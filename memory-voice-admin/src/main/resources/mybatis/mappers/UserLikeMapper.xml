@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.UserLikeDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.UserLike">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="performance_id" property="performanceId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="sale_end_time" property="saleEndTimeStamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="UserLikeMap" type="com.mem.vo.business.base.model.vo.UserLikeVO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="performance_id" property="performanceId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="sale_end_time" property="saleEndTimeStamp" jdbcType="TIMESTAMP"/>
+        <!-- 定义这个集合中元素的封装规则 -->
+        <result column="p_id" property="pId" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="simple_title" property="simpleTitle" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="artist_ids" property="artistIds" jdbcType="VARCHAR"/>
+        <result column="ticket_gear_ids" property="ticketGearIds" jdbcType="VARCHAR"/>
+        <result column="ticket_deliver_type" property="ticketDeliverType" jdbcType="INTEGER"/>
+        <result column="key_words" property="keyWords" jdbcType="VARCHAR"/>
+        <result column="show_time" property="showTime" jdbcType="TIMESTAMP"/>
+        <result column="thumb_url" property="thumbUrl" jdbcType="VARCHAR"/>
+        <result column="place_id" property="placeId" jdbcType="BIGINT"/>
+        <result column="status" property="enable" jdbcType="TINYINT"/>
+        <result column="start_sale_date" property="startSaleDate" jdbcType="TIMESTAMP"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="performance_type" property="performanceType" jdbcType="INTEGER"/>
+        <result column="detail" property="detail" jdbcType="VARCHAR"/>
+        <result column="buy_notes" property="buyNotes" jdbcType="VARCHAR"/>
+        <result column="performance_nature" property="performanceNature" jdbcType="INTEGER"/>
+        <result column="limit_number" property="limitNumber" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <!-- user_like table all fields -->
+    <sql id="Base_Column_List">
+		 id,
+		performance_id,
+		user_id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		sale_end_time
+	</sql>
+
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where
+        <trim suffixOverrides="," prefixOverrides="and">
+            <if test="condition.id != null">
+                and id = #{condition.id,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.performanceId != null">
+                and performance_id = #{condition.performanceId,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.userId != null">
+                and user_id = #{condition.userId,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.createTime != null">
+                and create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''">
+                and create_user = #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null">
+                and update_time = #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''">
+                and update_user = #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.saleEndTimeStamp != null">
+                and sale_end_time = #{condition.saleEndTimeStamp,jdbcType=TIMESTAMP}
+            </if>
+
+        </trim>
+    </sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.UserLike">
+        insert into user_like
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="performanceId != null  ">
+                performance_id,
+            </if>
+            <if test="userId != null  ">
+                user_id,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="saleEndTimeStamp != null  ">
+                sale_end_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="performanceId != null  ">
+                #{performanceId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null  ">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="saleEndTimeStamp != null  ">
+                #{saleEndTimeStamp,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.UserLike">
+        update user_like set
+        <trim suffixOverrides=",">
+            <if test="performanceId != null  ">
+                performance_id=#{performanceId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null  ">
+                user_id=#{userId,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="saleEndTimeStamp != null  ">
+                sale_end_time = #{saleEndTimeStamp,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+
+
+    <!-- 根据id查询 用户关注表 -->
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from user_like where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.UserLikeQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from user_like
+        <include refid="whereCondition"/>
+    </select>
+
+
+    <select id="selectAll" resultMap="UserLikeMap" parameterType="com.mem.vo.business.base.model.po.UserLikeQuery">
+		select u.*,
+		p.id  p_id,
+		p.title,
+		p.simple_title,
+		p.description,
+		p.artist_ids,
+		p.ticket_gear_ids,
+		p.ticket_deliver_type,
+		p.key_words,
+		p.show_time,
+		p.thumb_url,
+		p.place_id,
+		p.status,
+		p.start_sale_date,
+		p.sort,
+		p.performance_type,
+		p.detail,
+		p.buy_notes,
+		p.performance_nature,
+		p.limit_number
+	 from user_like u left join performance p on u.performance_id=p.id where
+	 <trim prefixOverrides="and">
+        <if test="condition.userId != null">
+            and u.user_id = #{condition.userId,jdbcType=INTEGER}
+        </if>
+        <if test="condition.performanceId != null">
+            and u.performance_id = #{condition.performanceId,jdbcType=INTEGER}
+        </if>
+     </trim>
+	</select>
+    <!-- 删除记录 -->
+    <delete id="deleteById" parameterType="com.mem.vo.business.base.model.po.UserLikeQuery">
+        delete from user_like
+        <include refid="whereCondition"/>
+    </delete>
+</mapper>   

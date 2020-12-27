@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.PerformanceShowDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.PerformanceShow">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="show_name" property="showName" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- performance_show table all fields -->
+    <sql id="Base_Column_List">
+		 id,	
+		show_name,	
+		start_time,	
+		end_time,	
+		create_time,	
+		create_user,	
+		update_time,	
+		update_user
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim suffixOverrides=",">
+            <if test="condition.id != null">
+                and id = #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.showName != null and condition.showName != ''">
+                and show_name = #{condition.showName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.startTime != null">
+                and start_time = #{condition.startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.endTime != null">
+                and end_time = #{condition.endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createTime != null">
+                and create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''">
+                and create_user = #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null">
+                and update_time = #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''">
+                and update_user = #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="condition.ts != null">
+                and ts = #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+
+        </trim>
+    </sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.PerformanceShow" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into performance_show
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="showName != null  and showName != '' ">
+                show_name,
+            </if>
+            <if test="startTime != null  ">
+                start_time,
+            </if>
+            <if test="endTime != null  ">
+                end_time,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="showName != null  and showName != '' ">
+                #{showName,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null  ">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null  ">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.PerformanceShow">
+        update performance_show set
+        <trim suffixOverrides=",">
+            <if test="showName != null  and showName != '' ">
+                show_name=#{showName,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null  ">
+                start_time=#{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null  ">
+                end_time=#{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update performance_show set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 接单中台表 -->
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from performance_show where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!-- 根据id查询 接单中台表 -->
+    <select id="findByIds" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from performance_show where id in (${ids})
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.PerformanceShowQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from performance_show
+        <include refid="whereCondition"/>
+    </select>
+</mapper>   

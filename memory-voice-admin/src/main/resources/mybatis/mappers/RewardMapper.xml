@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.RewardDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.Reward">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="prize_id" property="prizeId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="time" property="time" jdbcType="TIMESTAMP"/>
+        <result column="prize_type" property="prizeType" jdbcType="TINYINT"/>
+        <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
+        <result column="contact_name" property="contactName" jdbcType="VARCHAR"/>
+        <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
+        <result column="contact_province" property="contactProvince" jdbcType="VARCHAR"/>
+        <result column="contact_address" property="contactAddress" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="draw_code" property="drawCode" jdbcType="VARCHAR"/>
+        <result column="reward_description" property="rewardDescription" jdbcType="VARCHAR"/>
+        <result column="activity_id" property="activityId" jdbcType="INTEGER"/>
+        <result column="integral_num" property="integralNum" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- reward table all fields -->
+    <sql id="Base_Column_List" >
+		 id,
+		prize_id,
+		user_id,
+		time,
+		prize_type,
+		prize_name,
+		contact_name,
+		contact_phone,
+		contact_province,
+		contact_address,
+		status,
+		draw_code,
+		reward_description,
+		activity_id,
+		integral_num
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim  suffixOverrides="," >
+            <if test="condition.id != null" >
+                and id =  #{condition.id,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.prizeId != null" >
+                and prize_id =  #{condition.prizeId,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.userId != null" >
+                and user_id =  #{condition.userId,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.time != null" >
+                and time =  #{condition.time,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.prizeType != null" >
+                and prize_type =  #{condition.prizeType,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.prizeName != null and condition.prizeName != ''" >
+                and prize_name =  #{condition.prizeName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.contactName != null and condition.contactName != ''" >
+                and contact_name =  #{condition.contactName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.contactPhone != null and condition.contactPhone != ''" >
+                and contact_phone =  #{condition.contactPhone,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.contactProvince != null and condition.contactProvince != ''" >
+                and contact_province =  #{condition.contactProvince,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.contactAddress != null and condition.contactAddress != ''" >
+                and contact_address =  #{condition.contactAddress,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.status != null" >
+                and status =  #{condition.status,jdbcType=TINYINT}
+            </if>
+
+
+            <if test="condition.drawCode != null and condition.drawCode != ''" >
+                and draw_code =  #{condition.drawCode,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.rewardDescription != null and condition.rewardDescription != ''" >
+                and reward_description =  #{condition.rewardDescription,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.activityId != null" >
+                and activity_id =  #{condition.activityId,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.integralNum != null" >
+                and integral_num =  #{condition.integralNum,jdbcType=INTEGER}
+            </if>
+
+        </trim>
+    </sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Reward">
+        insert into reward
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prizeId != null  ">
+                prize_id,
+            </if>
+            <if test="userId != null  ">
+                user_id,
+            </if>
+            <if test="time != null  ">
+                time,
+            </if>
+            <if test="prizeType != null  ">
+                prize_type,
+            </if>
+            <if test="prizeName != null  and prizeName != '' ">
+                prize_name,
+            </if>
+            <if test="contactName != null  and contactName != '' ">
+                contact_name,
+            </if>
+            <if test="contactPhone != null  and contactPhone != '' ">
+                contact_phone,
+            </if>
+            <if test="contactProvince != null  and contactProvince != '' ">
+                contact_province,
+            </if>
+            <if test="contactAddress != null  and contactAddress != '' ">
+                contact_address,
+            </if>
+            <if test="status != null  ">
+                status,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+            <if test="drawCode != null  and drawCode != '' ">
+                draw_code,
+            </if>
+            <if test="rewardDescription != null  and rewardDescription != '' ">
+                reward_description,
+            </if>
+            <if test="activityId != null  ">
+                activity_id,
+            </if>
+            <if test="integralNum != null  ">
+                integral_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prizeId != null  ">
+                #{prizeId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null  ">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="time != null  ">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="prizeType != null  ">
+                #{prizeType,jdbcType=TINYINT},
+            </if>
+            <if test="prizeName != null  and prizeName != '' ">
+                #{prizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactName != null  and contactName != '' ">
+                #{contactName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhone != null  and contactPhone != '' ">
+                #{contactPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="contactProvince != null  and contactProvince != '' ">
+                #{contactProvince,jdbcType=VARCHAR},
+            </if>
+            <if test="contactAddress != null  and contactAddress != '' ">
+                #{contactAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null  ">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="drawCode != null  and drawCode != '' ">
+                #{drawCode,jdbcType=VARCHAR},
+            </if>
+            <if test="rewardDescription != null  and rewardDescription != '' ">
+                #{rewardDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="activityId != null  ">
+                #{activityId,jdbcType=INTEGER},
+            </if>
+            <if test="integralNum != null  ">
+                #{integralNum,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.Reward">
+        update reward set
+        <trim  suffixOverrides="," >
+            <if test="prizeId != null  ">
+                prize_id=#{prizeId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null  ">
+                user_id=#{userId,jdbcType=INTEGER},
+            </if>
+            <if test="time != null  ">
+                time=#{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="prizeType != null  ">
+                prize_type=#{prizeType,jdbcType=TINYINT},
+            </if>
+            <if test="prizeName != null  and prizeName != '' ">
+                prize_name=#{prizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactName != null  and contactName != '' ">
+                contact_name=#{contactName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhone != null  and contactPhone != '' ">
+                contact_phone=#{contactPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="contactProvince != null  and contactProvince != '' ">
+                contact_province=#{contactProvince,jdbcType=VARCHAR},
+            </if>
+            <if test="contactAddress != null  and contactAddress != '' ">
+                contact_address=#{contactAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null  ">
+                status=#{status,jdbcType=TINYINT},
+            </if>
+            <if test="drawCode != null  and drawCode != '' ">
+                draw_code=#{drawCode,jdbcType=VARCHAR},
+            </if>
+            <if test="rewardDescription != null  and rewardDescription != '' ">
+                reward_description=#{rewardDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="activityId != null  ">
+                activity_id=#{activityId,jdbcType=INTEGER},
+            </if>
+            <if test="integralNum != null  ">
+                integral_num=#{integralNum,jdbcType=INTEGER},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=INTEGER} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update reward set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 奖品信息明细表 -->
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from reward where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.RewardQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from reward
+        <include refid="whereCondition"/>
+    </select>
+    <select id="selectIdByEt" parameterType="com.mem.vo.business.base.model.po.RewardQuery" resultType="java.lang.Integer">
+		select id from reward where
+	activity_id=#{condition.activityId,jdbcType=BIGINT} and prize_type=#{condition.prizeType,jdbcType=TINYINT} and draw_code = ''
+	</select>
+</mapper>

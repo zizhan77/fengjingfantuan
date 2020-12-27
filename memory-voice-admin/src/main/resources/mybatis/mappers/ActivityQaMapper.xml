@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.ActivityQaDao" >
+
+	<resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.ActivityQa" >
+		<result column="id" property="id" jdbcType="INTEGER"/>
+			<result column="tile" property="tile" jdbcType="VARCHAR"/>
+			<result column="answers" property="answers" jdbcType="VARCHAR"/>
+			<result column="answer" property="answer" jdbcType="TINYINT"/>
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+			<result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+			<result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+			<result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+		</resultMap>
+       
+<!-- activity_qa table all fields -->
+	<sql id="Base_Column_List" >
+		 id,	
+		tile,	
+		answers,	
+		answer,	
+		create_time,	
+		create_user,	
+		update_time,	
+		update_user
+	</sql>
+<!-- 查询条件 -->
+	<sql id="whereCondition">
+       	where is_delete = 0
+		<trim  suffixOverrides="," >
+			<if test="condition.id != null" >
+				and id =  #{condition.id,jdbcType=INTEGER}
+			</if>
+			
+			<if test="condition.tile != null and condition.tile != ''" >
+				and tile =  #{condition.tile,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.answers != null and condition.answers != ''" >
+				and answers =  #{condition.answers,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.answer != null" >
+				and answer =  #{condition.answer,jdbcType=TINYINT}
+			</if>
+			
+			<if test="condition.createTime != null" >
+				and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.createUser != null and condition.createUser != ''" >
+				and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.updateTime != null" >
+				and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.updateUser != null and condition.updateUser != ''" >
+				and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+			</if>
+			
+
+		</trim>
+	</sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.ActivityQa" >
+         insert into activity_qa
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="tile != null  and tile != '' ">
+				tile,
+			</if>
+			<if test="answers != null  and answers != '' ">
+				answers,
+			</if>
+			<if test="answer != null  ">
+				answer,
+			</if>
+			<if test="createTime != null  ">
+				create_time,
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				create_user,
+			</if>
+			<if test="updateTime != null  ">
+				update_time,
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user,
+			</if>
+			<if test="isDelete != null  ">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="tile != null  and tile != '' ">
+				#{tile,jdbcType=VARCHAR},
+			</if>
+			<if test="answers != null  and answers != '' ">
+				#{answers,jdbcType=VARCHAR},
+			</if>
+			<if test="answer != null  ">
+				#{answer,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null  ">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null  ">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null  ">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+		</trim>
+    </insert>
+
+	 <!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.ActivityQa" >
+		 update activity_qa set 
+		<trim  suffixOverrides="," >
+			<if test="tile != null  and tile != '' ">
+				tile=#{tile,jdbcType=VARCHAR},
+			</if>
+			<if test="answers != null  and answers != '' ">
+				answers=#{answers,jdbcType=VARCHAR},
+			</if>
+			<if test="answer != null  ">
+				answer=#{answer,jdbcType=TINYINT},
+			</if>
+			<if test="updateTime != null  ">
+				update_time=#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user=#{updateUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		 where id=#{id,jdbcType=INTEGER} and is_delete = 0
+	</update>
+
+	<!-- 删除记录 -->
+	<update id="deleteById" parameterType="java.lang.Long">
+		update activity_qa set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+ 
+	<!-- 根据id查询 网络资源表 -->
+	<select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select <include refid="Base_Column_List" /> 
+		 from activity_qa where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据条件查询列表 -->
+	<select id="findByCondition" resultMap="BaseResultMap"  parameterType="com.mem.vo.business.base.model.po.ActivityQaQuery">
+		select
+		<include refid="Base_Column_List"/>
+		from activity_qa
+		<include refid="whereCondition"/>
+	</select>
+</mapper>   

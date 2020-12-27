@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.CouponDao" >
+
+	<resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.Coupon" >
+		<result column="id" property="id" jdbcType="BIGINT"/>
+			<result column="title" property="title" jdbcType="VARCHAR"/>
+			<result column="description" property="description" jdbcType="VARCHAR"/>
+			<result column="start_time" property="startTime" jdbcType="VARCHAR"/>
+			<result column="end_time" property="endTime" jdbcType="VARCHAR"/>
+			<result column="coupon_sort" property="couponSort" jdbcType="INTEGER"/>
+			<result column="status" property="status" jdbcType="TINYINT"/>
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+			<result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+			<result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+			<result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+			<result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+			<result column="discount_condition" property="discountCondition" jdbcType="DECIMAL"/>
+			<result column="discount_amount" property="discountAmount" jdbcType="DECIMAL"/>
+			<result column="date_type" property="dateType" jdbcType="TINYINT"/>
+			<result column="useful_days" property="usefulDays" jdbcType="TINYINT"/>
+			<result column="performance_show_ids" property="performanceShowIds" jdbcType="VARCHAR"/>
+		</resultMap>
+       
+<!-- coupon table all fields -->
+	<sql id="Base_Column_List" >
+		 id,	
+		title,	
+		description,	
+		start_time,	
+		end_time,	
+		coupon_sort,	
+		status,	
+		create_time,	
+		create_user,	
+		update_time,	
+		update_user,	
+		discount_condition,	
+		discount_amount,	
+		date_type,	
+		useful_days,	
+		performance_show_ids
+	</sql>
+<!-- 查询条件 -->
+	<sql id="whereCondition">
+       	where is_delete = 0
+		<trim  suffixOverrides="," >
+			<if test="condition.id != null" >
+				and id =  #{condition.id,jdbcType=BIGINT}
+			</if>
+			
+			<if test="condition.title != null and condition.title != ''" >
+				and title =  #{condition.title,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.description != null and condition.description != ''" >
+				and description =  #{condition.description,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.startTime != null" >
+				and start_time =  #{condition.startTime,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.endTime != null" >
+				and end_time =  #{condition.endTime,jdbcType=VARCHAR}
+			</if>
+			<if test="condition.couponSort != null" >
+				and coupon_sort =  #{condition.couponSort,jdbcType=INTEGER}
+			</if>
+			
+			<if test="condition.status != null" >
+				and status =  #{condition.status,jdbcType=TINYINT}
+			</if>
+			
+			<if test="condition.createTime != null" >
+				and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.createUser != null and condition.createUser != ''" >
+				and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.updateTime != null" >
+				and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+			</if>
+			
+			<if test="condition.updateUser != null and condition.updateUser != ''" >
+				and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+			</if>
+			
+
+			<if test="condition.ts != null" >
+				and ts =  #{condition.ts,jdbcType=TIMESTAMP}
+			</if>
+			
+			<if test="condition.discountCondition != null" >
+				and discount_condition =  #{condition.discountCondition,jdbcType=DECIMAL}
+			</if>
+			
+			<if test="condition.discountAmount != null" >
+				and discount_amount =  #{condition.discountAmount,jdbcType=DECIMAL}
+			</if>
+			
+			<if test="condition.dateType != null" >
+				and date_type =  #{condition.dateType,jdbcType=TINYINT}
+			</if>
+			
+			<if test="condition.usefulDays != null" >
+				and useful_days =  #{condition.usefulDays,jdbcType=TINYINT}
+			</if>
+			
+			<if test="condition.performanceShowIds != null and condition.performanceShowIds != ''" >
+				and performance_show_ids =  #{condition.performanceShowIds,jdbcType=VARCHAR}
+			</if>
+			
+		</trim>
+	</sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Coupon" >
+         insert into coupon
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="title != null  and title != '' ">
+				title,
+			</if>
+			<if test="description != null  and description != '' ">
+				description,
+			</if>
+			<if test="startTime != null  ">
+				start_time,
+			</if>
+			<if test="endTime != null  ">
+				end_time,
+			</if>
+			<if test="couponSort != null  ">
+				coupon_sort,
+			</if>
+			<if test="status != null  ">
+				status,
+			</if>
+			<if test="createTime != null  ">
+				create_time,
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				create_user,
+			</if>
+			<if test="updateTime != null  ">
+				update_time,
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user,
+			</if>
+			<if test="isDelete != null  ">
+				is_delete,
+			</if>
+			<if test="discountCondition != null  ">
+				discount_condition,
+			</if>
+			<if test="discountAmount != null  ">
+				discount_amount,
+			</if>
+			<if test="dateType != null  ">
+				date_type,
+			</if>
+			<if test="usefulDays != null  ">
+				useful_days,
+			</if>
+			<if test="performanceShowIds != null  and performanceShowIds != '' ">
+				performance_show_ids,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="title != null  and title != '' ">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null  and description != '' ">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="startTime != null  ">
+				#{startTime,jdbcType=VARCHAR},
+			</if>
+			<if test="endTime != null  ">
+				#{endTime,jdbcType=VARCHAR},
+			</if>
+			<if test="couponSort != null  ">
+				#{couponSort,jdbcType=INTEGER},
+			</if>
+			<if test="status != null  ">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null  ">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null  ">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null  ">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="discountCondition != null  ">
+				#{discountCondition,jdbcType=DECIMAL},
+			</if>
+			<if test="discountAmount != null  ">
+				#{discountAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="dateType != null  ">
+				#{dateType,jdbcType=TINYINT},
+			</if>
+			<if test="usefulDays != null  ">
+				#{usefulDays,jdbcType=TINYINT},
+			</if>
+			<if test="performanceShowIds != null  and performanceShowIds != '' ">
+				#{performanceShowIds,jdbcType=VARCHAR},
+			</if>
+		</trim>
+    </insert>
+
+	 <!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.Coupon" >
+		 update coupon set 
+		<trim  suffixOverrides="," >
+			<if test="title != null  and title != '' ">
+				title=#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null  and description != '' ">
+				description=#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="startTime != null  ">
+				start_time=#{startTime,jdbcType=VARCHAR},
+			</if>
+			<if test="endTime != null  ">
+				end_time=#{endTime,jdbcType=VARCHAR},
+			</if>
+			<if test="couponSort != null  ">
+				coupon_sort=#{couponSort,jdbcType=INTEGER},
+			</if>
+			<if test="status != null  ">
+				status=#{status,jdbcType=TINYINT},
+			</if>
+			<if test="updateTime != null  ">
+				update_time=#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user=#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="discountCondition != null  ">
+				discount_condition=#{discountCondition,jdbcType=DECIMAL},
+			</if>
+			<if test="discountAmount != null  ">
+				discount_amount=#{discountAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="dateType != null  ">
+				date_type=#{dateType,jdbcType=TINYINT},
+			</if>
+			<if test="usefulDays != null  ">
+				useful_days=#{usefulDays,jdbcType=TINYINT},
+			</if>
+			<if test="performanceShowIds != null  and performanceShowIds != '' ">
+				performance_show_ids=#{performanceShowIds,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		 where id=#{id,jdbcType=BIGINT} and is_delete = 0
+	</update>
+
+	<!-- 删除记录 -->
+	<update id="deleteById" parameterType="java.lang.Long">
+		update coupon set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+ 
+	<!-- 根据id查询 优惠券表 -->
+	<select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select <include refid="Base_Column_List" /> 
+		 from coupon where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据条件查询列表 -->
+	<select id="findByCondition" resultMap="BaseResultMap"  parameterType="com.mem.vo.business.base.model.po.CouponQuery">
+		select
+		<include refid="Base_Column_List"/>
+		from coupon
+		<include refid="whereCondition"/>
+	</select>
+</mapper>   

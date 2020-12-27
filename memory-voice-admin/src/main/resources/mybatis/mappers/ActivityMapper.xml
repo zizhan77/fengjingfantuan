@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.ActivityDao" >
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.Activity" >
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="activity_title" property="activityTitle" jdbcType="VARCHAR"/>
+        <result column="activity_intro" property="activityIntro" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="TINYINT"/>
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP"/>
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="activity_url" property="activityUrl" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+        <result column="sponsor_id" property="sponsorId" jdbcType="INTEGER"/>
+        <result column="sponsor_name" property="sponsorName" jdbcType="VARCHAR"/>
+        <result column="is_only" property="isOnly" jdbcType="TINYINT"/>
+        <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- activity table all fields -->
+    <sql id="Base_Column_List" >
+		 id,
+		activity_title,
+		activity_intro,
+		type,
+		start_date,
+		end_date,
+		status,
+		sort,
+		activity_url,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		sponsor_id,
+		sponsor_name,
+		is_only,
+		thumbnail_url
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim  suffixOverrides="," >
+            <if test="condition.id != null" >
+                and id =  #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.activityTitle != null and condition.activityTitle != ''" >
+                and activity_title =  #{condition.activityTitle,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.activityIntro != null and condition.activityIntro != ''" >
+                and activity_intro =  #{condition.activityIntro,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.type != null" >
+                and type =  #{condition.type,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.startDate != null" >
+                and start_date =  #{condition.startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.endDate != null" >
+                and end_date =  #{condition.endDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.status != null" >
+                and status =  #{condition.status,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.sort != null" >
+                and sort =  #{condition.sort,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.activityUrl != null and condition.activityUrl != ''" >
+                and activity_url =  #{condition.activityUrl,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.createTime != null" >
+                and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''" >
+                and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null" >
+                and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''" >
+                and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="condition.ts != null" >
+                and ts =  #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="condition.sponsorId != null" >
+                and sponsor_id =  #{condition.sponsorId,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.sponsorName != null and condition.sponsorName != ''" >
+                and sponsor_name =  #{condition.sponsorName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.isOnly != null" >
+                and is_only =  #{condition.isOnly,jdbcType=TINYINT}
+            </if>
+            <if test="condition.thumbnailUrl != null and condition.thumbnailUrl != ''" >
+                and thumbnail_url =  #{condition.thumbnailUrl,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        order by sort desc,create_time desc
+    </sql>
+    <!-- 查询条件 比较时间大小 -->
+    <sql id="whereConditionAvailable">
+        where is_delete = 0 and end_date <![CDATA[>=]]> now()
+        <trim suffixOverrides=",">
+            <if test="condition.id != null">
+                and id = #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.activityTitle != null and condition.activityTitle != ''">
+                and activity_title = #{condition.activityTitle,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.activityIntro != null and condition.activityIntro != ''">
+                and activity_intro = #{condition.activityIntro,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.type != null">
+                and type = #{condition.type,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.startDate != null">
+                and start_date <![CDATA[>=]]> #{condition.startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.sort != null">
+                and sort = #{condition.sort,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.activityUrl != null and condition.activityUrl != ''">
+                and activity_url = #{condition.activityUrl,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.createTime != null">
+                and create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''">
+                and create_user = #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null">
+                and update_time = #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''">
+                and update_user = #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="condition.ts != null">
+                and ts = #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.thumbnailUrl != null and condition.thumbnailUrl != ''" >
+                and thumbnail_url =  #{condition.thumbnailUrl,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        order by sort desc,create_time desc
+    </sql>
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Activity" >
+        insert into activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="activityTitle != null  and activityTitle != '' ">
+                activity_title,
+            </if>
+            <if test="activityIntro != null  and activityIntro != '' ">
+                activity_intro,
+            </if>
+            <if test="type != null  ">
+                type,
+            </if>
+            <if test="startDate != null  ">
+                start_date,
+            </if>
+            <if test="endDate != null  ">
+                end_date,
+            </if>
+            <if test="status != null  ">
+                status,
+            </if>
+            <if test="sort != null  ">
+                sort,
+            </if>
+            <if test="activityUrl != null  and activityUrl != '' ">
+                activity_url,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+            <if test="sponsorId != null  ">
+                sponsor_id,
+            </if>
+            <if test="sponsorName != null  and sponsorName != '' ">
+                sponsor_name,
+            </if>
+            <if test="isOnly != null  ">
+                is_only,
+            </if>
+            <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
+                thumbnail_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="activityTitle != null  and activityTitle != '' ">
+                #{activityTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="activityIntro != null  and activityIntro != '' ">
+                #{activityIntro,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null  ">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="startDate != null  ">
+                #{startDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endDate != null  ">
+                #{endDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null  ">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="sort != null  ">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="activityUrl != null  and activityUrl != '' ">
+                #{activityUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="sponsorId != null  ">
+                #{sponsorId,jdbcType=INTEGER},
+            </if>
+            <if test="sponsorName != null  and sponsorName != '' ">
+                #{sponsorName,jdbcType=VARCHAR},
+            </if>
+            <if test="isOnly != null  ">
+                #{isOnly,jdbcType=TINYINT},
+            </if>
+            <if test="thumbnailUrl != null and thumbnailUrl != ''" >
+                #{thumbnailUrl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.Activity" >
+        update activity set
+        <trim  suffixOverrides="," >
+            <if test="activityTitle != null  and activityTitle != '' ">
+                activity_title=#{activityTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="activityIntro != null  and activityIntro != '' ">
+                activity_intro=#{activityIntro,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null  ">
+                type=#{type,jdbcType=TINYINT},
+            </if>
+            <if test="startDate != null  ">
+                start_date=#{startDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endDate != null  ">
+                end_date=#{endDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null  ">
+                status=#{status,jdbcType=TINYINT},
+            </if>
+            <if test="sort != null  ">
+                sort=#{sort,jdbcType=INTEGER},
+            </if>
+            <if test="activityUrl != null  and activityUrl != '' ">
+                activity_url=#{activityUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="sponsorId != null  ">
+                sponsor_id=#{sponsorId,jdbcType=INTEGER},
+            </if>
+            <if test="sponsorName != null  and sponsorName != '' ">
+                sponsor_name=#{sponsorName,jdbcType=VARCHAR},
+            </if>
+            <if test="isOnly != null  ">
+                is_only=#{isOnly,jdbcType=TINYINT},
+            </if>
+            <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
+                thumbnail_url=#{thumbnailUrl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update activity set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 用户关注表 -->
+    <select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select <include refid="Base_Column_List" />
+        from activity where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"  parameterType="com.mem.vo.business.base.model.po.ActivityQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from activity
+        <include refid="whereCondition"/>
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByConditionAvailable" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.ActivityQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from activity
+        <include refid="whereConditionAvailable"/>
+    </select>
+</mapper>

@@ -1,0 +1,23 @@
+package com.mem.vo.common.constant;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+ * @author litongwei
+ * @description:
+ * @date 2019/6/1 14:29
+ */
+
+@AllArgsConstructor
+@Getter
+public enum BannerType {
+
+    BANNER(1, "banner"),
+    OPENING_PAGE(2, "开屏页");
+
+    private Integer code;
+    private String name;
+
+
+}

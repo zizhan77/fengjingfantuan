@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Valid values of the status attribute are "trace", "debug", "info", "warn", "error" and "fatal". -->
+<!-- monitorInterval 重新读取配置文件间隔时间 单位秒 The minimum interval is 5 seconds-->
+<!-- status="OFF"，可以去掉，它的含义为是否记录log4j2本身的event信息，默认是OFF -->
+<Configuration status="OFF" monitorInterval="3600">
+
+    <Properties>
+        <Property name="fileName">/www/server/apache-tomcat-8.5.32/log</Property>
+        <Property name="projectName">mem-vo-admin</Property>
+        <Property name="rootLevel">INFO</Property>
+        <Property name="sqlLevel">ERROR</Property>
+    </Properties>
+
+
+    <!--先定义der-->
+    <Appenders>
+        <!--两种strict模式都能识别-->
+        <Console name="console" follow="true">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--输出日志格式 -->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <RollingRandomAccessFile name="errorRollingFile"
+                                 fileName="${fileName}/${projectName}-error.log"
+                                 filePattern="${fileName}/${projectName}-%d{yyyy-MM-dd}-error-%i.log.gz">
+            <!-- 输出格式 -->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <!-- 只接受error级别的日志-->
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/> <!-- 和filePattern中的日期格式对应，此处按天创建日志文件-->
+                <SizeBasedTriggeringPolicy size="200 MB"/> <!-- 每个日志文件的大小 -->
+            </Policies>
+            <!-- 每天的日志文件最多保留的个数 -->
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="infoRollingFile"
+                                 fileName="${fileName}/${projectName}-info.log"
+                                 filePattern="${fileName}/${projectName}-%d{yyyy-MM-dd}-info-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="200 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+
+        <Async name="async">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="errorRollingFile"/>
+            <AppenderRef ref="infoRollingFile"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <!--自定义：过滤掉spring和mybatis的一些无用的DEBUG信息-->
+        <logger name="java.sql" level="ERROR" additivity="true"/>
+        <logger name="java.sql.ResultSet" level="ERROR" additivity="true"/>
+        <logger name="com.ibatis" level="ERROR" additivity="true"/>
+        <logger name="org.apache" level="ERROR" additivity="true"/>
+        <logger name="org.apache.ibatis" level="ERROR" additivity="true"/>
+        <logger name="org.springframework" level="ERROR" additivity="true"/>
+        <logger name="com.mchange" level="ERROR" additivity="true"/>
+        <logger name="org.apache.commons" level="ERROR" additivity="true"/>
+        <logger name="org.apache.cxf" level="ERROR" additivity="true"/>
+        <Logger name="java.sql.PreparedStatement" level="${rootLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="async"/>
+        </Logger>
+        <Root level="${rootLevel}" includeLocation="true">
+            <AppenderRef ref="async"/>
+        </Root>
+    </Loggers>
+</Configuration>

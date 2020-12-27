@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.UserDao" >
+
+	<resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.User" >
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+		<result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="password" property="password" jdbcType="VARCHAR"/>
+		<result column="source" property="source" jdbcType="VARCHAR"/>
+		<result column="source_name" property="sourceName" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="TINYINT"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+		<result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+		<result column="role" property="role" jdbcType="INTEGER"/>
+		<result column="form" property="form" jdbcType="TINYINT"/>
+		<result column="is_authorize" property="isAuthorize" jdbcType="TINYINT"/>
+		<result column="gender" property="gender" jdbcType="TINYINT"/>
+		<result column="birthday" property="birthday" jdbcType="DATE"/>
+		<result column="integral" property="integral" jdbcType="INTEGER"/>
+	</resultMap>
+
+	<!-- user table all fields -->
+	<sql id="Base_Column_List" >
+		 id,
+		phone_number,
+		biz_code,
+		name,
+		password,
+		source,
+		source_name,
+		status,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		role,
+		form,
+		is_authorize,
+		gender,
+		birthday,
+		integral
+	</sql>
+	<!-- 查询条件 -->
+	<sql id="whereCondition">
+		where is_delete = 0
+		<trim  suffixOverrides="," >
+			<if test="condition.id != null" >
+				and id =  #{condition.id,jdbcType=BIGINT}
+			</if>
+
+			<if test="condition.phoneNumber != null and condition.phoneNumber != ''" >
+				and phone_number =  #{condition.phoneNumber,jdbcType=VARCHAR}
+			</if>
+
+			<if test="condition.bizCode != null and condition.bizCode != ''" >
+				and biz_code =  #{condition.bizCode,jdbcType=VARCHAR}
+			</if>
+
+			<if test="condition.name != null and condition.name != ''" >
+				and name =  #{condition.name,jdbcType=VARCHAR}
+			</if>
+
+			<if test="condition.password != null and condition.password != ''" >
+				and password =  #{condition.password,jdbcType=VARCHAR}
+			</if>
+
+			<if test="condition.source != null and condition.source != ''" >
+				and source =  #{condition.source,jdbcType=VARCHAR}
+			</if>
+
+			<if test="condition.sourceName != null and condition.sourceName != ''" >
+				and source_name =  #{condition.sourceName,jdbcType=VARCHAR}
+			</if>
+
+			<if test="condition.status != null" >
+				and status =  #{condition.status,jdbcType=TINYINT}
+			</if>
+
+			<if test="condition.createTime != null" >
+				and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.createUser != null and condition.createUser != ''" >
+				and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+			</if>
+
+			<if test="condition.updateTime != null" >
+				and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.updateUser != null and condition.updateUser != ''" >
+				and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+			</if>
+
+
+			<if test="condition.ts != null" >
+				and ts =  #{condition.ts,jdbcType=TIMESTAMP}
+			</if>
+
+			<if test="condition.role != null">
+				and role = #{condition.role,jdbcType=INTEGER}
+			</if>
+
+
+			<if test="condition.roleList != null">
+			and role in
+				<foreach collection="condition.roleList" item="item" index="index" open="(" separator="," close=")">
+					#{item,jdbcType=DECIMAL}
+				</foreach>
+			</if>
+
+			<if test="condition.form != null">
+				and form = #{condition.form,jdbcType=TINYINT}
+			</if>
+
+			<if test="condition.isAuthorize != null">
+				and is_authorize = #{condition.isAuthorize,jdbcType=TINYINT}
+			</if>
+
+			<if test="condition.gender != null">
+				and gender = #{condition.gender,jdbcType=TINYINT}
+			</if>
+
+			<if test="condition.birthday != null">
+				and birthday = #{condition.birthday,jdbcType=DATE}
+			</if>
+
+			<if test="condition.integral != null" >
+				and integral =  #{condition.integral,jdbcType=INTEGER}
+			</if>
+		</trim>
+	</sql>
+
+	<!-- 单个插入，只插入不为空的字段  -->
+	<insert id="insert" parameterType="com.mem.vo.business.base.model.po.User"  useGeneratedKeys="true"
+			keyProperty="id">
+		insert into user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="phoneNumber != null  and phoneNumber != '' ">
+				phone_number,
+			</if>
+			<if test="bizCode != null  and bizCode != '' ">
+				biz_code,
+			</if>
+			<if test="name != null  and name != '' ">
+				name,
+			</if>
+			<if test="password != null  and password != '' ">
+				password,
+			</if>
+			<if test="source != null  and source != '' ">
+				source,
+			</if>
+			<if test="sourceName != null  and sourceName != '' ">
+				source_name,
+			</if>
+			<if test="status != null  ">
+				status,
+			</if>
+			<if test="createTime != null  ">
+				create_time,
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				create_user,
+			</if>
+			<if test="updateTime != null  ">
+				update_time,
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user,
+			</if>
+			<if test="isDelete != null  ">
+				is_delete,
+			</if>
+			<if test="role != null  ">
+				role,
+			</if>
+			<if test="form != null  ">
+				form,
+			</if>
+			<if test="isAuthorize != null  ">
+				is_authorize,
+			</if>
+			<if test="gender != null  ">
+				gender,
+			</if>
+			<if test="birthday != null  ">
+				birthday,
+			</if>
+			<if test="integral != null">
+				integral,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="phoneNumber != null  and phoneNumber != '' ">
+				#{phoneNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="bizCode != null  and bizCode != '' ">
+				#{bizCode,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null  and name != '' ">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null  and password != '' ">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="source != null  and source != '' ">
+				#{source,jdbcType=VARCHAR},
+			</if>
+			<if test="sourceName != null  and sourceName != '' ">
+				#{sourceName,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null  ">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null  ">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null  ">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null  ">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="role != null  ">
+				#{role,jdbcType=INTEGER},
+			</if>
+			<if test="form != null  ">
+				#{form,jdbcType=TINYINT},
+			</if>
+			<if test="isAuthorize != null  ">
+				#{isAuthorize,jdbcType=TINYINT},
+			</if>
+			<if test="gender != null  ">
+				#{gender,jdbcType=TINYINT},
+			</if>
+			<if test="birthday != null  ">
+				#{birthday,jdbcType=DATE},
+			</if>
+			<if test="integral != null">
+				#{integral,jdbcType=INTEGER}
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.User" >
+		update user set
+		<trim  suffixOverrides="," >
+			<if test="phoneNumber != null  and phoneNumber != '' ">
+				phone_number=#{phoneNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="bizCode != null  and bizCode != '' ">
+				biz_code=#{bizCode,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null  and name != '' ">
+				name=#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null  and password != '' ">
+				password=#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="source != null  and source != '' ">
+				source=#{source,jdbcType=VARCHAR},
+			</if>
+			<if test="sourceName != null  and sourceName != '' ">
+				source_name=#{sourceName,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null  ">
+				status=#{status,jdbcType=TINYINT},
+			</if>
+			<if test="updateTime != null  ">
+				update_time=#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user=#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="role != null  ">
+				role=#{role,jdbcType=INTEGER},
+			</if>
+			<if test="form != null  ">
+				form=#{form,jdbcType=TINYINT},
+			</if>
+			<if test="isAuthorize != null  ">
+				is_authorize=#{isAuthorize,jdbcType=TINYINT},
+			</if>
+			<if test="gender != null  ">
+				gender=#{gender,jdbcType=TINYINT},
+			</if>
+			<if test="birthday != null  ">
+				birthday=#{birthday,jdbcType=DATE},
+			</if>
+			<if test="integral != null  ">
+				integral=#{integral,jdbcType=INTEGER},
+			</if>
+		</trim>
+		where id=#{id,jdbcType=BIGINT} and is_delete = 0
+	</update>
+
+	<!-- 删除记录 -->
+	<update id="deleteById" parameterType="java.lang.Long">
+		update user set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+	<!-- 根据id查询 接单中台表 -->
+	<select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select <include refid="Base_Column_List" />
+		from user where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据条件查询列表 -->
+	<select id="findByCondition" resultMap="BaseResultMap"  parameterType="com.mem.vo.business.base.model.po.UserQuery">
+		select
+		<include refid="Base_Column_List"/>
+		from user
+		<include refid="whereCondition"/>
+	</select>
+
+	<update id="updateBySourceAndBizCode">
+		update user set
+		 phone_number =  #{phoneNumber,jdbcType=VARCHAR},
+		 is_authorize = 1,
+		 name=#{userName,jdbcType=VARCHAR}
+		where is_delete = 0
+		and source=#{sourceCode,jdbcType=VARCHAR}
+		and biz_code=#{bizCode,jdbcType=VARCHAR}
+
+	</update>
+</mapper>

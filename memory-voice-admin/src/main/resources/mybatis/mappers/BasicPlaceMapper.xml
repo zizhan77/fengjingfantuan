@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.BasicPlaceDao" >
+
+	<resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.BasicPlace" >
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="one_address" jdbcType="VARCHAR" property="oneAddress" />
+		<result column="two_address" jdbcType="VARCHAR" property="twoAddress" />
+		<result column="three_address" jdbcType="VARCHAR" property="threeAddress" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="choose_seat" jdbcType="INTEGER" property="chooseSeat" />
+		<result column="enable" jdbcType="INTEGER" property="enable" />
+		<result column="longitude" jdbcType="DECIMAL" property="longitude" />
+		<result column="latitude" jdbcType="DECIMAL" property="latitude" />
+		<result column="lowPrice" jdbcType="DECIMAL" property="lowprice" />
+		<result column="TopPrice" jdbcType="DECIMAL" property="topprice" />
+		<result column="TopCount" jdbcType="VARCHAR" property="topcount" />
+		<result column="LowCount" jdbcType="VARCHAR" property="lowcount" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="update_user" jdbcType="TIMESTAMP" property="updateUser" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="ts" jdbcType="TIMESTAMP" property="ts" />
+		<result column="introduce" jdbcType="VARCHAR" property="introduce" />
+		<result column="artist_id" jdbcType="INTEGER" property="artistId" />
+		</resultMap>
+       
+<!-- basic_place table all fields -->
+	<sql id="Base_Column_List" >
+		 id, name, one_address, two_address, three_address, address, choose_seat, enable,
+    longitude, latitude, lowPrice, TopPrice, TopCount, LowCount, phone, create_time,
+    create_user, update_time, update_user, is_delete, ts, introduce, artist_id
+	</sql>
+<!-- 查询条件 -->
+	<sql id="whereCondition">
+       	where is_delete = 0
+		<trim  suffixOverrides="," >
+			<if test="condition.id != null" >
+				and id =  #{condition.id,jdbcType=BIGINT}
+			</if>
+			
+			<if test="condition.name != null and condition.name != ''" >
+				and name like CONCAT(CONCAT('%',#{condition.name,jdbcType=VARCHAR} ),'%')
+			</if>
+			
+			<if test="condition.oneAddress != null and condition.oneAddress != ''" >
+				and one_address =  #{condition.oneAddress,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.twoAddress != null and condition.twoAddress != ''" >
+				and two_address =  #{condition.twoAddress,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.threeAddress != null and condition.threeAddress != ''" >
+				and three_address =  #{condition.threeAddress,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.address != null and condition.address != ''" >
+				and address =  #{condition.address,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.chooseSeat != null" >
+				and choose_seat =  #{condition.chooseSeat,jdbcType=INTEGER}
+			</if>
+			
+			<if test="condition.enable != null" >
+				and enable =  #{condition.enable,jdbcType=INTEGER}
+			</if>
+			
+			<if test="condition.longitude != null" >
+				and longitude =  #{condition.longitude,jdbcType=DECIMAL}
+			</if>
+			
+			<if test="condition.latitude != null" >
+				and latitude =  #{condition.latitude,jdbcType=DECIMAL}
+			</if>
+			
+			<if test="condition.createTime != null" >
+				and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.createUser != null and condition.createUser != ''" >
+				and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.updateTime != null" >
+				and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.updateUser != null" >
+				and update_user =  #{condition.updateUser,jdbcType=TIMESTAMP}
+			</if>
+
+			<if test="condition.ts != null" >
+				and ts =  #{condition.ts,jdbcType=TIMESTAMP}
+			</if>
+			
+		</trim>
+	</sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.BasicPlace" >
+         insert into basic_place
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null  and name != '' ">
+				name,
+			</if>
+			<if test="oneAddress != null  and oneAddress != '' ">
+				one_address,
+			</if>
+			<if test="twoAddress != null  and twoAddress != '' ">
+				two_address,
+			</if>
+			<if test="threeAddress != null  and threeAddress != '' ">
+				three_address,
+			</if>
+			<if test="address != null  and address != '' ">
+				address,
+			</if>
+			<if test="chooseSeat != null  ">
+				choose_seat,
+			</if>
+			<if test="enable != null  ">
+				enable,
+			</if>
+			<if test="longitude != null  ">
+				longitude,
+			</if>
+			<if test="latitude != null  ">
+				latitude,
+			</if>
+			<if test="createTime != null  ">
+				create_time,
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				create_user,
+			</if>
+			<if test="updateTime != null  ">
+				update_time,
+			</if>
+			<if test="updateUser != null  ">
+				update_user,
+			</if>
+			<if test="isDelete != null  ">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null  and name != '' ">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="oneAddress != null  and oneAddress != '' ">
+				#{oneAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="twoAddress != null  and twoAddress != '' ">
+				#{twoAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="threeAddress != null  and threeAddress != '' ">
+				#{threeAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null  and address != '' ">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="chooseSeat != null  ">
+				#{chooseSeat,jdbcType=INTEGER},
+			</if>
+			<if test="enable != null  ">
+				#{enable,jdbcType=INTEGER},
+			</if>
+			<if test="longitude != null  ">
+				#{longitude,jdbcType=DECIMAL},
+			</if>
+			<if test="latitude != null  ">
+				#{latitude,jdbcType=DECIMAL},
+			</if>
+			<if test="createTime != null  ">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null  ">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  ">
+				#{updateUser,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null  ">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+		</trim>
+    </insert>
+
+	 <!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.BasicPlace" >
+		 update basic_place set 
+		<trim  suffixOverrides="," >
+			<if test="name != null  and name != '' ">
+				name=#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="oneAddress != null  and oneAddress != '' ">
+				one_address=#{oneAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="twoAddress != null  and twoAddress != '' ">
+				two_address=#{twoAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="threeAddress != null  and threeAddress != '' ">
+				three_address=#{threeAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null  and address != '' ">
+				address=#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="chooseSeat != null  ">
+				choose_seat=#{chooseSeat,jdbcType=INTEGER},
+			</if>
+			<if test="enable != null  ">
+				enable=#{enable,jdbcType=INTEGER},
+			</if>
+			<if test="longitude != null  ">
+				longitude=#{longitude,jdbcType=DECIMAL},
+			</if>
+			<if test="latitude != null  ">
+				latitude=#{latitude,jdbcType=DECIMAL},
+			</if>
+			<if test="updateTime != null  ">
+				update_time=#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  ">
+				update_user=#{updateUser,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		 where id=#{id,jdbcType=BIGINT} and is_delete = 0
+	</update>
+
+	<!-- 删除记录 -->
+	<update id="deleteById" parameterType="java.lang.Long">
+		update basic_place set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+ 
+	<!-- 根据id查询 接单中台表 -->
+	<select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select <include refid="Base_Column_List" /> 
+		 from basic_place where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据条件查询列表 -->
+	<select id="findByCondition" resultMap="BaseResultMap"  parameterType="com.mem.vo.business.base.model.po.BasicPlaceQuery">
+		select
+		<include refid="Base_Column_List"/>
+		from basic_place
+		<include refid="whereCondition"/>
+		order by create_time desc
+	</select>
+
+
+	<!-- 根据条件查询列表 -->
+	<select id="findAllCity" resultType="java.lang.String">
+
+		select distinct two_address
+		from basic_place
+		where is_delete = 0
+	</select>
+
+	<!-- 根据条件查询列表 -->
+	<select id="findByIdList" resultMap="BaseResultMap"  parameterType="java.util.List">
+		select
+		<include refid="Base_Column_List"/>
+		from basic_place where id in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item,jdbcType=BIGINT}
+		</foreach>
+	</select>
+</mapper>   

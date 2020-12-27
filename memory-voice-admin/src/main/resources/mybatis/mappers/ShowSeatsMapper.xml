@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.ShowSeatsDao" >
+
+	<resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.ShowSeats" >
+		<result column="id" property="id" jdbcType="BIGINT"/>
+			<result column="line_no" property="lineNo" jdbcType="VARCHAR"/>
+			<result column="place_id" property="placeId" jdbcType="BIGINT"/>
+			<result column="performance_id" property="performanceId" jdbcType="BIGINT"/>
+			<result column="show_id" property="showId" jdbcType="BIGINT"/>
+			<result column="area_id" property="areaId" jdbcType="BIGINT"/>
+			<result column="status" property="status" jdbcType="INTEGER"/>
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+			<result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+			<result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+			<result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+			<result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+		</resultMap>
+       
+<!-- show_seats table all fields -->
+	<sql id="Base_Column_List" >
+		 id,	
+		line_no,	
+		place_id,	
+		performance_id,	
+		show_id,	
+		area_id,	
+		status,	
+		create_time,	
+		create_user,	
+		update_time,	
+		update_user
+	</sql>
+<!-- 查询条件 -->
+	<sql id="whereCondition">
+       	where is_delete = 0
+		<trim  suffixOverrides="," >
+			<if test="condition.id != null" >
+				and id =  #{condition.id,jdbcType=BIGINT}
+			</if>
+			
+			<if test="condition.lineNo != null and condition.lineNo != ''" >
+				and line_no =  #{condition.lineNo,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.placeId != null" >
+				and place_id =  #{condition.placeId,jdbcType=BIGINT}
+			</if>
+			
+			<if test="condition.performanceId != null" >
+				and performance_id =  #{condition.performanceId,jdbcType=BIGINT}
+			</if>
+			
+			<if test="condition.showId != null" >
+				and show_id =  #{condition.showId,jdbcType=BIGINT}
+			</if>
+			
+			<if test="condition.areaId != null" >
+				and area_id =  #{condition.areaId,jdbcType=BIGINT}
+			</if>
+			
+			<if test="condition.status != null" >
+				and status =  #{condition.status,jdbcType=INTEGER}
+			</if>
+			
+			<if test="condition.createTime != null" >
+				and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.createUser != null and condition.createUser != ''" >
+				and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.updateTime != null" >
+				and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.updateUser != null and condition.updateUser != ''" >
+				and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+			</if>
+			
+
+			<if test="condition.ts != null" >
+				and ts =  #{condition.ts,jdbcType=TIMESTAMP}
+			</if>
+			
+		</trim>
+	</sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.ShowSeats" >
+         insert into show_seats
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="lineNo != null  and lineNo != '' ">
+				line_no,
+			</if>
+			<if test="placeId != null  ">
+				place_id,
+			</if>
+			<if test="performanceId != null  ">
+				performance_id,
+			</if>
+			<if test="showId != null  ">
+				show_id,
+			</if>
+			<if test="areaId != null  ">
+				area_id,
+			</if>
+			<if test="status != null  ">
+				status,
+			</if>
+			<if test="createTime != null  ">
+				create_time,
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				create_user,
+			</if>
+			<if test="updateTime != null  ">
+				update_time,
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user,
+			</if>
+			<if test="isDelete != null  ">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="lineNo != null  and lineNo != '' ">
+				#{lineNo,jdbcType=VARCHAR},
+			</if>
+			<if test="placeId != null  ">
+				#{placeId,jdbcType=BIGINT},
+			</if>
+			<if test="performanceId != null  ">
+				#{performanceId,jdbcType=BIGINT},
+			</if>
+			<if test="showId != null  ">
+				#{showId,jdbcType=BIGINT},
+			</if>
+			<if test="areaId != null  ">
+				#{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null  ">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null  ">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null  ">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null  ">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+		</trim>
+    </insert>
+
+	 <!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.ShowSeats" >
+		 update show_seats set 
+		<trim  suffixOverrides="," >
+			<if test="lineNo != null  and lineNo != '' ">
+				line_no=#{lineNo,jdbcType=VARCHAR},
+			</if>
+			<if test="placeId != null  ">
+				place_id=#{placeId,jdbcType=BIGINT},
+			</if>
+			<if test="performanceId != null  ">
+				performance_id=#{performanceId,jdbcType=BIGINT},
+			</if>
+			<if test="showId != null  ">
+				show_id=#{showId,jdbcType=BIGINT},
+			</if>
+			<if test="areaId != null  ">
+				area_id=#{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null  ">
+				status=#{status,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null  ">
+				update_time=#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user=#{updateUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		 where id=#{id,jdbcType=BIGINT} and is_delete = 0
+	</update>
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateByIds" parameterType="list" >
+		update show_seats set
+		<trim  suffixOverrides="," >
+			<if test="lineNo != null  and lineNo != '' ">
+				line_no=#{lineNo,jdbcType=VARCHAR},
+			</if>
+			<if test="placeId != null  ">
+				place_id=#{placeId,jdbcType=BIGINT},
+			</if>
+			<if test="performanceId != null  ">
+				performance_id=#{performanceId,jdbcType=BIGINT},
+			</if>
+			<if test="showId != null  ">
+				show_id=#{showId,jdbcType=BIGINT},
+			</if>
+			<if test="areaId != null  ">
+				area_id=#{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null  ">
+				status=#{status,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null  ">
+				update_time=#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user=#{updateUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where id in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item.id,jdbcType=DECIMAL}
+		</foreach> and is_delete = 0
+	</update>
+	<!-- 删除记录 -->
+	<update id="deleteById" parameterType="java.lang.Long">
+		update show_seats set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+ 
+	<!-- 根据id查询 接单中台表 -->
+	<select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select <include refid="Base_Column_List" /> 
+		 from show_seats where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据条件查询列表 -->
+	<select id="findByCondition" resultMap="BaseResultMap"  parameterType="com.mem.vo.business.base.model.po.ShowSeatsQuery">
+		select
+		<include refid="Base_Column_List"/>
+		from show_seats
+		<include refid="whereCondition"/>
+	</select>
+</mapper>   

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.AuthorityMenuDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.AuthorityMenu">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="menu_id" property="menuId" jdbcType="VARCHAR"/>
+        <result column="menu_name" property="menuName" jdbcType="VARCHAR"/>
+        <result column="menu_url" property="menuUrl" jdbcType="VARCHAR"/>
+        <result column="sort_num" property="sortNum" jdbcType="INTEGER"/>
+        <result column="comment" property="comment" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- authority_menu table all fields -->
+    <sql id="Base_Column_List">
+		 id,	
+		menu_id,	
+		menu_name,	
+		menu_url,	
+		sort_num,	
+		comment,	
+		create_time,	
+		create_user,	
+		update_time,	
+		update_user
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim suffixOverrides=",">
+            <if test="condition.id != null">
+                and id = #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.menuId != null and condition.menuId != ''">
+                and menu_id = #{condition.menuId,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.menuName != null and condition.menuName != ''">
+                and menu_name = #{condition.menuName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.menuUrl != null and condition.menuUrl != ''">
+                and menu_url = #{condition.menuUrl,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.sortNum != null">
+                and sort_num = #{condition.sortNum,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.comment != null and condition.comment != ''">
+                and comment = #{condition.comment,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.createTime != null">
+                and create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''">
+                and create_user = #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null">
+                and update_time = #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''">
+                and update_user = #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="condition.ts != null">
+                and ts = #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+
+        </trim>
+    </sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.AuthorityMenu">
+        insert into authority_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="menuId != null  and menuId != '' ">
+                menu_id,
+            </if>
+            <if test="menuName != null  and menuName != '' ">
+                menu_name,
+            </if>
+            <if test="menuUrl != null  and menuUrl != '' ">
+                menu_url,
+            </if>
+            <if test="sortNum != null  ">
+                sort_num,
+            </if>
+            <if test="comment != null  and comment != '' ">
+                comment,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="menuId != null  and menuId != '' ">
+                #{menuId,jdbcType=VARCHAR},
+            </if>
+            <if test="menuName != null  and menuName != '' ">
+                #{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="menuUrl != null  and menuUrl != '' ">
+                #{menuUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="sortNum != null  ">
+                #{sortNum,jdbcType=INTEGER},
+            </if>
+            <if test="comment != null  and comment != '' ">
+                #{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.AuthorityMenu">
+        update authority_menu set
+        <trim suffixOverrides=",">
+            <if test="menuId != null  and menuId != '' ">
+                menu_id=#{menuId,jdbcType=VARCHAR},
+            </if>
+            <if test="menuName != null  and menuName != '' ">
+                menu_name=#{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="menuUrl != null  and menuUrl != '' ">
+                menu_url=#{menuUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="sortNum != null  ">
+                sort_num=#{sortNum,jdbcType=INTEGER},
+            </if>
+            <if test="comment != null  and comment != '' ">
+                comment=#{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update authority_menu set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 接单中台表 -->
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from authority_menu where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.AuthorityMenuQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from authority_menu
+        <include refid="whereCondition"/>
+    </select>
+</mapper>   

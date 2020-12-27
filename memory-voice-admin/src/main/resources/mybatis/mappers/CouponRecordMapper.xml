@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.CouponRecordDao" >
+
+	<resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.CouponRecord" >
+		<result column="id" property="id" jdbcType="BIGINT"/>
+			<result column="coupon_id" property="couponId" jdbcType="VARCHAR"/>
+			<result column="exchange_code" property="exchangeCode" jdbcType="VARCHAR"/>
+			<result column="status" property="status" jdbcType="INTEGER"/>
+			<result column="num" property="num" jdbcType="TIMESTAMP"/>
+			<result column="description" property="description" jdbcType="VARCHAR"/>
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+			<result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+			<result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+			<result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+			<result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+		</resultMap>
+       
+<!-- coupon_record table all fields -->
+	<sql id="Base_Column_List" >
+		 id,	
+		coupon_id,	
+		exchange_code,	
+		status,	
+		num,	
+		description,	
+		create_time,	
+		create_user,	
+		update_time,	
+		update_user
+	</sql>
+<!-- 查询条件 -->
+	<sql id="whereCondition">
+       	where is_delete = 0
+		<trim  suffixOverrides="," >
+			<if test="condition.id != null" >
+				and id =  #{condition.id,jdbcType=BIGINT}
+			</if>
+			
+			<if test="condition.couponId != null and condition.couponId != ''" >
+				and coupon_id =  #{condition.couponId,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.exchangeCode != null and condition.exchangeCode != ''" >
+				and exchange_code =  #{condition.exchangeCode,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.status != null" >
+				and status =  #{condition.status,jdbcType=INTEGER}
+			</if>
+			
+			<if test="condition.num != null" >
+				and num =  #{condition.num,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.description != null and condition.description != ''" >
+				and description =  #{condition.description,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.createTime != null" >
+				and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="condition.createUser != null and condition.createUser != ''" >
+				and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="condition.updateTime != null" >
+				and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+			</if>
+			
+			<if test="condition.updateUser != null and condition.updateUser != ''" >
+				and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+			</if>
+			
+
+			<if test="condition.ts != null" >
+				and ts =  #{condition.ts,jdbcType=TIMESTAMP}
+			</if>
+			
+		</trim>
+	</sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.mem.vo.business.base.model.po.CouponRecord" >
+         insert into coupon_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="couponId != null  and couponId != '' ">
+				coupon_id,
+			</if>
+			<if test="exchangeCode != null  and exchangeCode != '' ">
+				exchange_code,
+			</if>
+			<if test="status != null  ">
+				status,
+			</if>
+			<if test="num != null  ">
+				num,
+			</if>
+			<if test="description != null  and description != '' ">
+				description,
+			</if>
+			<if test="createTime != null  ">
+				create_time,
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				create_user,
+			</if>
+			<if test="updateTime != null  ">
+				update_time,
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user,
+			</if>
+			<if test="isDelete != null  ">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="couponId != null  and couponId != '' ">
+				#{couponId,jdbcType=VARCHAR},
+			</if>
+			<if test="exchangeCode != null  and exchangeCode != '' ">
+				#{exchangeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null  ">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="num != null  ">
+				#{num,jdbcType=TIMESTAMP},
+			</if>
+			<if test="description != null  and description != '' ">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null  ">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null  and createUser != '' ">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null  ">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null  ">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+		</trim>
+    </insert>
+
+	 <!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.CouponRecord" >
+		 update coupon_record set 
+		<trim  suffixOverrides="," >
+			<if test="couponId != null  and couponId != '' ">
+				coupon_id=#{couponId,jdbcType=VARCHAR},
+			</if>
+			<if test="exchangeCode != null  and exchangeCode != '' ">
+				exchange_code=#{exchangeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null  ">
+				status=#{status,jdbcType=INTEGER},
+			</if>
+			<if test="num != null  ">
+				num=#{num,jdbcType=TIMESTAMP},
+			</if>
+			<if test="description != null  and description != '' ">
+				description=#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null  ">
+				update_time=#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null  and updateUser != '' ">
+				update_user=#{updateUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		 where id=#{id,jdbcType=BIGINT} and is_delete = 0
+	</update>
+
+	<!-- 删除记录 -->
+	<update id="deleteById" parameterType="java.lang.Long">
+		update coupon_record set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+ 
+	<!-- 根据id查询 优惠券记录表 -->
+	<select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select <include refid="Base_Column_List" /> 
+		 from coupon_record where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据条件查询列表 -->
+	<select id="findByCondition" resultMap="BaseResultMap"  parameterType="com.mem.vo.business.base.model.po.CouponRecordQuery">
+		select
+		<include refid="Base_Column_List"/>
+		from coupon_record
+		<include refid="whereCondition"/>
+	</select>
+</mapper>   

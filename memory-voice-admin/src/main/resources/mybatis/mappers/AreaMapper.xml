@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.AreaDao" >
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.Area" >
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="place_id" property="placeId" jdbcType="BIGINT"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
+        <result column="area_color" property="areaColor" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- area table all fields -->
+    <sql id="Base_Column_List" >
+		 id,	
+		place_id,	
+		area_name,	
+		area_color,	
+		create_time,	
+		create_user,	
+		update_time,	
+		update_user
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim  suffixOverrides="," >
+            <if test="condition.id != null" >
+                and id =  #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.placeId != null" >
+                and place_id =  #{condition.placeId,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.areaName != null and condition.areaName != ''" >
+                and area_name =  #{condition.areaName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.areaColor != null and condition.areaColor != ''" >
+                and area_color =  #{condition.areaColor,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.createTime != null" >
+                and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''" >
+                and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null" >
+                and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''" >
+                and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="condition.ts != null" >
+                and ts =  #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+
+        </trim>
+    </sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Area" >
+        insert into area
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="placeId != null  ">
+                place_id,
+            </if>
+            <if test="areaName != null  and areaName != '' ">
+                area_name,
+            </if>
+            <if test="areaColor != null  and areaColor != '' ">
+                area_color,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="placeId != null  ">
+                #{placeId,jdbcType=BIGINT},
+            </if>
+            <if test="areaName != null  and areaName != '' ">
+                #{areaName,jdbcType=VARCHAR},
+            </if>
+            <if test="areaColor != null  and areaColor != '' ">
+                #{areaColor,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.Area" >
+        update area set
+        <trim  suffixOverrides="," >
+            <if test="placeId != null  ">
+                place_id=#{placeId,jdbcType=BIGINT},
+            </if>
+            <if test="areaName != null  and areaName != '' ">
+                area_name=#{areaName,jdbcType=VARCHAR},
+            </if>
+            <if test="areaColor != null  and areaColor != '' ">
+                area_color=#{areaColor,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update area set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 接单中台表 -->
+    <select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select <include refid="Base_Column_List" />
+        from area where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"  parameterType="com.mem.vo.business.base.model.po.AreaQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from area
+        <include refid="whereCondition"/>
+    </select>
+</mapper>   

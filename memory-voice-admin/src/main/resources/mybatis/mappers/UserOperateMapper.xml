@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.UserOperateDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.UserOperate">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="TINYINT"/>
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- user_operate table all fields -->
+    <sql id="Base_Column_List">
+		 id,
+		user_id,
+		phone_number,
+		type,
+		operate_time,
+		create_time,
+		create_user,
+		update_time,
+		update_user
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim suffixOverrides=",">
+            <if test="condition.id != null">
+                and id = #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.userId != null">
+                and user_id = #{condition.userId,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.phoneNumber != null and condition.phoneNumber != '' ">
+                and phone_number = #{condition.phoneNumber,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.type != null">
+                and type = #{condition.type,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.operateTime != null">
+                and operate_time = #{condition.operateTime,jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="condition.startDate != null">
+                and operate_time <![CDATA[ >= ]]> #{condition.startDate,jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="condition.endDate != null">
+                and operate_time <![CDATA[ <= ]]> #{condition.endDate,jdbcType=TIMESTAMP}
+            </if>
+
+
+            <if test="condition.createTime != null">
+                and create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''">
+                and create_user = #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null">
+                and update_time = #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''">
+                and update_user = #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+        </trim>
+    </sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.UserOperate">
+        insert into user_operate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  ">
+                user_id,
+            </if>
+            <if test="phoneNumber != null and phoneNumber != '' ">
+                phone_number,
+            </if>
+            <if test="type != null  ">
+                type,
+            </if>
+            <if test="operateTime != null  ">
+                operate_time,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  ">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="phoneNumber != null  and phoneNumber != '' ">
+                #{phoneNumber,jdbcType=INTEGER},
+            </if>
+            <if test="type != null  ">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="operateTime != null  ">
+                #{operateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.UserOperate">
+        update user_operate set
+        <trim suffixOverrides=",">
+            <if test="userId != null  ">
+                user_id=#{userId,jdbcType=BIGINT},
+            </if>
+            <if test="phoneNumber != null  and phoneNumber != '' ">
+                phone_number=#{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null  ">
+                type=#{type,jdbcType=TINYINT},
+            </if>
+            <if test="operateTime != null  ">
+                operate_time=#{operateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update user_operate set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 接单中台表 -->
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from user_operate where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.UserOperateQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from user_operate
+        <include refid="whereCondition"/>
+    </select>
+</mapper>

@@ -1,0 +1,58 @@
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    jdbc-url: jdbc:mysql://rm-8vb29nojxb2q59m452o.mysql.zhangbei.rds.aliyuncs.com:3306/memvo-dev?useUnicode=true&characterEncoding=utf-8&useSSL=true&useAffectedRows=true&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
+    password: Jiyizhisheng325
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+
+  servlet:
+    multipart:
+      max-request-size: 1000MB
+      max-file-size: 100MB
+  profiles:
+    active: dev
+  thymeleaf:
+    prefix: classpath:/templates/
+  mvc:
+    static-path-pattern: /**
+    date-format: yyyy-MM-dd HH:mm:ss
+  jmx:
+    enabled: false
+#微信相关
+wx:
+  login:
+    jsAppId: wx4ff47b82dfc23eab
+    jsAppSecret: 79cc66a7125503fb5f8e480d5443a80a
+    appId: wx4f6b226a68a2c8fd
+    appSecret: 5cef16ff8b73d540b60e8eeb76e0c866
+    grantType: authorization_code
+  order:
+    appId: wx4f6b226a68a2c8fd
+    mch_id: 1539306221
+    notify_url: https://47.92.115.105/order/receiveNotify
+    shopKey: 4m8j5by624kwf99wwiudsxew9d7bzcqr
+    spbill_create_ip: 47.92.115.105
+# 七牛云配置
+qiniu:
+  bucket: memoryvoice
+  secretKey: FH0sVK-gpFKRsmbYWPIM_JgDlBqRSWSacRPfXmIP
+  zone: zone1
+  accessKey: ZVWpOYIwNloHg9tBclVtXYN10KkAcClOdcNNQktx
+  domainOfBucket: http://image.jiyilive.com
+# 阿里云短信与快递信息
+aliyuncs:
+  accessKeyId: LTAIy9YVxFCejX30
+  signName: 记忆之声
+  regionId: default
+  domain: dysmsapi.aliyuncs.com
+  action: SendSms
+  templateCode: SMS_166325265
+  version: 2017-05-25
+  accessSecret: CpiBuVxGXzvhFaBNsUBSAxhlvN7U5n
+  expressAppCode: 70d1767caaec4fb5b4c70cf19e35c9cb
+picture:
+  root:
+    path: /www/server/apache-tomcat-8.5.32/picture/

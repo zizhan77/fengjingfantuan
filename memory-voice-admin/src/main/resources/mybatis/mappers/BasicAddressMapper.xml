@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.BasicAddressDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.BasicAddress">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="address_code" property="addressCode" jdbcType="VARCHAR"/>
+        <result column="address_name" property="addressName" jdbcType="VARCHAR"/>
+        <result column="parent_code" property="parentCode" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- basic_address table all fields -->
+    <sql id="Base_Column_List">
+		 id,	
+		address_code,	
+		address_name,	
+		parent_code,	
+		level,	
+		status,	
+		create_time,	
+		create_user,	
+		update_time,	
+		update_user
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim suffixOverrides=",">
+            <if test="condition.id != null">
+                and id = #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.addressCode != null and condition.addressCode != ''">
+                and address_code = #{condition.addressCode,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.addressName != null and condition.addressName != ''">
+                and address_name like CONCAT(CONCAT('%',#{condition.addressName,jdbcType=VARCHAR} ),'%')
+            </if>
+
+            <if test="condition.parentCode != null and condition.parentCode != ''">
+                and parent_code = #{condition.parentCode,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.level != null">
+                and level = #{condition.level,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.status != null ">
+                and status = #{condition.status,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.createTime != null">
+                and create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''">
+                and create_user = #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null">
+                and update_time = #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''">
+                and update_user = #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="condition.ts != null">
+                and ts = #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+
+        </trim>
+    </sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.BasicAddress">
+        insert into basic_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="addressCode != null  and addressCode != '' ">
+                address_code,
+            </if>
+            <if test="addressName != null  and addressName != '' ">
+                address_name,
+            </if>
+            <if test="parentCode != null  and parentCode != '' ">
+                parent_code,
+            </if>
+            <if test="level != null  ">
+                level,
+            </if>
+            <if test="status != null  ">
+                status,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="addressCode != null  and addressCode != '' ">
+                #{addressCode,jdbcType=VARCHAR},
+            </if>
+            <if test="addressName != null  and addressName != '' ">
+                #{addressName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentCode != null  and parentCode != '' ">
+                #{parentCode,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null  ">
+                #{level,jdbcType=TINYINT},
+            </if>
+            <if test="status != null   ">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.BasicAddress">
+        update basic_address set
+        <trim suffixOverrides=",">
+            <if test="addressCode != null  and addressCode != '' ">
+                address_code=#{addressCode,jdbcType=VARCHAR},
+            </if>
+            <if test="addressName != null  and addressName != '' ">
+                address_name=#{addressName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentCode != null  and parentCode != '' ">
+                parent_code=#{parentCode,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null  ">
+                level=#{level,jdbcType=TINYINT},
+            </if>
+            <if test="status != null  ">
+                status=#{status,jdbcType=TINYINT},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update basic_address set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 接单中台表 -->
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from basic_address where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.BasicAddressQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from basic_address
+        <include refid="whereCondition"/>
+        order by create_time desc
+    </select>
+
+    <select id="findNameByCode" resultType="java.lang.String"
+            parameterType="java.lang.String">
+        select address_name
+        from basic_address
+        where is_delete = 0 and
+        address_code = #{code}
+    </select>
+
+</mapper>   

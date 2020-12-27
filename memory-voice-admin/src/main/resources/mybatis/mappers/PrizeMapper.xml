@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.PrizeDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.Prize">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
+        <result column="activity_id" property="activityId" jdbcType="BIGINT"/>
+        <result column="prob" property="prob" jdbcType="DECIMAL"/>
+        <result column="total_num" property="totalNum" jdbcType="INTEGER"/>
+        <result column="gived_num" property="givedNum" jdbcType="INTEGER"/>
+        <result column="prize_type" property="prizeType" jdbcType="TINYINT"/>
+        <result column="prize_intro" property="prizeIntro" jdbcType="VARCHAR"/>
+        <result column="prize_rule" property="prizeRule" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+        <result column="sponsor_id" property="sponsorId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- prize table all fields -->
+    <sql id="Base_Column_List" >
+		 id,
+		prize_name,
+		activity_id,
+		prob,
+		total_num,
+		gived_num,
+		prize_type,
+		prize_intro,
+		prize_rule,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		sponsor_id
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim  suffixOverrides="," >
+            <if test="condition.id != null" >
+                and id =  #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.prizeName != null and condition.prizeName != ''" >
+                and prize_name =  #{condition.prizeName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.activityId != null" >
+                and activity_id =  #{condition.activityId,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.prob != null" >
+                and prob =  #{condition.prob,jdbcType=DECIMAL}
+            </if>
+
+            <if test="condition.totalNum != null" >
+                and total_num =  #{condition.totalNum,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.givedNum != null" >
+                and gived_num =  #{condition.givedNum,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.prizeType != null" >
+                and prize_type =  #{condition.prizeType,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.prizeIntro != null and condition.prizeIntro != ''" >
+                and prize_intro =  #{condition.prizeIntro,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.prizeRule != null and condition.prizeRule != ''" >
+                and prize_rule =  #{condition.prizeRule,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.createTime != null" >
+                and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''" >
+                and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null" >
+                and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''" >
+                and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="condition.ts != null" >
+                and ts =  #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="condition.sponsorId != null" >
+                and sponsor_id =  #{condition.sponsorId,jdbcType=INTEGER}
+            </if>
+
+        </trim>
+    </sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Prize">
+        insert into prize
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prizeName != null  and prizeName != '' ">
+                prize_name,
+            </if>
+            <if test="activityId != null  ">
+                activity_id,
+            </if>
+            <if test="prob != null  ">
+                prob,
+            </if>
+            <if test="totalNum != null  ">
+                total_num,
+            </if>
+            <if test="givedNum != null  ">
+                gived_num,
+            </if>
+            <if test="prizeType != null  ">
+                prize_type,
+            </if>
+            <if test="prizeIntro != null  and prizeIntro != '' ">
+                prize_intro,
+            </if>
+            <if test="prizeRule != null  and prizeRule != '' ">
+                prize_rule,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+            <if test="sponsorId != null  ">
+                sponsor_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prizeName != null  and prizeName != '' ">
+                #{prizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="activityId != null  ">
+                #{activityId,jdbcType=BIGINT},
+            </if>
+            <if test="prob != null  ">
+                #{prob,jdbcType=DECIMAL},
+            </if>
+            <if test="totalNum != null  ">
+                #{totalNum,jdbcType=INTEGER},
+            </if>
+            <if test="givedNum != null  ">
+                #{givedNum,jdbcType=INTEGER},
+            </if>
+            <if test="prizeType != null  ">
+                #{prizeType,jdbcType=TINYINT},
+            </if>
+            <if test="prizeIntro != null  and prizeIntro != '' ">
+                #{prizeIntro,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeRule != null  and prizeRule != '' ">
+                #{prizeRule,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="sponsorId != null  ">
+                #{sponsorId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.Prize">
+        update prize set
+        <trim  suffixOverrides="," >
+            <if test="prizeName != null  and prizeName != '' ">
+                prize_name=#{prizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="activityId != null  ">
+                activity_id=#{activityId,jdbcType=BIGINT},
+            </if>
+            <if test="prob != null  ">
+                prob=#{prob,jdbcType=DECIMAL},
+            </if>
+            <if test="totalNum != null  ">
+                total_num=#{totalNum,jdbcType=INTEGER},
+            </if>
+            <if test="givedNum != null  ">
+                gived_num=#{givedNum,jdbcType=INTEGER},
+            </if>
+            <if test="prizeType != null  ">
+                prize_type=#{prizeType,jdbcType=TINYINT},
+            </if>
+            <if test="prizeIntro != null  and prizeIntro != '' ">
+                prize_intro=#{prizeIntro,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeRule != null  and prizeRule != '' ">
+                prize_rule=#{prizeRule,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="sponsorId != null  ">
+                sponsor_id=#{sponsorId,jdbcType=INTEGER},
+            </if>
+            <if test="isDelete != null  ">
+                is_delete=#{isDelete,jdbcType=INTEGER}
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update prize set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 奖品表 -->
+    <select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select <include refid="Base_Column_List" />
+        from prize where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.PrizeQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from prize
+        <include refid="whereCondition"/>
+    </select>
+</mapper>   

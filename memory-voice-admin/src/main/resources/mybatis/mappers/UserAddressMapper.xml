@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.UserAddressDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.UserAddress">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="receiver_name" property="receiverName" jdbcType="VARCHAR"/>
+        <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR"/>
+        <result column="dest_one_address" property="destOneAddress" jdbcType="VARCHAR"/>
+        <result column="dest_two_address" property="destTwoAddress" jdbcType="VARCHAR"/>
+        <result column="dest_three_address" property="destThreeAddress" jdbcType="VARCHAR"/>
+        <result column="dest_four_address" property="destFourAddress" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+        <result column="is_default" property="isDefault" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!-- user_address table all fields -->
+    <sql id="Base_Column_List" >
+		 id,
+		user_id,
+		receiver_name,
+		receiver_mobile,
+		dest_one_address,
+		dest_two_address,
+		dest_three_address,
+		dest_four_address,
+		address,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		is_default
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim  suffixOverrides="," >
+            <if test="condition.id != null" >
+                and id =  #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.userId != null" >
+                and user_id =  #{condition.userId,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.receiverName != null and condition.receiverName != ''" >
+                and receiver_name =  #{condition.receiverName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.receiverMobile != null and condition.receiverMobile != ''" >
+                and receiver_mobile =  #{condition.receiverMobile,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.destOneAddress != null and condition.destOneAddress != ''" >
+                and dest_one_address =  #{condition.destOneAddress,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.destTwoAddress != null and condition.destTwoAddress != ''" >
+                and dest_two_address =  #{condition.destTwoAddress,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.destThreeAddress != null and condition.destThreeAddress != ''" >
+                and dest_three_address =  #{condition.destThreeAddress,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.destFourAddress != null and condition.destFourAddress != ''" >
+                and dest_four_address =  #{condition.destFourAddress,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.address != null and condition.address != ''" >
+                and address =  #{condition.address,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.createTime != null" >
+                and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''" >
+                and create_user =  #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null" >
+                and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''" >
+                and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="condition.ts != null" >
+                and ts =  #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="condition.isDefault != null" >
+                and is_default =  #{condition.isDefault,jdbcType=TINYINT}
+            </if>
+            order by is_default desc
+        </trim>
+    </sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.UserAddress">
+        insert into user_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  ">
+                user_id,
+            </if>
+            <if test="receiverName != null  and receiverName != '' ">
+                receiver_name,
+            </if>
+            <if test="receiverMobile != null  and receiverMobile != '' ">
+                receiver_mobile,
+            </if>
+            <if test="destOneAddress != null  and destOneAddress != '' ">
+                dest_one_address,
+            </if>
+            <if test="destTwoAddress != null  and destTwoAddress != '' ">
+                dest_two_address,
+            </if>
+            <if test="destThreeAddress != null  and destThreeAddress != '' ">
+                dest_three_address,
+            </if>
+            <if test="destFourAddress != null  and destFourAddress != '' ">
+                dest_four_address,
+            </if>
+            <if test="address != null  and address != '' ">
+                address,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+            <if test="isDefault != null  ">
+                is_default,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  ">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="receiverName != null  and receiverName != '' ">
+                #{receiverName,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverMobile != null  and receiverMobile != '' ">
+                #{receiverMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="destOneAddress != null  and destOneAddress != '' ">
+                #{destOneAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="destTwoAddress != null  and destTwoAddress != '' ">
+                #{destTwoAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="destThreeAddress != null  and destThreeAddress != '' ">
+                #{destThreeAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="destFourAddress != null  and destFourAddress != '' ">
+                #{destFourAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null  and address != '' ">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="isDefault != null  ">
+                #{isDefault,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.UserAddress">
+        update user_address set
+        <trim  suffixOverrides="," >
+            <if test="userId != null  ">
+                user_id=#{userId,jdbcType=BIGINT},
+            </if>
+            <if test="receiverName != null  and receiverName != '' ">
+                receiver_name=#{receiverName,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverMobile != null  and receiverMobile != '' ">
+                receiver_mobile=#{receiverMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="destOneAddress != null  and destOneAddress != '' ">
+                dest_one_address=#{destOneAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="destTwoAddress != null  and destTwoAddress != '' ">
+                dest_two_address=#{destTwoAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="destThreeAddress != null  and destThreeAddress != '' ">
+                dest_three_address=#{destThreeAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="destFourAddress != null  and destFourAddress != '' ">
+                dest_four_address=#{destFourAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null  and address != '' ">
+                address=#{address,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null  ">
+                is_default=#{isDefault,jdbcType=TINYINT},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update user_address set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 用户地址表 -->
+    <select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select <include refid="Base_Column_List" />
+        from user_address where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.UserAddressQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from user_address
+        <include refid="whereCondition"/>
+    </select>
+</mapper>   
