@@ -1,1 +1,3 @@
 memory-voice-admin/src/main/resources/application*
+.idea/*
+.idea
