@@ -5,6 +5,7 @@ import com.mem.vo.business.base.model.po.Organizer;
 import com.mem.vo.business.base.model.po.OrganizerExample;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import com.mem.vo.common.dto.Page;
 
 import java.util.List;
 
@@ -36,4 +37,10 @@ public interface OrganizerDao {
 
     @Select("select id, name, phone, password, status, create_time, create_user, update_time, update_user, is_delete from organizer where id = #{userId} and is_delete = 0 ")
     Organizer queryById(@Param("userId") Long userId);
+
+    List<Organizer> queryPage(@Param("page") Page paramPage);
+
+    int update(Organizer paramOrganizer);
+
+    List<Organizer> queryBy(Organizer paramOrganizer);
 }

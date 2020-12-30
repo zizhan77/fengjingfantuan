@@ -1,11 +1,12 @@
 package com.mem.vo.business.base.dao;
 
-import java.util.List;
-
 import com.mem.vo.business.base.model.po.BasicArtist;
 import com.mem.vo.business.base.model.po.BasicArtistQuery;
+import com.mem.vo.business.base.model.vo.PlaceArtistVO;
 import com.mem.vo.common.dto.Page;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * <br>
@@ -63,5 +64,10 @@ public interface BasicArtistDao {
      * @param query 查询条件
      */
     List<BasicArtist> findByCondition(@Param("page") Page page, @Param("condition") BasicArtistQuery query);
+
+    List<PlaceArtistVO> findByIdList(@Param("artistList") List<String> paramList);
+
+    @Select({"select count(1) from basic_artist where is_delete = 0 and artist_name=#{name}"})
+    int findByArtistName(@Param("name") String paramString);
 
 }

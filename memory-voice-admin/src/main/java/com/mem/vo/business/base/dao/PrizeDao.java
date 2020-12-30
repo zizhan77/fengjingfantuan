@@ -1,10 +1,10 @@
 package com.mem.vo.business.base.dao;
 
-import java.util.List;
-
 import com.mem.vo.business.base.model.po.Prize;
 import com.mem.vo.business.base.model.po.PrizeQuery;
+import com.mem.vo.business.base.model.vo.ActivityVO;
 import com.mem.vo.common.dto.Page;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -61,4 +61,9 @@ public interface PrizeDao {
      */
     List<Prize> findByCondition(@Param("page") Page page, @Param("condition") PrizeQuery query);
 
+    int rollBackStoreById(Integer paramInteger);
+
+    ActivityVO gettotalandgived(Long paramLong);
+
+    int insertforprize(Prize paramPrize);
 }

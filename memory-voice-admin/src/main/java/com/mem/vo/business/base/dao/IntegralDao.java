@@ -1,11 +1,11 @@
 package com.mem.vo.business.base.dao;
 
 
-import java.util.List;
-
 import com.mem.vo.business.base.model.po.Integral;
 import com.mem.vo.business.base.model.po.IntegralQuery;
 import com.mem.vo.common.dto.Page;
+import com.mem.vo.common.dto.PageBean;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 /**
 *
@@ -56,4 +56,7 @@ public interface IntegralDao {
     */
     void findByCondition(@Param("page") Page page, @Param("condition") IntegralQuery query);
 
+    List<Integral> integralRecordByUser(@Param("id") Long paramLong, @Param("paging") PageBean<Integral> paramPageBean);
+
+    int integralRecordByUserCount(@Param("id") Long paramLong);
 }

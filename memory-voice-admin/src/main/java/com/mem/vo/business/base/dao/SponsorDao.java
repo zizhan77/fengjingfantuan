@@ -56,4 +56,9 @@ public interface SponsorDao {
     */
     void findByCondition(@Param("page") Page page, @Param("condition") SponsorQuery query);
 
+    List<Sponsor> findByConditionbyishow();
+
+    Sponsor getSponsorOne(Long paramLong);
+
+    List<String> getSponsorPrize(Long paramLong);
 }

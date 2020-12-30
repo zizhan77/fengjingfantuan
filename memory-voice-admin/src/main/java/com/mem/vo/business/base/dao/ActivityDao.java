@@ -4,7 +4,10 @@ import java.util.List;
 
 import com.mem.vo.business.base.model.po.Activity;
 import com.mem.vo.business.base.model.po.ActivityQuery;
+import com.mem.vo.business.base.model.po.User;
+import com.mem.vo.business.base.model.vo.ActivityVO;
 import com.mem.vo.common.dto.Page;
+import com.mem.vo.common.dto.PageBean;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -68,4 +71,30 @@ public interface ActivityDao {
      * @return 返回查询的集合
      */
     List<Activity> findByConditionAvailable(@Param("condition") ActivityQuery query);
+
+    List<Activity> findByPage(@Param("condition") ActivityQuery paramActivityQuery, @Param("page") Page paramPage);
+
+    List<Activity> pcFindByPage(@Param("condition") ActivityQuery paramActivityQuery, @Param("page") Page paramPage);
+
+    int findByPageToPhoneCount();
+
+    List<ActivityVO> findByPageToPhone(@Param("paging") PageBean<ActivityVO> paramPageBean);
+
+    ActivityVO queryDetailByPhone(Integer paramInteger);
+
+    Integer querySort(Long paramLong);
+
+    String findSplistToid(Long paramLong);
+
+    int queryActivityByUserCount(@Param("type") Integer paramInteger, @Param("id") Long paramLong);
+
+    List<ActivityVO> queryActivityByUser(@Param("paging") PageBean<ActivityVO> paramPageBean, @Param("type") Integer paramInteger, @Param("id") Long paramLong);
+
+    List<Integer> getActivityEnd();
+
+    List<User> getActivityUser(@Param("i") Integer paramInteger);
+
+    Activity getActivitySumPass(@Param("a") Activity paramActivity);
+
+    Activity getRankSumPass(@Param("a") Activity paramActivity);
 }

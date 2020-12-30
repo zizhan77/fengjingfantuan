@@ -48,11 +48,15 @@ public interface ActivityQaDao {
     */
     List<ActivityQa> findByCondition(@Param("condition") ActivityQaQuery query);
 
-    /**
-    * 根据条件查询网络资源表
-    * @param  page 分页信息
-    * @param  query 查询条件
-    */
-    void findByCondition(@Param("page") Page page, @Param("condition") ActivityQaQuery query);
+//    /**
+//    * 根据条件查询网络资源表
+//    * @param  page 分页信息
+//    * @param  query 查询条件
+//    */
+//    void findByCondition(@Param("page") Page page, @Param("condition") ActivityQaQuery query);
+
+    List<ActivityQa> findByCondition(@Param("page") Page paramPage, @Param("condition") ActivityQaQuery paramActivityQaQuery);
+
+    Integer inserts(@Param("list") List<ActivityQa> paramList);
 
 }

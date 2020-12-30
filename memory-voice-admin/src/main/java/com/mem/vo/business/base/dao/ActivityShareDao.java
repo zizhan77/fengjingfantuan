@@ -5,6 +5,8 @@ import com.mem.vo.business.base.model.po.ActivityShareQuery;
 import com.mem.vo.common.dto.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import com.mem.vo.business.base.model.po.User;
+import com.mem.vo.business.base.model.po.UserShareClass;
 
 import java.util.List;
 
@@ -73,4 +75,16 @@ public interface ActivityShareDao {
 
     @Select("select * from activity_share where is_delete = 0 ")
     List<ActivityShare> findAll();
+
+    ActivityShare showShareInUser(Long paramLong);
+
+    List<ActivityShare> findAllForUserShare(Long paramLong);
+
+    void insertUserShare(UserShareClass paramUserShareClass);
+
+    List<User> getUserShareForSign(String paramString);
+
+    String getUserShareForuser(Long paramLong);
+
+    Integer selectACT(ActivityShare paramActivityShare);
 }

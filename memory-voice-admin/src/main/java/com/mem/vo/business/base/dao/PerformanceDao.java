@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mem.vo.business.base.model.po.Performance;
 import com.mem.vo.business.base.model.po.PerformanceQuery;
+import com.mem.vo.business.biz.model.vo.performance.ShowDetail;
 import com.mem.vo.common.dto.Page;
 import org.apache.ibatis.annotations.Param;
 
@@ -65,4 +66,6 @@ public interface PerformanceDao {
     List<Performance> findByVo(@Param("page") Page page, @Param("condition") PerformanceQuery performanceQuery);
 
     List<Performance> selectByUserId(Integer userId);
+
+    List<ShowDetail> getListByCount();
 }

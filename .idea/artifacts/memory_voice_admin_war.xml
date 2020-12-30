@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="memory-voice-admin:war">
+    <output-path>$PROJECT_DIR$/memory-voice-admin/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>memory-voice-admin</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="memory-voice-admin.war">
+      <element id="artifact" artifact-name="memory-voice-admin:war exploded" />
+    </root>
+  </artifact>
+</component>
