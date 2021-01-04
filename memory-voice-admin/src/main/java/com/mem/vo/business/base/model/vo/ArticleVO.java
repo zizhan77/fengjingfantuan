@@ -34,5 +34,8 @@ public class ArticleVO {
 
     private Integer cityId;
 
+    private String showTime2;
+
+    private String organizerPhone;
 
 }

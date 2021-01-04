@@ -2,9 +2,10 @@ package com.mem.vo.business.base.service;
 
 import com.mem.vo.business.base.model.po.ActivityShare;
 import com.mem.vo.business.base.model.po.ActivityShareQuery;
+import com.mem.vo.business.base.model.po.ActivitysharePc;
+import com.mem.vo.business.base.model.po.User;
 import com.mem.vo.common.dto.Page;
-
-import java.util.Date;
+import com.mem.vo.common.dto.PageBean;
 import java.util.List;
 /**
 *
@@ -68,4 +69,14 @@ public interface ActivityShareService {
      * @return  返回可抽奖次数
      */
     Integer queryLotteryQtyByToken(String token, Integer activityId);
+
+    PageBean queryShareAddUserList(ActivitysharePc actPc);
+
+    ActivityShare showShareInUser(String token);
+
+    Integer shareForUserAndSign(String token, Long userId, Integer type, Integer shareFrom, Integer isNew);
+
+    List<User> getUserShareForSign(String bizCode);
+
+    User getUserShareForuser(Long userId);
 }

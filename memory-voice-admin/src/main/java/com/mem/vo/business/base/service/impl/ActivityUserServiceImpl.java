@@ -4,6 +4,7 @@ package com.mem.vo.business.base.service.impl;
 import com.mem.vo.business.base.dao.ActivityUserDao;
 import com.mem.vo.business.base.model.po.ActivityUser;
 import com.mem.vo.business.base.model.po.ActivityUserQuery;
+import com.mem.vo.business.base.model.po.Prize;
 import com.mem.vo.business.base.model.po.User;
 import com.mem.vo.business.base.service.ActivityUserService;
 import com.mem.vo.business.base.service.UserService;
@@ -12,6 +13,7 @@ import com.mem.vo.business.biz.service.token.TokenService;
 import com.mem.vo.common.constant.ActivityEnum;
 import com.mem.vo.common.constant.RedisConstant;
 import com.mem.vo.common.constant.RedisPrefix;
+import com.mem.vo.common.dto.PageBean;
 import com.mem.vo.common.exception.BizException;
 import com.mem.vo.common.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -97,6 +99,31 @@ public class ActivityUserServiceImpl implements ActivityUserService {
     @Override
     public int updateLotteryQtyReduceById(long id) {
         return activityUserDao.updateLotteryQtyReduceById(id);
+    }
+
+    @Override
+    public int findCountPass() {
+        return 0;
+    }
+
+    @Override
+    public Integer shareAndAdd(String paramString1, String paramString2) {
+        return null;
+    }
+
+    @Override
+    public PageBean<Prize> queryRewardByActivity(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3) {
+        return null;
+    }
+
+    @Override
+    public PageBean<Prize> queryRewardByActivityAndUser(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3) {
+        return null;
+    }
+
+    @Override
+    public PageBean<User> queryShareUserbyUser(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3) {
+        return null;
     }
 
 }

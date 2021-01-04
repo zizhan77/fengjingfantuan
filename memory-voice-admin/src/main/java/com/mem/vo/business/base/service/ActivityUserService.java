@@ -2,6 +2,9 @@ package com.mem.vo.business.base.service;
 
 import com.mem.vo.business.base.model.po.ActivityUser;
 import com.mem.vo.business.base.model.po.ActivityUserQuery;
+import com.mem.vo.business.base.model.po.Prize;
+import com.mem.vo.business.base.model.po.User;
+import com.mem.vo.common.dto.PageBean;
 import java.util.List;
 /**
 *
@@ -42,4 +45,15 @@ public interface ActivityUserService {
     int updateUserPassQty(ActivityUser activityUser);
 
     int updateLotteryQtyReduceById(long id);
+
+    int findCountPass();
+
+    Integer shareAndAdd(String paramString1, String paramString2);
+
+    PageBean<Prize> queryRewardByActivity(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3);
+
+    PageBean<Prize> queryRewardByActivityAndUser(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3);
+
+    PageBean<User> queryShareUserbyUser(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3);
+
 }

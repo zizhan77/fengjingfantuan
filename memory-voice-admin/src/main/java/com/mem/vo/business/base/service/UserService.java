@@ -1,9 +1,13 @@
 package com.mem.vo.business.base.service;
 
+import com.mem.vo.business.base.model.po.Integral;
+import com.mem.vo.business.base.model.po.MtaBean;
 import com.mem.vo.business.base.model.po.User;
 import com.mem.vo.business.base.model.po.UserQuery;
+import com.mem.vo.business.base.model.vo.UserUpdatelottery;
 import com.mem.vo.common.dto.Page;
-
+import com.mem.vo.common.dto.PageBean;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -61,4 +65,28 @@ public interface UserService {
     Page<User> findPageByCondition(Page page, UserQuery query);
 
     int updateBySourceAndBizCode(String phoneNumber,String sourceCode,String bizCode,String userName);
+
+    MtaBean findGender();
+
+    HashMap<String, String> findAge(String paramString);
+
+    void addIntegral(Integer paramInteger, String paramString);
+
+    int updateIntegral(String paramString, Integer paramInteger);
+
+    void updateByIntegral(Integer paramInteger, Long paramLong);
+
+    void updateByName(String paramString1, String paramString2, Integer paramInteger, String paramString3);
+
+    User queryUserIdAndActvitity(Long paramLong);
+
+    PageBean<Integral> integralRecordByUser(Long paramLong, Integer paramInteger1, Integer paramInteger2);
+
+    PageBean myRankingByUser(String paramString, Integer paramInteger1, Integer paramInteger2);
+
+    Integer addintegral1(Long paramLong);
+
+    List<UserUpdatelottery> userUpdatelottery(UserUpdatelottery paramUserUpdatelottery);
+
+    void updateByUserCodeForlottery(UserUpdatelottery paramUserUpdatelottery);
 }

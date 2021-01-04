@@ -17,4 +17,6 @@ public class EticketVO {
      * 数量
      */
     private Integer nums;
+
+    private String count;
 }

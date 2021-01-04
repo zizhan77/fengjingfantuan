@@ -1,10 +1,12 @@
 package com.mem.vo.business.base.service;
 
+import com.mem.vo.business.base.model.po.IntegralRoleClass;
 import com.mem.vo.business.base.model.po.Reward;
 import com.mem.vo.business.base.model.po.RewardQuery;
+import com.mem.vo.business.base.model.vo.RewardQueryDto;
+import com.mem.vo.business.base.model.vo.RewardVO;
 import com.mem.vo.common.dto.Page;
-import org.apache.ibatis.annotations.Param;
-
+import com.mem.vo.common.dto.PageBean;
 import java.util.List;
 /**
 *
@@ -57,4 +59,34 @@ public interface RewardService {
     void findPageByCondition(Page page, RewardQuery query);
 
     List<Integer> selectIdByEt(RewardQuery query);
+
+    List<RewardVO> findBy(String paramString);
+
+    List<Reward> findByConditionAndDate(RewardQuery paramRewardQuery);
+
+    int updateByPrizedId(Integer paramInteger1, Integer paramInteger2);
+
+    Integer getUserDefaultIntegral();
+
+    List<RewardVO> findByActivityId(Integer paramInteger);
+
+    List<Reward> findByConditionAndCurrentDay(RewardQuery paramRewardQuery);
+
+    PageBean<RewardVO> queryListBy(RewardQueryDto paramRewardQueryDto);
+
+    void downLoadExcel(RewardQueryDto paramRewardQueryDto);
+
+    List<IntegralRoleClass> integralRoleList(Integer paramInteger);
+
+    Integer updateByIdToIntegralRole(IntegralRoleClass paramIntegralRoleClass);
+
+    PageBean<RewardVO> queryListByUser(Long paramLong, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3) throws Exception;
+
+    int getOldUserIntegral();
+
+    int getNewUserIntegral();
+
+    IntegralRoleClass getSignlaxin();
+
+    Integer updateRewardFlag(String paramString, Reward paramReward);
 }

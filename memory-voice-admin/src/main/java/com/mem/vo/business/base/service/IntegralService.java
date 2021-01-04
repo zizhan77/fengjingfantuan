@@ -3,7 +3,9 @@ package com.mem.vo.business.base.service;
 import com.mem.vo.business.base.model.po.Integral;
 import com.mem.vo.business.base.model.po.IntegralQuery;
 import com.mem.vo.common.dto.Page;
+import com.mem.vo.common.dto.PageBean;
 import java.util.List;
+
 /**
 *
 * <br>
@@ -52,4 +54,6 @@ public interface IntegralService {
     * @param  query 查询条件
     */
     void findPageByCondition(Page page, IntegralQuery query);
+
+    List<Integral> integralRecordByUser(Long paramLong, PageBean<Integral> paramPageBean);
 }

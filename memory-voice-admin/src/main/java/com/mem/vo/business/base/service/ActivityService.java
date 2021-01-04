@@ -1,10 +1,12 @@
 package com.mem.vo.business.base.service;
 
-import java.util.List;
-
 import com.mem.vo.business.base.model.po.Activity;
 import com.mem.vo.business.base.model.po.ActivityQuery;
+import com.mem.vo.business.base.model.po.Prize;
+import com.mem.vo.business.base.model.vo.ActivityVO;
 import com.mem.vo.common.dto.Page;
+import com.mem.vo.common.dto.PageBean;
+import java.util.List;
 
 /**
  * <br>
@@ -66,4 +68,19 @@ public interface ActivityService {
      * @return 返回查询的集合
      */
     List<Activity> findByConditionAvailable(ActivityQuery query);
+
+    Page<Activity> findByPage(ActivityQuery activityQuery, Page page);
+
+    List<String> queryQa(String id);
+
+    Prize queryPrizeById(String activityId);
+
+    Page<Activity> pcFindByPage(ActivityQuery activityQuery, Page<Activity> page);
+
+    ActivityVO queryDetailByPhone(Integer id);
+
+    PageBean<ActivityVO> findByPageToPhone(Integer pageNo, Integer pageSize);
+
+    PageBean<ActivityVO> queryActivityByUser(Integer pageNo, Integer pageSize, Integer flag, Long userId);
+
 }

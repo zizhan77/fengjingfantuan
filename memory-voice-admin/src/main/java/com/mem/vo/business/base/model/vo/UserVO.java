@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserVO {
+public class UserVO{
     /**
      * 主键
      */
@@ -45,4 +45,6 @@ public class UserVO {
      * 积分
      */
     private Integer integral;
+
+    private Integer integralflag;
 }

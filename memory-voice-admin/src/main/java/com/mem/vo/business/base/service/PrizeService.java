@@ -67,4 +67,8 @@ public interface PrizeService {
      * @return  返回中奖信息
      */
     PrizeD slotMachine(String token, Long activityId);
+
+    int rollBackStoreById(Integer paramInteger);
+
+    int addchangecodeall(Long paramLong);
 }

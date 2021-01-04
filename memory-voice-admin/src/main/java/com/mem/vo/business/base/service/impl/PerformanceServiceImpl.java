@@ -98,6 +98,7 @@ public class PerformanceServiceImpl implements PerformanceService {
         return getShowDetail( performance);
     }
 
+    @Override
     public ShowDetail getShowDetail(Performance performance) {
 
         ShowDetail showDetail = new ShowDetail();
@@ -214,6 +215,7 @@ public class PerformanceServiceImpl implements PerformanceService {
         return showDetail;
     }
 
+    @Override
     public Integer getStatus(Date startSaleDate, Date firstShowTime, Integer status) {
         /**
          * 开售时间为空   & 当前时间< 首场演出时间 =》 预售（未确定时间）

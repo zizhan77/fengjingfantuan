@@ -54,4 +54,8 @@ public interface ActivityQaService {
     * @param  query 查询条件
     */
     void findPageByCondition(Page page, ActivityQaQuery query);
+
+    Integer inserts(String paramString, List<ActivityQa> paramList);
+
+    ActivityQa queryOne(Long paramLong);
 }

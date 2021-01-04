@@ -11,4 +11,5 @@ import lombok.Data;
 public class ExcelDataVO {
     private Integer id;
     private String barcode;
+    private String pass;
 }

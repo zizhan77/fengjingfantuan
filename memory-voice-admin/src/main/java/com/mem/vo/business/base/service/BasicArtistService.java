@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mem.vo.business.base.model.po.BasicArtist;
 import com.mem.vo.business.base.model.po.BasicArtistQuery;
+import com.mem.vo.business.base.model.vo.PlaceArtistVO;
 import com.mem.vo.common.dto.Page;
 
 /**
@@ -61,4 +62,6 @@ public interface BasicArtistService {
      * @param query 查询条件
      */
     Page<BasicArtist> findPageByCondition(Page page, BasicArtistQuery query);
+
+    List<PlaceArtistVO> findByIdList(List<String> paramList);
 }

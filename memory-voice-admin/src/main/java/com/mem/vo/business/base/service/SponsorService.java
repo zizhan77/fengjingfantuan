@@ -1,9 +1,12 @@
 package com.mem.vo.business.base.service;
 
+import com.mem.vo.business.base.model.po.MtaBean;
+import com.mem.vo.business.base.model.po.MtaData;
 import com.mem.vo.business.base.model.po.Sponsor;
 import com.mem.vo.business.base.model.po.SponsorQuery;
 import com.mem.vo.common.dto.Page;
-
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 /**
 *
@@ -53,4 +56,14 @@ public interface SponsorService {
     * @param  query 查询条件
     */
     void findPageByCondition(Page page, SponsorQuery query);
+
+    MtaData findHistory() throws URISyntaxException, IOException;
+
+    MtaBean findArea(String paramString1, String paramString2) throws URISyntaxException, IOException;
+
+    List<Sponsor> queryAllSponorByPhone(Long paramLong1, Long paramLong2);
+
+    List<String> querySponorPictureByactid(Long paramLong);
+
+    Sponsor getSponsorOne(Long paramLong);
 }

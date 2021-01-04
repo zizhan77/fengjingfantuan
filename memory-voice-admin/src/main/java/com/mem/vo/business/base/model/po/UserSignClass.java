@@ -6,26 +6,50 @@ import java.util.Date;
 
 @Data
 public class UserSignClass {
+//
+//
+//    private Integer id;
+//
+//    private String userId;
+//
+//    private String userName;
+//
+//    private String targetId;
+//
+//    private Date createTime;
+//
+//    private String createUser;
+//
+//    private Date updateTime;
+//
+//    private String updateUser;
+//
+//    private Integer isDelete;
+//
+//    private Integer type;
+//
+//    private Integer shareFrom;
+
     private Integer id;
 
-    private String userId;
+    private Long userid;
 
-    private String userName;
+    private Integer length;
 
-    private String targetId;
+    private String signstarttime;
 
-    private Date createTime;
+    private String signendtime;
 
-    private String createUser;
+    private String createtime;
 
-    private Date updateTime;
+    private String updatetime;
 
-    private String updateUser;
+    private Integer todayIntegral = 0;
 
-    private Integer isDelete;
+    private Integer allIntegral = 0;
 
-    private Integer type;
+    private Integer isSignToday = 0;
 
-    private Integer shareFrom;
+    private Integer light;
 
 }

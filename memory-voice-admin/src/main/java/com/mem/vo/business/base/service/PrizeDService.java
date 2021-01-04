@@ -58,4 +58,10 @@ public interface PrizeDService {
     void findPageByCondition(Page page, PrizeDQuery query);
 
     List<Integer> selectIdByEt(PrizeDQuery query);
+
+    List<PrizeD> findByLevelAndActivityIdAndType(PrizeDQuery paramPrizeDQuery);
+
+    int deleteByPrizeId(Integer paramInteger);
+
+    Integer giveUp(String paramString);
 }
