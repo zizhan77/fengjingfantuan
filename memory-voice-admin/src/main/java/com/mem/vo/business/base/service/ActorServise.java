@@ -6,29 +6,29 @@ import com.mem.vo.business.base.model.po.ActorTirp;
 import com.mem.vo.common.dto.PageBean;
 
 public interface ActorServise {
-    PageBean<Actor> getActorList(Actor paramActor, Integer paramInteger1, Integer paramInteger2);
+    PageBean<Actor> getActorList(Actor actor, Integer page, Integer pageSize);
 
-    Integer updateActor(Actor paramActor);
+    Integer updateActor(Actor actor);
 
-    Integer deleteActor(Actor paramActor);
+    Integer deleteActor(Actor actor);
 
-    Integer addActor(Actor paramActor);
+    Integer addActor(Actor actor);
 
-    PageBean<ActorTirp> getActorTripList(ActorTirp paramActorTirp, Integer paramInteger1, Integer paramInteger2);
+    PageBean<ActorTirp> getActorTripList(ActorTirp actorTirp, Integer page, Integer pageSize);
 
-    Integer updateActorTrip(ActorTirp paramActorTirp);
+    Integer updateActorTrip(ActorTirp actor);
 
-    Integer deleteActorTrip(ActorTirp paramActorTirp);
+    Integer deleteActorTrip(ActorTirp actor);
 
-    Integer addActorTrip(ActorTirp paramActorTirp);
+    Integer addActorTrip(ActorTirp actor);
 
-    PageBean<Actor> getPhoneActorList(Integer paramInteger1, Integer paramInteger2);
+    PageBean<Actor> getPhoneActorList(Integer page, Integer pageSize);
 
-    PageBean<ActorTirp> getPhoneActorTripList(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3);
+    PageBean<ActorTirp> getPhoneActorTripList(String name, Integer page, Integer pageSize, Integer actorid);
 
-    Integer clickPrize(String paramString, Long paramLong);
+    Integer clickPrize(String token, Long id);
 
-    Integer clickBanner(String paramString, Long paramLong);
+    Integer clickBanner(String token, Long id);
 
-    Integer clickSponsor(String paramString, Long paramLong);
+    Integer clickSponsor(String token, Long id);
 }

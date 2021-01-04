@@ -63,5 +63,5 @@ public interface BasicArtistService {
      */
     Page<BasicArtist> findPageByCondition(Page page, BasicArtistQuery query);
 
-    List<PlaceArtistVO> findByIdList(List<String> paramList);
+    List<PlaceArtistVO> findByIdList(List<String> artistList);
 }

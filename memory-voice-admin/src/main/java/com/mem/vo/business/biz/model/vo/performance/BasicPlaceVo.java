@@ -2,7 +2,9 @@ package com.mem.vo.business.biz.model.vo.performance;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import com.mem.vo.business.base.model.vo.PlaceArtistVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -89,4 +91,5 @@ public class BasicPlaceVo {
 
     private String artistNmae;
 
+    private List<PlaceArtistVO> artistList;
 }

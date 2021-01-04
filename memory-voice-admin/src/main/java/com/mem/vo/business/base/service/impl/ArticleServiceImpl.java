@@ -18,28 +18,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+
 @Service("articleService")
 @Transactional
 public class ArticleServiceImpl implements ArticleService {
-   @Resource
-   private TokenService tokenService;
+    @Resource
+    private TokenService tokenService;
 
-   @Resource
-   private ArticleMapper articleMapper;
+    @Resource
+    private ArticleMapper articleMapper;
+
     @Override
     public Page<ArticleVO> queryAllBy(String token, Page page, Article article) {
         CommonLoginContext contextByken = tokenService.getContextByken(token);
-        if(contextByken.getSourceCode().equals(SourceType.SPONSOR.getCode())){
+        if (contextByken.getSourceCode().equals(SourceType.SPONSOR.getCode())) {
             //赞助商登录，就只查询状态为1的
             //contextByken.getUserId()
             article.setStatus("0");
         }
-        if(contextByken.getSourceCode().equals(SourceType.ORGENIZER.getCode())){
+        if (contextByken.getSourceCode().equals(SourceType.ORGENIZER.getCode())) {
             //主办方登录，就只查主办方的
             //contextByken.getUserId()
             article.setOrganizerid(contextByken.getUserId().intValue());
         }
-        List<ArticleVO> list=articleMapper.selectBy(page,article);
+        List<ArticleVO> list = articleMapper.selectBy(page, article);
         BizAssert.notEmpty(list, BizCode.BIZ_1102.getMessage());
         System.out.println(list.get(0));
         page.setData(list);
@@ -48,49 +50,46 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleVO queryById(Article article) {
-        BizAssert.notNull(article,BizCode.PARAM_NULL.getMessage());
-        if(null!=article.getId()){
+        BizAssert.notNull(article, BizCode.PARAM_NULL.getMessage());
+        if (null != article.getId()) {
             ArticleVO article1 = articleMapper.selectById(article.getId());
-            BizAssert.notNull(article1,BizCode.BIZ_1103.getMessage());
+            BizAssert.notNull(article1, BizCode.BIZ_1103.getMessage());
             return article1;
-        }else{
-            throw new BizException("ID为空");
         }
-
+        throw new BizException("ID为空");
     }
 
     @Override
     public Article saveOrUpdate(String token, Article article) {
         System.out.println("请求");
-        BizAssert.notNull(article,BizCode.PARAM_NULL.getMessage());
+        BizAssert.notNull(article, BizCode.PARAM_NULL.getMessage());
         CommonLoginContext contextByken = tokenService.getContextByken(token);
         Long userId = contextByken.getUserId();
 
 
-
         //判断增加和修改
-        if(null!=article.getId()){
+        if (null != article.getId()) {
             //修改
-            int row =articleMapper.updateByArticle(article);
-            if(row==0){
+            int row = articleMapper.updateByArticle(article);
+            if (row == 0) {
                 throw new BizException("项目修改失败");
             }
-        }else {
+        } else {
             //增加
             //初始化各种参数
-            BizAssert.notNull(article.getArtistid(),BizCode.PARAM_NULL.getMessage());
-            BizAssert.notNull(article.getCityid(),BizCode.PARAM_NULL.getMessage());
-            BizAssert.notNull(article.getPlaceid(),BizCode.PARAM_NULL.getMessage());
+            BizAssert.notNull(article.getArtistid(), BizCode.PARAM_NULL.getMessage());
+            BizAssert.notNull(article.getCityid(), BizCode.PARAM_NULL.getMessage());
+            BizAssert.notNull(article.getPlaceid(), BizCode.PARAM_NULL.getMessage());
             article.setStatus("0");
             article.setIsDelete("0");
             article.setOrganizerid(userId.intValue());
-            Article article1=articleMapper.selectByArticle(article);
-            if(article1!=null){
+            Article article1 = articleMapper.selectByArticle(article);
+            if (article1 != null) {
                 throw new BizException("不要重复操作");
             }
 
             int insert = articleMapper.insert(article);
-            if(insert==0){
+            if (insert == 0) {
                 throw new BizException("项目增加失败");
             }
         }
@@ -99,15 +98,15 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article delete(Article article) {
-        BizAssert.notNull(article,BizCode.PARAM_NULL.getMessage());
-        if(null==article.getId()){
-                throw new BizException("Id为空");
-        }else{
-            int i = articleMapper.deleteById(article.getId());
-            if(i==0){
-                throw new BizException("项目删除失败");
-            }
-            return article;
+        BizAssert.notNull(article, BizCode.PARAM_NULL.getMessage());
+        if (null == article.getId()) {
+            throw new BizException("Id为空");
         }
+
+        int i = articleMapper.deleteById(article.getId());
+        if (i == 0) {
+            throw new BizException("项目删除失败");
+        }
+        return article;
     }
 }

@@ -48,12 +48,12 @@ public interface ActivityUserService {
 
     int findCountPass();
 
-    Integer shareAndAdd(String paramString1, String paramString2);
+    Integer shareAndAdd(String token, String activityId);
 
-    PageBean<Prize> queryRewardByActivity(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3);
+    PageBean<Prize> queryRewardByActivity(String token, Integer pageNo, Integer pageSize, Integer activityId);
 
-    PageBean<Prize> queryRewardByActivityAndUser(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3);
+    PageBean<Prize> queryRewardByActivityAndUser(String token, Integer pageNo, Integer pageSize, Integer activityId);
 
-    PageBean<User> queryShareUserbyUser(String paramString, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3);
+    PageBean<User> queryShareUserbyUser(String token, Integer pageNo, Integer pageSize, Integer activityId);
 
 }

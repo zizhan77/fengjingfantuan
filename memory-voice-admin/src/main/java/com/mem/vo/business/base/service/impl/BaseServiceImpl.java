@@ -12,6 +12,4 @@ import org.springframework.stereotype.Service;
 @Service("baseService")
 public class BaseServiceImpl implements BaseService{
 
-
-
 }

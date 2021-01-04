@@ -8,8 +8,12 @@ import javax.annotation.Resource;
 import com.mem.vo.business.base.dao.BasicArtistDao;
 import com.mem.vo.business.base.model.po.BasicArtist;
 import com.mem.vo.business.base.model.po.BasicArtistQuery;
+import com.mem.vo.business.base.model.vo.PlaceArtistVO;
 import com.mem.vo.business.base.service.BasicArtistService;
+import com.mem.vo.common.constant.BizCode;
 import com.mem.vo.common.dto.Page;
+import com.mem.vo.common.exception.BizAssert;
+import com.mem.vo.common.exception.BizException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -29,6 +33,11 @@ public class BasicArtistServiceImpl implements BasicArtistService {
 
     @Override
     public int insert(BasicArtist basicArtist) {
+        String artistName = basicArtist.getArtistName();
+        int list = basicArtistDao.findByArtistName(artistName);
+        if (list != 0) {
+            throw new BizException("这个艺人已经不存在了");
+        }
         return basicArtistDao.insert(basicArtist);
     }
 
@@ -64,5 +73,11 @@ public class BasicArtistServiceImpl implements BasicArtistService {
         List<BasicArtist> list = basicArtistDao.findByCondition(page, query);
         page.setData(list);
         return page;
+    }
+
+    @Override
+    public List<PlaceArtistVO> findByIdList(List<String> artistList) {
+        BizAssert.notEmpty(artistList, BizCode.PARAM_NULL.getMessage());
+        return this.basicArtistDao.findByIdList(artistList);
     }
 }

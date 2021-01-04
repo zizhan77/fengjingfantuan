@@ -2,6 +2,7 @@ package com.mem.vo.business.base.service.impl;
 
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,13 +10,18 @@ import javax.annotation.Resource;
 
 import com.alibaba.fastjson.JSON;
 import com.mem.vo.business.base.dao.BasicPlaceDao;
+import com.mem.vo.business.base.dao.PlaceArtistMapper;
 import com.mem.vo.business.base.model.po.BasicPlace;
 import com.mem.vo.business.base.model.po.BasicPlaceQuery;
 import com.mem.vo.business.base.model.po.MtaBean;
+import com.mem.vo.business.base.model.vo.PlaceArtistVO;
 import com.mem.vo.business.base.service.BasicPlaceService;
+import com.mem.vo.business.biz.model.vo.performance.BasicPlaceVo;
 import com.mem.vo.common.constant.BizCode;
 import com.mem.vo.common.dto.Page;
 import com.mem.vo.common.exception.BizAssert;
+import com.mem.vo.common.exception.BizException;
+import com.mem.vo.common.util.BeanCopyUtil;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
@@ -37,18 +43,47 @@ import org.springframework.util.DigestUtils;
 public class BasicPlaceServiceImpl implements BasicPlaceService {
     private final static Logger log = LogManager.getLogger(BasicPlaceServiceImpl.class);
 
+    @Resource
+    private PlaceArtistMapper placeArtistMapper;
 
     @Resource
     private BasicPlaceDao basicPlaceDao;
 
     @Override
-    public int insert(BasicPlace basicPlace) {
-        return basicPlaceDao.insert(basicPlace);
+    public int insert(BasicPlaceVo basicPlaceVo) {
+        BizAssert.notNull(basicPlaceVo, BizCode.PARAM_NULL.getMessage());
+        BasicPlace basicPlace = (BasicPlace) BeanCopyUtil.copyProperties(basicPlaceVo, BasicPlace.class);
+        int insert = this.basicPlaceDao.insert(basicPlace);
+        System.out.println("主键"+ basicPlace.getId());
+        if (!basicPlaceVo.getArtistList().isEmpty()) {
+            List<String> list = new ArrayList<>();
+            for (PlaceArtistVO placeArtist : basicPlaceVo.getArtistList()) {
+                list.add(placeArtist.getArtistId() + "");
+            }
+            int i = this.placeArtistMapper.insertList(list, basicPlace.getId().intValue());
+            insert = i;
+        }
+        return insert;
     }
 
     @Override
-    public int updateById(BasicPlace basicPlace) {
-        return basicPlaceDao.updateById(basicPlace);
+    public int updateById(BasicPlaceVo basicPlaceVo) {
+        BizAssert.notNull(basicPlaceVo, BizCode.PARAM_NULL.getMessage());
+        BasicPlace basicPlace = (BasicPlace)BeanCopyUtil.copyProperties(basicPlaceVo, BasicPlace.class);
+        int i = basicPlaceDao.updateById(basicPlace);
+        if (i == 0) {
+            throw new BizException("修改失败");
+        }
+        int s = placeArtistMapper.deleteByPlaceId(basicPlaceVo.getId());
+        if (!basicPlaceVo.getArtistList().isEmpty()) {
+            List<String> list = new ArrayList<>();
+            for (PlaceArtistVO placeArtist : basicPlaceVo.getArtistList()) {
+                System.out.println(placeArtist);
+                list.add(placeArtist.getArtistId() + "");
+            }
+            i = placeArtistMapper.insertList(list, basicPlaceVo.getId().intValue());
+        }
+        return i;
     }
 
     @Override

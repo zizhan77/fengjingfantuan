@@ -6,6 +6,7 @@ import java.util.List;
 import com.mem.vo.business.base.model.po.BasicPlace;
 import com.mem.vo.business.base.model.po.BasicPlaceQuery;
 import com.mem.vo.business.base.model.po.MtaBean;
+import com.mem.vo.business.biz.model.vo.performance.BasicPlaceVo;
 import com.mem.vo.common.dto.Page;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,17 +20,17 @@ public interface BasicPlaceService {
 
     /**
     * 添加接单中台表
-    * @param  basicPlaceQuery 回复接单中台表实体
+    * @param  basicPlaceVo 回复接单中台表实体
     * @return 返回添加的接单中台表的ID
     */
-    int insert(BasicPlace basicPlaceQuery);
+    int insert(BasicPlaceVo basicPlaceVo);
 
     /**
     * 更新接单中台表
-    * @param  basicPlace 更新接单中台表实体
+    * @param basicPlaceVo 更新接单中台表实体
     * @return 返回更新的接单中台表的ID
     */
-    int updateById(BasicPlace basicPlace);
+    int updateById(BasicPlaceVo basicPlaceVo);
 
     /**
     * 删除接单中台表
