@@ -68,25 +68,25 @@ public interface UserService {
 
     MtaBean findGender();
 
-    HashMap<String, String> findAge(String paramString);
+    HashMap<String, String> findAge(String list);
 
-    void addIntegral(Integer paramInteger, String paramString);
+    void addIntegral(Integer code, String userId);
 
-    int updateIntegral(String paramString, Integer paramInteger);
+    int updateIntegral(String bizCode, Integer integral);
 
-    void updateByIntegral(Integer paramInteger, Long paramLong);
+    void updateByIntegral(Integer num, Long shareId);
 
-    void updateByName(String paramString1, String paramString2, Integer paramInteger, String paramString3);
+    void updateByName(String token, String name, Integer gender, String avatarurl);
 
-    User queryUserIdAndActvitity(Long paramLong);
+    User queryUserIdAndActvitity(Long userId);
 
-    PageBean<Integral> integralRecordByUser(Long paramLong, Integer paramInteger1, Integer paramInteger2);
+    PageBean<Integral> integralRecordByUser(Long userId, Integer pageNo, Integer pageSize);
 
-    PageBean myRankingByUser(String paramString, Integer paramInteger1, Integer paramInteger2);
+    PageBean myRankingByUser(String token, Integer pageNo, Integer pageSize);
 
-    Integer addintegral1(Long paramLong);
+    Integer addintegral1(Long userId);
 
-    List<UserUpdatelottery> userUpdatelottery(UserUpdatelottery paramUserUpdatelottery);
+    List<UserUpdatelottery> userUpdatelottery(UserUpdatelottery user);
 
-    void updateByUserCodeForlottery(UserUpdatelottery paramUserUpdatelottery);
+    void updateByUserCodeForlottery(UserUpdatelottery user);
 }

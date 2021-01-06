@@ -59,11 +59,11 @@ public interface SponsorService {
 
     MtaData findHistory() throws URISyntaxException, IOException;
 
-    MtaBean findArea(String paramString1, String paramString2) throws URISyntaxException, IOException;
+    MtaBean findArea(String start_time, String end_time) throws URISyntaxException, IOException;
 
-    List<Sponsor> queryAllSponorByPhone(Long paramLong1, Long paramLong2);
+    List<Sponsor> queryAllSponorByPhone(Long spid, Long activityid);
 
-    List<String> querySponorPictureByactid(Long paramLong);
+    List<String> querySponorPictureByactid(Long activityid);
 
-    Sponsor getSponsorOne(Long paramLong);
+    Sponsor getSponsorOne(Long id);
 }

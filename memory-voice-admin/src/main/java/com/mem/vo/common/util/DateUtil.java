@@ -259,6 +259,19 @@ public class DateUtil {
         return utcDate;
     }
 
+    public static boolean judgmentDate(String date1, String date2) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date start = sdf.parse(date1);
+        Date end = sdf.parse(date2);
+        long cha = end.getTime() - start.getTime();
+        if (cha < 0L)
+            return false;
+        double result = cha * 1.0D / 3600000.0D;
+        if (result <= 12.0D)
+            return true;
+        return false;
+    }
+
     public static void main(String[] args) {
         System.out.println(getMonthFirstStr("20174"));
         System.out.println(getMonthLastStr("201704"));

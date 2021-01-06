@@ -60,27 +60,27 @@ public interface RewardService {
 
     List<Integer> selectIdByEt(RewardQuery query);
 
-    List<RewardVO> findBy(String paramString);
+    List<RewardVO> findBy(String token);
 
-    List<Reward> findByConditionAndDate(RewardQuery paramRewardQuery);
+    List<Reward> findByConditionAndDate(RewardQuery reward);
 
-    int updateByPrizedId(Integer paramInteger1, Integer paramInteger2);
+    int updateByPrizedId(Integer prizedId, Integer code);
 
     Integer getUserDefaultIntegral();
 
-    List<RewardVO> findByActivityId(Integer paramInteger);
+    List<RewardVO> findByActivityId(Integer activityId);
 
-    List<Reward> findByConditionAndCurrentDay(RewardQuery paramRewardQuery);
+    List<Reward> findByConditionAndCurrentDay(RewardQuery reward);
 
-    PageBean<RewardVO> queryListBy(RewardQueryDto paramRewardQueryDto);
+    PageBean<RewardVO> queryListBy(RewardQueryDto dto);
 
-    void downLoadExcel(RewardQueryDto paramRewardQueryDto);
+    void downLoadExcel(RewardQueryDto dto);
 
-    List<IntegralRoleClass> integralRoleList(Integer paramInteger);
+    List<IntegralRoleClass> integralRoleList(Integer id);
 
-    Integer updateByIdToIntegralRole(IntegralRoleClass paramIntegralRoleClass);
+    Integer updateByIdToIntegralRole(IntegralRoleClass roleClass);
 
-    PageBean<RewardVO> queryListByUser(Long paramLong, Integer paramInteger1, Integer paramInteger2, Integer paramInteger3) throws Exception;
+    PageBean<RewardVO> queryListByUser(Long userId, Integer flag, Integer pageNo, Integer pageSize) throws Exception;
 
     int getOldUserIntegral();
 
@@ -88,5 +88,5 @@ public interface RewardService {
 
     IntegralRoleClass getSignlaxin();
 
-    Integer updateRewardFlag(String paramString, Reward paramReward);
+    Integer updateRewardFlag(String token, Reward reward);
 }

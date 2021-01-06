@@ -3,11 +3,11 @@ package com.mem.vo.business.base.service;
 import com.mem.vo.business.base.model.po.UserSignClass;
 
 public interface SignInUserService {
-    UserSignClass signIntegral(String paramString);
+    UserSignClass signIntegral(String token);
 
-    UserSignClass signShow(String paramString);
+    UserSignClass signShow(String token);
 
-    Integer signAddIntegral(String paramString);
+    Integer signAddIntegral(String token);
 
-    Integer signAddIntegralTest(Long paramLong);
+    Integer signAddIntegralTest(Long userid);
 }
