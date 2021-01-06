@@ -1,6 +1,7 @@
 package com.mem.vo.business.biz.model.dto;
 
 import com.mem.vo.business.base.model.po.Organizer;
+import com.mem.vo.business.base.model.po.Sponsor;
 import com.mem.vo.business.base.model.po.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,5 +33,7 @@ public class CommonLoginContext {
     private User user;
 //增加的
     private Organizer organizer;
+
+    private Sponsor sponsor;
 
 }

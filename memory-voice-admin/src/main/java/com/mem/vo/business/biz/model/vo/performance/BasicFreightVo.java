@@ -43,5 +43,4 @@ public class BasicFreightVo {
      */
     private Date createTime;
 
-
 }

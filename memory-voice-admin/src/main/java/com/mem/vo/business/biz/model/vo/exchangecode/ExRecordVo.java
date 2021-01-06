@@ -79,4 +79,34 @@ public class ExRecordVo {
      */
     private String statuaName;
 
+    public static ExRecordVoBuilder builder() {
+        return new ExRecordVoBuilder();
+    }
+
+    public static class ExRecordVoBuilder {
+        private Integer businessTag;
+
+        private String exchangeCode;
+
+        private Long performanceId;
+
+        private String performanceName;
+
+        private Long showId;
+
+        private String showName;
+
+        private Long areaId;
+
+        private String areaName;
+
+        private Long ticketGearId;
+
+        private String ticketGearName;
+
+        private String status;
+
+        private String statuaName;
+    }
+
 }

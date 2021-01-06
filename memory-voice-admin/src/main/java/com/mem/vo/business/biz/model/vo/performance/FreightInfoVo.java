@@ -24,6 +24,4 @@ public class FreightInfoVo {
     List<BasicFreightVo> freightVoList;
 
     Integer total;
-
-
 }

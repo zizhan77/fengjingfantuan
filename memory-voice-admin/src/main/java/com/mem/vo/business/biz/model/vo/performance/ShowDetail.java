@@ -19,5 +19,4 @@ public class ShowDetail {
     private PerformanceVo performanceVo;
 
     private BasicPlaceVo placeInfo;
-
 }

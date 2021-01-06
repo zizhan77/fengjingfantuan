@@ -34,5 +34,4 @@ public class AdministratorVo {
     private String roleName;
 
     private Integer status;
-
 }

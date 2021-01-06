@@ -30,12 +30,4 @@ public class RoleMenusRelVo {
      * 菜单
      */
     private List<Integer> menuIds;
-
-    public static void main(String[] args) {
-        List<Integer> menuids = new ArrayList<>();
-        menuids.add(3);
-        menuids.add(5);
-        RoleMenusRelVo vo = RoleMenusRelVo.builder().roleId(3).menuIds(menuids).build();
-        System.out.println(JsonUtil.toJson(vo));
-    }
 }

@@ -41,4 +41,20 @@ public class BasicAddressNode {
      */
     private List<BasicAddressNode> children;
 
+    public static BasicAddressNodeBuilder builder() {
+        return new BasicAddressNodeBuilder();
+    }
+
+    public static  class BasicAddressNodeBuilder {
+        private String addressCode;
+
+        private String addressName;
+
+        private String parentCode;
+
+        private Integer level;
+
+        private List<BasicAddressNode> children;
+    }
+
 }

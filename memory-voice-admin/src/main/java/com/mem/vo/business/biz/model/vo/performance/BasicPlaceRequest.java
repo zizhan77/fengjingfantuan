@@ -26,5 +26,4 @@ public class BasicPlaceRequest {
     private String cityId;
 
     private Integer enable;
-
 }

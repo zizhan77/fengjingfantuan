@@ -43,4 +43,20 @@ public class ExchangeCodeRequest {
      */
     private Integer number;
 
+    public static ExchangeCodeRequestBuilder builder() {
+        return new ExchangeCodeRequestBuilder();
+    }
+
+    public static class ExchangeCodeRequestBuilder {
+        private String businessKey;
+
+        private List<String> recordBusinessKeyList;
+
+        private Integer businessTag;
+
+        private String remark;
+
+        private Integer number;
+    }
+
 }

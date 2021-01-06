@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.mem.vo.business.base.model.po.PerformanceShow;
+import com.mem.vo.business.base.model.po.Sponsor;
 import com.mem.vo.business.base.model.po.TicketGear;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -169,4 +170,7 @@ public class PerformanceVo {
      */
     private Long saleEndTimeStamp;
 
+    private String sponsorId;
+
+    private List<Sponsor> sponsors;
 }

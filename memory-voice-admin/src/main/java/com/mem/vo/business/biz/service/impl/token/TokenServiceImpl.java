@@ -1,8 +1,10 @@
 package com.mem.vo.business.biz.service.impl.token;
 
 import com.mem.vo.business.base.model.po.Organizer;
+import com.mem.vo.business.base.model.po.Sponsor;
 import com.mem.vo.business.base.model.po.User;
 import com.mem.vo.business.base.service.OrganizerService;
+import com.mem.vo.business.base.service.SponsorService;
 import com.mem.vo.business.base.service.UserService;
 import com.mem.vo.business.biz.model.dto.CommonLoginContext;
 import com.mem.vo.business.biz.service.token.TokenService;
@@ -15,6 +17,7 @@ import com.mem.vo.common.util.JsonUtil;
 import com.mem.vo.common.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,6 +32,10 @@ import java.util.UUID;
 @Slf4j
 @Service("tokenService")
 public class TokenServiceImpl implements TokenService {
+
+    @Autowired
+    private SponsorService sponsorService;
+
     @Resource
     private OrganizerService organizerService;
 
@@ -61,6 +68,14 @@ public class TokenServiceImpl implements TokenService {
         CommonLoginContext commonLoginContext = JsonUtil.fromJson(value, CommonLoginContext.class);
         BizAssert.notNull(commonLoginContext, BizCode.BIZ_1004.getMessage());
         BizAssert.notNull(commonLoginContext.getUserId(),"用户id为空");
+
+        if (commonLoginContext.getSourceCode().equals(SourceType.SPONSOR.getCode())) {
+            Sponsor sponsor = this.sponsorService.findById(commonLoginContext.getUserId());
+            BizAssert.notNull(sponsor, "查询用户信息为空");
+                    commonLoginContext.setSponsor(sponsor);
+            return commonLoginContext;
+        }
+
         if(commonLoginContext.getSourceCode().equals(SourceType.ORGENIZER.getCode())){
             Organizer organizer=organizerService.queryById(commonLoginContext.getUserId());
             BizAssert.notNull(organizer,"查询用户信息为空");

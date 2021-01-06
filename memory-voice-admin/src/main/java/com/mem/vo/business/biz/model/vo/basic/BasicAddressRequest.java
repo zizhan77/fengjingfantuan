@@ -22,4 +22,17 @@ public class BasicAddressRequest {
     private Integer status;
 
 
+    public static class BasicAddressRequestBuilder {
+        private String cityName;
+
+        private Integer limit;
+
+        private Integer page;
+
+        private Integer status;
+    }
+
+    public static BasicAddressRequestBuilder builder() {
+        return new BasicAddressRequestBuilder();
+    }
 }

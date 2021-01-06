@@ -69,5 +69,11 @@ public class BannerVo {
      */
     private Date createTime;
 
+    private Date onlinetime;
+
+    private Date offlinetime;
+
+    private String thumbType;
+
 
 }

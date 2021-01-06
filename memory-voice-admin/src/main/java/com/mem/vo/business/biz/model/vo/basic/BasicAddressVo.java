@@ -51,5 +51,25 @@ public class BasicAddressVo {
      */
     private Date createTime;
 
+    public static class BasicAddressVoBuilder {
+        private Long id;
+
+        private String addressCode;
+
+        private String addressName;
+
+        private String parentCode;
+
+        private Integer level;
+
+        private Integer status;
+
+        private Date createTime;
+
+    }
+
+    public static BasicAddressVoBuilder builder() {
+        return new BasicAddressVoBuilder();
+    }
 
 }

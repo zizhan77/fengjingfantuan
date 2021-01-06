@@ -31,4 +31,16 @@ public class CheckTicketVo {
      */
     private Long userId;
 
-}
+    public static CheckTicketVoBuilder builder() {
+        return new CheckTicketVoBuilder();
+    }
+
+    public static class CheckTicketVoBuilder {
+        private Long performanceId;
+
+        private String exchangeCode;
+
+        private Long userId;
+    }
+
+    }
