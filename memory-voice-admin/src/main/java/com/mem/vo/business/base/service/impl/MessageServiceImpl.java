@@ -29,15 +29,13 @@ public class MessageServiceImpl implements MessageService {
     private MessageMapper messageMapper;
     @Override
     public Page<MessageVO> queryAll(String token, MessageQuery messageQuery) {
-        System.out.println("显示所有消息");
         Message message = new Message();
         if(tokenService.getContextByken(token).getSourceCode().equals(SourceType.ORGENIZER.getCode())){
             Long userId = tokenService.getContextByken(token).getUserId();
             message.setOrganizerId(userId.intValue());
         }
-        if (!(messageQuery.getStatus()==null || "".equals(messageQuery.getStatus()))){
+        if (messageQuery.getStatus() != null && !"".equals(messageQuery.getStatus())){
             message.setStatus(messageQuery.getStatus());
-            System.out.println("加进去了");
         }
 
         Page<MessageVO> page = new Page<>();
@@ -55,7 +53,7 @@ public class MessageServiceImpl implements MessageService {
         BizAssert.notNull(message.getId(), BizCode.PARAM_NULL.getMessage());
         MessageVO message1 = messageMapper.selectById(message);
         BizAssert.notNull(message1,BizCode.BIZ_1101.getMessage());
-        if(message1.getStatus().equals("0")){
+        if("0".equals(message1.getStatus())){
             int i=messageMapper.updateStatusById(message.getId().longValue());
             if(i==0){
                 throw new BizException("消息状态修改失败");

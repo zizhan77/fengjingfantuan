@@ -38,6 +38,8 @@ public class PerformanceServiceImpl implements PerformanceService {
 
     private final static Logger log = LogManager.getLogger(PerformanceServiceImpl.class);
 
+    @Resource
+    private SponsorService sponsorService;
 
     @Resource
     private PerformanceDao performanceDao;

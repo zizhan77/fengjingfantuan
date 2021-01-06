@@ -3,17 +3,17 @@ import com.mem.vo.business.base.model.po.CodeType;
 import java.util.List;
 
 public interface CodeTypeService {
-    CodeType edit(CodeType paramCodeType);
+    CodeType edit(CodeType codeType);
 
-    CodeType selectById(Integer paramInteger);
+    CodeType selectById(Integer codeType);
 
-    List<CodeType> queryBySponsorId(String paramString);
+    List<CodeType> queryBySponsorId(String ids);
 
-    CodeType queryById(Integer paramInteger);
+    CodeType queryById(Integer codeTypeId);
 
-    int addCount(Integer paramInteger, int paramInt);
+    int addCount(Integer codeTypeId, int count);
 
-    int desCount(Integer paramInteger, int paramInt);
+    int desCount(Integer codeTypeId, int count);
 
-    List<CodeType> getCodeTypeForAdd(int paramInt);
+    List<CodeType> getCodeTypeForAdd(int i);
 }

@@ -59,9 +59,9 @@ public interface PrizeDService {
 
     List<Integer> selectIdByEt(PrizeDQuery query);
 
-    List<PrizeD> findByLevelAndActivityIdAndType(PrizeDQuery paramPrizeDQuery);
+    List<PrizeD> findByLevelAndActivityIdAndType(PrizeDQuery query);
 
-    int deleteByPrizeId(Integer paramInteger);
+    int deleteByPrizeId(Integer prizeId);
 
-    Integer giveUp(String paramString);
+    Integer giveUp(String prizedId);
 }

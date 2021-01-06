@@ -19,7 +19,8 @@ public enum RedisPrefix {
     SPONSOR_TOKEN("sponsor_token_", "登录后分配的赞助商token前缀"),
     SPONSOR_EXCHANGE_TOKEN("sponsor_exchange_token_", "登录后分配的赞助商兑换端token前缀"),
     CHECK_MAN_TOKEN("check_man_token_", "登录后分配验票员的token前缀"),
-    EXPRESS("express_", "快递信息");
+    EXPRESS("express_", "快递信息"),
+    RANKING_USER("ranking", "排行榜前三名");
 
 
     private String code;

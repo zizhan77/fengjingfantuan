@@ -16,7 +16,7 @@ public interface PlaceArtistMapper {
 
     int updateByPrimaryKey(PlaceArtist paramPlaceArtist);
 
-    int insertList(List<String> paramList, int paramInt);
+    int insertList(List<String> paramList, int id);
 
     int deleteByPlaceId(Long paramLong);
 

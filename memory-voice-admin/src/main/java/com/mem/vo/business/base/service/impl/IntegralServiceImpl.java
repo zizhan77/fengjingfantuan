@@ -9,6 +9,7 @@ import com.mem.vo.business.base.model.po.UserQuery;
 import com.mem.vo.business.base.service.IntegralService;
 import com.mem.vo.business.base.service.UserService;
 import com.mem.vo.common.dto.Page;
+import com.mem.vo.common.dto.PageBean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.annotation.Resource;
@@ -29,6 +30,11 @@ public class  IntegralServiceImpl implements IntegralService {
     private IntegralDao integralDao;
     @Resource
     private UserService userService;
+
+    @Override
+    public int integralRecordByUserCount(Long userId) {
+        return integralDao.integralRecordByUserCount(userId);
+    }
 
     @Override
     public int insert(Integral integral){
@@ -62,5 +68,10 @@ public class  IntegralServiceImpl implements IntegralService {
     @Override
     public void findPageByCondition(Page page,IntegralQuery query){
         integralDao.findByCondition(page,query);
+    }
+
+    @Override
+    public List<Integral> integralRecordByUser(Long userId, PageBean<Integral> pager) {
+        return integralDao.integralRecordByUser(userId, pager);
     }
 }

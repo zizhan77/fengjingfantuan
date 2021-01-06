@@ -17,6 +17,7 @@ import com.mem.vo.business.base.model.po.MtaBean;
 import com.mem.vo.business.base.model.vo.PlaceArtistVO;
 import com.mem.vo.business.base.service.BasicPlaceService;
 import com.mem.vo.business.biz.model.vo.performance.BasicPlaceVo;
+import com.mem.vo.common.constant.AppEnum;
 import com.mem.vo.common.constant.BizCode;
 import com.mem.vo.common.dto.Page;
 import com.mem.vo.common.exception.BizAssert;
@@ -119,17 +120,17 @@ public class BasicPlaceServiceImpl implements BasicPlaceService {
         return basicPlaceDao.findByIdList(list);
     }
 
-    @Override
-    public List<BasicPlace> findByPlaceId(long parseLong) {
-        return null;
-    }
+//    @Override
+//    public List<BasicPlace> findByPlaceId(long parseLong) {
+//        return null;
+//    }
 
     @Override
 
     public MtaBean findHistory(String startTime,String endTime) throws Exception {
-        String dateTime = new Date().getTime() + "";
+        String dateTime = System.currentTimeMillis() + "";
         String time = dateTime.substring(0, dateTime.length() - 3);
-        String key = "5c6cc1293c37ebe624d0ff64ec39f749";
+        String key = AppEnum.KEY.getCode();
         key = key.replace('-', '+').replace('_', '/');
         StringBuffer s = new StringBuffer(key);
         s.append("&").append("app_id=500687204");
@@ -144,7 +145,7 @@ public class BasicPlaceServiceImpl implements BasicPlaceService {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         URIBuilder uriBuilder = new URIBuilder(url);
         // 定义请求的参数
-        uriBuilder.addParameter("app_id", "500687204");
+        uriBuilder.addParameter("app_id", AppEnum.App_id.getCode());
         uriBuilder.addParameter("end_time", endTime);
         uriBuilder.addParameter("start_time", startTime);
         uriBuilder.addParameter("sign", sign);
@@ -161,12 +162,9 @@ public class BasicPlaceServiceImpl implements BasicPlaceService {
                 String content = EntityUtils.toString(response.getEntity(), "UTF-8");
                 MtaBean myBean = JSON.parseObject(content, MtaBean.class);
                 return myBean;
-            } else {
-                //请求没成功，不解析，再做处理。
-                //变成返回体信息
-                System.out.println("失败");
-                return null;
             }
+            System.out.println("失败");
+            return null;
         } finally {
             if (response != null) {
                 response.close();

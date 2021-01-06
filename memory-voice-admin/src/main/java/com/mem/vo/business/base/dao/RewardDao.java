@@ -18,6 +18,8 @@ import org.apache.ibatis.annotations.Update;
 */
 public interface RewardDao {
 
+    List<Reward> getUserForTickrt(@Param("userid") Long userid, @Param("first") String first, @Param("last") String last, @Param("code") Integer code);
+
     /**
     * 添加奖品信息明细表实体
     * @param  reward 回复奖品信息明细表实体

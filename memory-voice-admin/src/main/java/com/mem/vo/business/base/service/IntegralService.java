@@ -14,6 +14,8 @@ import java.util.List;
 public interface IntegralService {
 
 
+    int integralRecordByUserCount(Long userId);
+
     /**
     * 添加积分表
     * @param  integralQuery 回复积分表实体
@@ -55,5 +57,5 @@ public interface IntegralService {
     */
     void findPageByCondition(Page page, IntegralQuery query);
 
-    List<Integral> integralRecordByUser(Long paramLong, PageBean<Integral> paramPageBean);
+    List<Integral> integralRecordByUser(Long userId, PageBean<Integral> pager);
 }

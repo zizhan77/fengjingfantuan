@@ -8,31 +8,31 @@ import com.mem.vo.common.dto.PageBean;
 import java.util.List;
 
 public interface RankingService {
-    Ranking edit(Ranking paramRanking);
+    Ranking edit(Ranking ranking);
 
-    List<Ranking> query(Ranking paramRanking);
+    List<Ranking> query(Ranking ranking);
 
-    Page<RankingVO> queryPage(Ranking paramRanking, Page paramPage);
+    Page<RankingVO> queryPage(Ranking ranking, Page page);
 
     Ranking queryById(String paramString);
 
-    Integer add(String paramString1, String paramString2, String paramString3);
+    Integer add(String token, String id, String count);
 
-    int addIntegral(String paramString1, String paramString2);
+    int addIntegral(String id, String count);
 
-    List<Ranking> queryByName(String paramString);
+    List<Ranking> queryByName(String name);
 
-    Page<RankingVO> queryGetOne(Ranking paramRanking, Page paramPage);
+    Page<RankingVO> queryGetOne(Ranking ranking, Page page);
 
-    PageBean<Ranking> findByPageToPhone(Integer paramInteger1, Integer paramInteger2);
+    PageBean<Ranking> findByPageToPhone(Integer pageNo, Integer pageSize);
 
-    Ranking queryRankingDetail(Long paramLong);
+    Ranking queryRankingDetail(Long id);
 
-    PageBean<User> queryUserByRanking(Integer paramInteger1, Integer paramInteger2, Long paramLong);
+    PageBean<User> queryUserByRanking(Integer pageNo, Integer pageSize, Long id);
 
-    RankingMoney getrankingMoney(String paramString);
+    RankingMoney getrankingMoney(String token);
 
-    User getrankingMoneytouser(String paramString, Long paramLong);
+    User getrankingMoneytouser(String token, Long id);
 
     Integer addActor(String paramString1, String paramString2, String paramString3);
 }

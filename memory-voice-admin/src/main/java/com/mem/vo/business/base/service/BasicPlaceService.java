@@ -64,8 +64,8 @@ public interface BasicPlaceService {
 
     List<BasicPlace> findByIdList(List<Long> list);
 
-    @Select("select * from basic_place where id=#{parseLong} and  is_delete= 0")
-    List<BasicPlace> findByPlaceId(long parseLong);
+//    @Select("select * from basic_place where id=#{parseLong} and  is_delete= 0")
+//    List<BasicPlace> findByPlaceId(long parseLong);
 
     MtaBean findHistory(String s,String e) throws URISyntaxException, Exception;
 }

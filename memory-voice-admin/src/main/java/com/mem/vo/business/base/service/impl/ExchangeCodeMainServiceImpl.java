@@ -122,7 +122,7 @@ public class  ExchangeCodeMainServiceImpl implements ExchangeCodeMainService {
         exchangeCodeMain.setRemark(exchangeCodeRequest.getRemark());
 
 
-        this.insert(exchangeCodeMain);
+        insert(exchangeCodeMain);
 
         for (String recordbusinessKey:exchangeCodeRequest.getRecordBusinessKeyList()) {
             ExchangeCodeRecord exchangeCodeRecord = new ExchangeCodeRecord();

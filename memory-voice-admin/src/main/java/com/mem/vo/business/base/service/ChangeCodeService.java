@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ChangeCodeService {
-    int updateById(Integer paramInteger1, Integer paramInteger2);
+    int updateById(Integer id, Integer code);
 
-    List<ChangeCode> selectByChangeCodeId(Integer paramInteger1, Integer paramInteger2);
+    List<ChangeCode> selectByChangeCodeId(Integer codeType, Integer code);
 
-    ChangeCode selectById(Integer paramInteger);
+    ChangeCode selectById(Integer keyId);
 
-    List<ChangeCode> selectByCodeTypeId(Integer paramInteger1, Integer paramInteger2);
+    List<ChangeCode> selectByCodeTypeId(Integer codeType, Integer code);
 
-    Integer up(String paramString, MultipartFile paramMultipartFile);
+    Integer up(String codeTypeId, MultipartFile file);
 }

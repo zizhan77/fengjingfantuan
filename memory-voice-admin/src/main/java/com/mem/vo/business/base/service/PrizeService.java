@@ -68,7 +68,7 @@ public interface PrizeService {
      */
     PrizeD slotMachine(String token, Long activityId);
 
-    int rollBackStoreById(Integer paramInteger);
+    int rollBackStoreById(Integer prizeId);
 
-    int addchangecodeall(Long paramLong);
+    int addchangecodeall(Long activityId);
 }

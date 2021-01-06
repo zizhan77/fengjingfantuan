@@ -12,9 +12,9 @@ public interface OrganizerService {
 
     Organizer queryById(Long userId);
 
-    Organizer saveOrUpdate(Organizer paramOrganizer);
+    Organizer saveOrUpdate(Organizer organizer);
 
-    Page queryAll(Page paramPage);
+    Page queryAll(Page page);
 
-    List<Organizer> queryBy(Organizer paramOrganizer);
+    List<Organizer> queryBy(Organizer organizer);
 }
