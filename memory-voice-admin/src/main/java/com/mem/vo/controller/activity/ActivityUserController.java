@@ -34,27 +34,69 @@ public class ActivityUserController {
     @Resource
     private TokenService tokenService;
 
-    @PostMapping("/queryByToken")
-    public ResponseDto<Integer> queryAllActivity(@RequestHeader("token") String token, ActivityUserQuery query) {
-        //权限验证
-        ResponseDto<Integer> responseDto = ResponseDto.successDto();
-        try {
-            CommonLoginContext CommonLoginContext = tokenService.getContextByken(token);
-            query.setUserId(CommonLoginContext.getBizCode());
-            List<ActivityUser> activityUserList = activityUserService.findByCondition(query);
-            if (CollectionUtils.isEmpty(activityUserList)) {
-                throw new BizException("用户通关记录为空");
-            }
-            return responseDto.successData(activityUserList.get(0).getPassQty());
-        } catch (BizException e) {
-            log.error("获取活动信息异常，原因：{}", e.getMessage());
-            return responseDto.failData(e.getMessage());
-        } catch (Exception e) {
-
-            log.error("获取活动信息异常。", e);
-            return responseDto.failSys();
-        }
+    @PostMapping({"/phone/queryRewardByUser/1"})
+  public ResponseDto<PageBean<Prize>> queryRewardByUser(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestParam Integer activityId) {
+    ResponseDto<PageBean<Prize>> responseDto = ResponseDto.successDto();
+    try {
+      PageBean<Prize> page = this.activityUserService.queryRewardByActivity(token, pageNo, pageSize, activityId);
+      responseDto.setData(page);
+      return responseDto;
+    } catch (Exception e) {
+      log.error("老虎机下面的三个接口其中之一有问题", e.getMessage());
+      responseDto.setCode(Integer.valueOf(1));
+      return responseDto;
     }
+  }
+
+  @PostMapping({"/phone/queryRewardByUser/2"})
+  public ResponseDto<PageBean<Prize>> queryRewardByUser1(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestParam Integer activityId) {
+    ResponseDto<PageBean<Prize>> responseDto = ResponseDto.successDto();
+    try {
+      PageBean<Prize> page = this.activityUserService.queryRewardByActivityAndUser(token, pageNo, pageSize, activityId);
+      responseDto.setData(page);
+      return responseDto;
+    } catch (Exception e) {
+      log.error("老虎机下面的三个接口其中之一有问题", e.getMessage());
+      responseDto.setCode(Integer.valueOf(1));
+      return responseDto;
+    }
+  }
+
+  @PostMapping({"/phone/queryRewardByUser/3"})
+  public ResponseDto<PageBean<User>> queryRewardByUser2(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, Integer activityId) {
+    ResponseDto<PageBean<User>> responseDto = ResponseDto.successDto();
+    try {
+      PageBean<User> page = this.activityUserService.queryShareUserbyUser(token, pageNo, pageSize, activityId);
+      responseDto.setData(page);
+      return responseDto;
+    } catch (Exception e) {
+      log.error("老虎机下面的三个接口其中之一有问题", e.getMessage());
+      responseDto.setCode(Integer.valueOf(1));
+      return responseDto;
+    }
+  }
+
+//    @PostMapping("/queryByToken")
+//    public ResponseDto<Integer> queryAllActivity(@RequestHeader("token") String token, ActivityUserQuery query) {
+//        //权限验证
+//        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+//        try {
+//            CommonLoginContext CommonLoginContext = tokenService.getContextByken(token);
+//            query.setUserId(CommonLoginContext.getBizCode());
+//            List<ActivityUser> activityUserList = activityUserService.findByCondition(query);
+//            if (CollectionUtils.isEmpty(activityUserList)) {
+//                throw new BizException("用户通关记录为空");
+//            }
+//            return responseDto.successData(activityUserList.get(0).getPassQty());
+//        } catch (BizException e) {
+//            log.error("获取活动信息异常，原因：{}", e.getMessage());
+//            return responseDto.failData(e.getMessage());
+//        } catch (Exception e) {
+//
+//            log.error("获取活动信息异常。", e);
+//            return responseDto.failSys();
+//        }
+//    }
 
     @PostMapping("/findByCondition")
     public ResponseDto<ActivityUser> findByCondition(@RequestHeader("token") String token, ActivityUserQuery query) {
@@ -115,4 +157,21 @@ public class ActivityUserController {
             return responseDto.failSys();
         }
     }
+
+    @PostMapping({"/shareAndAdd"})
+  public ResponseDto<Integer> shareAndAdd(@RequestHeader("token") String token, String activityId) {
+    ResponseDto<Integer> responseDto = ResponseDto.successDto();
+    try {
+      BizAssert.notNull(activityId, BizCode.PARAM_NULL.getMessage());
+      Integer integer = activityUserService.shareAndAdd(token, activityId);
+      responseDto.setData(integer);
+      return responseDto;
+    } catch (BizException e) {
+      log.error("插入活动信息异常, 原因: {}", e.getMessage());
+      return responseDto.failData(e.getMessage());
+    } catch (Exception e) {
+      log.error("插入活动信息异常", e);
+      return responseDto.failSys();
+    }
+  }
 }

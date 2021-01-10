@@ -3,7 +3,6 @@ package com.mem.vo.common.util;
 import com.google.gson.Gson;
 import com.mem.vo.business.base.dao.InternetResourcesDao;
 import com.mem.vo.business.base.model.po.InternetResources;
-import com.mem.vo.business.base.service.InternetResourcesService;
 import com.mem.vo.common.exception.BizException;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
@@ -12,22 +11,36 @@ import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
+import com.qiniu.storage.model.FileInfo;
 import com.qiniu.storage.model.FileListing;
 import com.qiniu.util.Auth;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.MemoryCacheImageInputStream;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-
+import sun.misc.BASE64Encoder;
 /**
  * @author lvxiao
  * @date 2019/6/17
@@ -173,4 +186,97 @@ public class FileUtil {
         return fileList;
     }
 
+    public String image2Base64(String imgUrl) {
+        HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+        ByteArrayOutputStream baos = null;
+        try {
+            URL url = new URL(imgUrl);
+            urlConnection = (HttpURLConnection)url.openConnection();
+            urlConnection.connect();
+            inputStream = urlConnection.getInputStream();
+            baos = new ByteArrayOutputStream();
+            String contentType = urlConnection.getContentType();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inputStream.read(buffer)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            return "data:" + contentType + ";base64," + encode(baos.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (baos != null) {
+                try {
+                    baos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+        return imgUrl;
+    }
+
+    private static String encode(byte[] image) {
+        BASE64Encoder decoder = new BASE64Encoder();
+        return replaceEnter(decoder.encode(image));
+    }
+
+    private static String replaceEnter(String str) {
+        String reg = "[\n-\r]";
+        Pattern p = Pattern.compile(reg);
+        Matcher m = p.matcher(str);
+        return m.replaceAll("");
+    }
+
+    private static String getFileFormat(byte[] bytes) {
+        String type = "";
+        ByteArrayInputStream bais = null;
+        MemoryCacheImageInputStream mcis = null;
+        try {
+            bais = new ByteArrayInputStream(bytes);
+            mcis = new MemoryCacheImageInputStream(bais);
+            Iterator<ImageReader> itr = ImageIO.getImageReaders(mcis);
+            while (itr.hasNext()) {
+                ImageReader reader = itr.next();
+                if (reader instanceof com.sun.imageio.plugins.gif.GIFImageReader) {
+                    type = "image/gif";
+                    continue;
+                }
+                if (reader instanceof com.sun.imageio.plugins.jpeg.JPEGImageReader) {
+                    type = "image/jpeg";
+                    continue;
+                }
+                if (reader instanceof com.sun.imageio.plugins.png.PNGImageReader) {
+                    type = "image/png";
+                    continue;
+                }
+                if (reader instanceof com.sun.imageio.plugins.bmp.BMPImageReader) {
+                    type = "application/x-bmp";
+                }
+            }
+        } finally {
+            if (bais != null) {
+                try {
+                    bais.close();
+                } catch (IOException iOException) {}
+            }
+            if (mcis != null) {
+                try {
+                    mcis.close();
+                } catch (IOException iOException) {}
+            }
+        }
+        return type;
+    }
 }
