@@ -25,6 +25,7 @@ import com.mem.vo.common.exception.BizAssert;
 import com.mem.vo.common.exception.BizException;
 import com.mem.vo.common.util.BeanCopyUtil;
 import com.mem.vo.common.util.DateUtil;
+import com.mem.vo.common.util.RedisUtils;
 import com.mem.vo.config.annotations.CommonExHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -44,6 +45,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/banner")
 @Slf4j
 public class BannerController {
+
+    @Resource
+    private RedisUtils redisUtils;
+
+    private static String REDIS_NAME = "banner_";
 
     @Resource
     private BannerService bannerService;
@@ -108,17 +114,19 @@ public class BannerController {
     public ResponseDto<Page<Banner>> queryOpeningPage(Page page, BannerQuery query) {
 
         ResponseDto<Page<Banner>> responseDto = new ResponseDto<>();
-        query.setIsDelete(0);
-
-        Page<Banner> banners = bannerService.findPageByCondition(page, query);
-        if (CollectionUtils.isNotEmpty(banners.getData())) {
-            for (Banner banner : banners.getData()) {
-                assembleAddress(banner);
+        try {
+            Page<Banner> banners = bannerService.findPageByCondition(page, query);
+            if (CollectionUtils.isNotEmpty(banners.getData())) {
+                for (Banner banner : banners.getData()) {
+                    assembleAddress(banner);
+                }
             }
+            return responseDto.successData(banners);
+        } catch (Exception e) {
+            log.debug("token未登录", e.getMessage());
+            responseDto.setCode(3);
+            return responseDto;
         }
-
-        return responseDto.successData(banners);
-
     }
 
 

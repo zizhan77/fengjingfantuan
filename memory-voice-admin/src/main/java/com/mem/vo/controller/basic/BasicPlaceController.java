@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mem.vo.business.base.model.po.*;
+import com.mem.vo.business.base.model.vo.PlaceArtistVO;
 import com.mem.vo.business.base.service.BasicAddressService;
 import com.mem.vo.business.base.service.BasicArtistService;
 import com.mem.vo.business.base.service.BasicPlaceService;
@@ -23,6 +25,7 @@ import com.mem.vo.common.dto.ResponseDto;
 import com.mem.vo.common.exception.BizAssert;
 import com.mem.vo.common.exception.BizException;
 import com.mem.vo.common.util.BeanCopyUtil;
+import com.mem.vo.common.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -148,17 +151,24 @@ public class BasicPlaceController {
     }
 
     @PostMapping("/place/addOrUpdatePlace")
-    public ResponseDto<Boolean> addPlace(@RequestHeader("token") String token, BasicPlaceVo basicPlaceVo,
-        Integer optionType) {
+    public ResponseDto<Boolean> addPlace(String str, Integer optionType, String list) {
         ResponseDto<Boolean> responseDto = ResponseDto.successDto();
 
         try {
-            BasicPlace basicPlace = BeanCopyUtil.copyProperties(basicPlaceVo, BasicPlace.class);
+            if (str == null && "".equals(str)) {
+                throw new BizException(BizCode.PARAM_NULL.getMessage());
+            }
+            BasicPlaceVo basicPlaceVo = JsonUtil.fromJson(str, BasicPlaceVo.class);
+            if (list != null && !"".equals(list)) {
+                List<PlaceArtistVO> list2 = JSONArray.parseArray(list, PlaceArtistVO.class);
+                System.out.println(list2);
+                basicPlaceVo.setArtistList(list2);
+            }
 
             if (VmOptionType.INSERT.getCode().equals(optionType)) {
-                basicPlaceService.insert(basicPlace);
+                basicPlaceService.insert(basicPlaceVo);
             } else {
-                basicPlaceService.updateById(basicPlace);
+                basicPlaceService.updateById(basicPlaceVo);
             }
             return responseDto.successData(true);
 
