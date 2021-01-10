@@ -3,6 +3,8 @@ package com.mem.vo.controller.prize;
 import com.mem.vo.business.base.model.po.Prize;
 import com.mem.vo.business.base.model.po.PrizeD;
 import com.mem.vo.business.base.model.po.PrizeQuery;
+import com.mem.vo.business.base.service.ChangeCodeService;
+import com.mem.vo.business.base.service.CodeTypeService;
 import com.mem.vo.business.base.service.PrizeService;
 import com.mem.vo.common.constant.BizCode;
 import com.mem.vo.common.dto.ResponseDto;
@@ -32,8 +34,25 @@ import java.util.List;
 public class PrizeController {
 
     @Resource
+    private ChangeCodeService ChangeCodeService;
+
+    @Resource
+    private CodeTypeService codeTypeService;
+
+    @Resource
     private PrizeService prizeService;
 
+    @PostMapping({"/pc/addchangecodeall"})
+    public ResponseDto<Integer> addchangecodeall(Long activityId) {
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+        try {
+            int a = prizeService.addchangecodeall(activityId);
+            return responseDto.successData(Integer.valueOf(a));
+        } catch (Exception e) {
+            log.error("查询奖品异常", e);
+            return responseDto.failSys();
+        }
+    }
 
     @PostMapping("/queryAll")
     public ResponseDto<List<Prize>> queryAllPrize(@RequestHeader("token") String token,PrizeQuery query) {
@@ -108,5 +127,21 @@ public class PrizeController {
         //权限验证
         ResponseDto<PrizeD> responseDto = ResponseDto.successDto();
         return responseDto.successData(prizeService.slotMachine(token, activityId));
+    }
+
+    @PostMapping({"/deleteById"})
+    public ResponseDto<Integer> deleteById(@RequestHeader("token") String token, Long id) {
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+        log.error("===================================删除奖品");
+        try {
+            BizAssert.notNull(id, BizCode.PARAM_NULL.getMessage());
+            return responseDto.successData(prizeService.deleteById(id));
+        } catch (BizException e) {
+            log.error("删除奖品异常，参数:{},原因:{}", id, e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+            log.error("删除奖品异常,参数{}", id, e);
+            return responseDto.failSys();
+        }
     }
 }

@@ -331,46 +331,46 @@ public class LoginController {
 
     }
 
-    @PostMapping("/organizer/getInfo")
-    public ResponseDto<JSONObject> getOrInfo(@RequestHeader String token) {
-        ResponseDto<JSONObject> responseDto = ResponseDto.successDto();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            CommonLoginContext context = tokenService.getContextByken(token);
-            BizAssert.notNull(context, "查询token信息为空");
-            BizAssert.notNull(context.getUserId(), "token 保存  userid 为空");
-            Organizer organizer = organizerService.findById(Long.valueOf(context.getUserId()));
-            jsonObject.put("user", organizer);
-
-         /*  // AuthorityRole role = authorityRoleService.findById(Long.valueOf(user.getRole()));
-            //jsonObject.put("role", role);
-
-            AuthorityRoleMenuRelQuery query = new AuthorityRoleMenuRelQuery();
-        //    query.setRoleId(Long.valueOf(user.getRole()));
-            List<AuthorityRoleMenuRel> relList = authorityRoleMenuRelService.findByCondition(query);
-            List<AuthorityMenu> menuList = new ArrayList<>();
-            if (CollectionUtils.isNotEmpty(relList)) {
-                for (AuthorityRoleMenuRel authorityRoleMenuRel : relList) {
-
-                    AuthorityMenu menu = authorityMenuService.findById(Long.valueOf(authorityRoleMenuRel.getMenuId()));
-                    menuList.add(menu);
-                }
-            }
-            jsonObject.put("menuList", menuList);*/
-
-            return responseDto.successData(jsonObject);
-
-        } catch (BizException e) {
-
-            log.error("业务异常，参数:{},原因：{}", token, e.getMessage());
-            return responseDto.failData(e.getMessage());
-        } catch (Exception e) {
-
-            log.error("主板方登录系统异常，参数:{}", token, e);
-            return responseDto.failSys();
-
-        }
-    }
+//    @PostMapping("/organizer/getInfo")
+//    public ResponseDto<JSONObject> getOrInfo(@RequestHeader String token) {
+//        ResponseDto<JSONObject> responseDto = ResponseDto.successDto();
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            CommonLoginContext context = tokenService.getContextByken(token);
+//            BizAssert.notNull(context, "查询token信息为空");
+//            BizAssert.notNull(context.getUserId(), "token 保存  userid 为空");
+//            Organizer organizer = organizerService.findById(Long.valueOf(context.getUserId()));
+//            jsonObject.put("user", organizer);
+//
+//         /*  // AuthorityRole role = authorityRoleService.findById(Long.valueOf(user.getRole()));
+//            //jsonObject.put("role", role);
+//
+//            AuthorityRoleMenuRelQuery query = new AuthorityRoleMenuRelQuery();
+//        //    query.setRoleId(Long.valueOf(user.getRole()));
+//            List<AuthorityRoleMenuRel> relList = authorityRoleMenuRelService.findByCondition(query);
+//            List<AuthorityMenu> menuList = new ArrayList<>();
+//            if (CollectionUtils.isNotEmpty(relList)) {
+//                for (AuthorityRoleMenuRel authorityRoleMenuRel : relList) {
+//
+//                    AuthorityMenu menu = authorityMenuService.findById(Long.valueOf(authorityRoleMenuRel.getMenuId()));
+//                    menuList.add(menu);
+//                }
+//            }
+//            jsonObject.put("menuList", menuList);*/
+//
+//            return responseDto.successData(jsonObject);
+//
+//        } catch (BizException e) {
+//
+//            log.error("业务异常，参数:{},原因：{}", token, e.getMessage());
+//            return responseDto.failData(e.getMessage());
+//        } catch (Exception e) {
+//
+//            log.error("主板方登录系统异常，参数:{}", token, e);
+//            return responseDto.failSys();
+//
+//        }
+//    }
 
 
     @CommonExHandler(key = "主办方登出")
@@ -399,7 +399,5 @@ public class LoginController {
             return responseDto.failSys();
 
         }
-
-
     }
 }
