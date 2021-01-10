@@ -46,7 +46,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Intercepts({
-    @Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
+        @Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class PaginationInterceptor implements Interceptor {
 
     private static final Logger log = LogManager.getLogger(PaginationInterceptor.class);
@@ -57,6 +57,7 @@ public class PaginationInterceptor implements Interceptor {
     String PAGE = "page";
 
 
+    @Override
     public Object intercept(Invocation invocation) throws Throwable {
         StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
         MetaObject metaStatementHandler = MetaObject
@@ -233,10 +234,12 @@ public class PaginationInterceptor implements Interceptor {
         parameterHandler.setParameters(ps);
     }
 
+    @Override
     public Object plugin(Object target) {
         return Plugin.wrap(target, this);
     }
 
+    @Override
     public void setProperties(Properties properties) {
 
     }

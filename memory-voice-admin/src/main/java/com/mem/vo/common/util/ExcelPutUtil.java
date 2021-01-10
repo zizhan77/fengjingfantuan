@@ -27,8 +27,9 @@ public class ExcelPutUtil {
         for (String str : map.keySet()) {
             row = sheet.createRow(i + 1);
             List<String> list = map.get(str);
-            for (int j = 0; j < strArray.length; j++)
+            for (int j = 0; j < strArray.length; j++) {
                 row.createCell((short)j).setCellValue(list.get(j));
+            }
             try {
                 FileOutputStream fout = new FileOutputStream("D:/Members.xls");
                 wb.write(fout);

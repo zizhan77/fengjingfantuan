@@ -264,11 +264,13 @@ public class DateUtil {
         Date start = sdf.parse(date1);
         Date end = sdf.parse(date2);
         long cha = end.getTime() - start.getTime();
-        if (cha < 0L)
+        if (cha < 0L) {
             return false;
+        }
         double result = cha * 1.0D / 3600000.0D;
-        if (result <= 12.0D)
+        if (result <= 12.0D) {
             return true;
+        }
         return false;
     }
 

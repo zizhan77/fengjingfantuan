@@ -17,7 +17,7 @@ public enum PrizeEnum {
     coupon(Integer.valueOf(4), "优惠券"),
     NO_CHANGE(0, "未兑换"),
     YES_CHANGE(1, "已兑换"),
-    DEFAULT_PRIZE(100,"默认返回的点数,完善个人信息增加的点数");
+    DEFAULT_PRIZE(100,"默认返回的饭团,完善个人信息增加的饭团");
 
 
     private Integer Code;
