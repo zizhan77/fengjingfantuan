@@ -68,6 +68,6 @@ public interface BasicArtistDao {
     List<PlaceArtistVO> findByIdList(@Param("artistList") List<String> paramList);
 
     @Select({"select count(1) from basic_artist where is_delete = 0 and artist_name=#{name}"})
-    int findByArtistName(@Param("name") String paramString);
+    int findByArtistName(@Param("name") String name);
 
 }

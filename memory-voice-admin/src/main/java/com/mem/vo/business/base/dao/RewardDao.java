@@ -71,7 +71,7 @@ public interface RewardDao {
     List<RewardVO> findByUserId(@Param("id") Long paramLong);
 
     @Update({"update reward set status = #{status} where prize_id = #{id}"})
-    int updateByPrizedId(@Param("id") Integer paramInteger1, @Param("status") Integer paramInteger2);
+    int updateByPrizedId(@Param("id") Integer id, @Param("status") Integer status);
 
     List<RewardVO> findByActivityId(@Param("activityId") Integer paramInteger);
 

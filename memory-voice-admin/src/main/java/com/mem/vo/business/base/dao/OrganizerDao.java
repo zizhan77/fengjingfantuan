@@ -33,7 +33,7 @@ public interface OrganizerDao {
     int updateByPrimaryKey(Organizer record);
 
     @Select("select id, name, phone, password, status, create_time, create_user, update_time, update_user, is_delete from organizer where phone = #{phone} and is_delete = 0 ")
-    List<Organizer> selectByUsername(@Param("phone") String username);
+    List<Organizer> selectByUsername(@Param("phone") String phone);
 
     @Select("select id, name, phone, password, status, create_time, create_user, update_time, update_user, is_delete from organizer where id = #{userId} and is_delete = 0 ")
     Organizer queryById(@Param("userId") Long userId);

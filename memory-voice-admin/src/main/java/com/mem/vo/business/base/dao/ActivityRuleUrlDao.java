@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Update;
 public interface ActivityRuleUrlDao {
 
     @Update({"update  activityRuleUrl  set url= #{url} where id= #{id}"})
-    int updateById(@Param("id") Integer paramInteger, @Param("url") String paramString);
+    int updateById(@Param("id") Integer id, @Param("url") String url);
 
     @Insert({"insert into activityRuleUrl (url) VALUES (#{url}) "})
     int insert(@Param("url") String paramString);

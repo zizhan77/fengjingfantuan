@@ -12,18 +12,18 @@ public interface CodeTypeDao {
     int insert(CodeType paramCodeType);
 
     @Select({"select * from codetype where id = #{id}"})
-    CodeType selectById(@Param("id") Integer paramInteger);
+    CodeType selectById(@Param("id") Integer id);
 
     List<CodeType> queryBySponsorId(@Param("list") List<String> paramList);
 
     @Update({"update codetype set count = #{count} where id=#{id}"})
-    int updateById(@Param("count") int paramInt, @Param("id") String paramString);
+    int updateById(@Param("count") int count, @Param("id") String id);
 
     @Update({"update codetype set count = count + #{count} where id=#{codeTypeId}"})
-    int addCount(@Param("codeTypeId") Integer paramInteger, @Param("count") int paramInt);
+    int addCount(@Param("codeTypeId") Integer codeTypeId, @Param("count") int count);
 
     @Update({"update codetype set count = count - #{count} where id=#{id}"})
-    int desCount(@Param("id") Integer paramInteger, @Param("count") int paramInt);
+    int desCount(@Param("id") Integer id, @Param("count") int count);
 
     List<CodeType> getCodeTypeForAdd(int paramInt);
 }

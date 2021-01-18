@@ -62,8 +62,8 @@ public interface PrizeDDao {
     List<Integer> selectIdByEt(@Param("condition") PrizeDQuery query);
 
     @Select({"SELECT DISTINCT a.name,\n\n\t\t a.prize_id as prizeId,\n\t\t a.prize_type as prizeType,\n\t\t a.integral_qty as integralQty,\n\t\t a.prob as prob,\n\t\t a.eticket_code as eticketCode,a.prized_count as prizedCount,a.ticket_unit as ticketUnit,\n\t\t a.is_change as isChange,\n\t\t a.create_time as createTime,\n\t\t a.create_user as createUser,\n\t\t a.update_time as updateTime,\n\t\t a.update_user as updateUser,\n\t\t a.activity_id as activityId,\n\t\t a.prize_intro as prizeIntro,\n\t\t a.prize_name as prizeName,\n\t\t a.integral_prob as integralProb ,\n\t\t b.`total_num` as count,\n\t\t b.`level` as level \n FROM `prize_d` a LEFT JOIN `prize` b ON a.`prize_id` = b.`id` WHERE b.`activity_id` =#{query.activityId} AND  b.`prize_type` = #{query.prizeType} AND b.`level`=#{query.level}"})
-    List<PrizeD> findByLevelAndActivityIdAndType(@Param("query") PrizeDQuery paramPrizeDQuery);
+    List<PrizeD> findByLevelAndActivityIdAndType(@Param("query") PrizeDQuery query);
 
     @Delete({"DELETE FROM `prize_d` WHERE `prize_id` = #{prizeId}"})
-    int deleteByPrizeId(Integer paramInteger);
+    int deleteByPrizeId(Integer prizeId);
 }

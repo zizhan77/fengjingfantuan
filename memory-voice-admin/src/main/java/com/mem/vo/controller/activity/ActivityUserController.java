@@ -159,19 +159,19 @@ public class ActivityUserController {
     }
 
     @PostMapping({"/shareAndAdd"})
-  public ResponseDto<Integer> shareAndAdd(@RequestHeader("token") String token, String activityId) {
-    ResponseDto<Integer> responseDto = ResponseDto.successDto();
-    try {
-      BizAssert.notNull(activityId, BizCode.PARAM_NULL.getMessage());
-      Integer integer = activityUserService.shareAndAdd(token, activityId);
-      responseDto.setData(integer);
-      return responseDto;
-    } catch (BizException e) {
-      log.error("插入活动信息异常, 原因: {}", e.getMessage());
-      return responseDto.failData(e.getMessage());
-    } catch (Exception e) {
-      log.error("插入活动信息异常", e);
-      return responseDto.failSys();
+    public ResponseDto<Integer> shareAndAdd(@RequestHeader("token") String token, String activityId) {
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+        try {
+            BizAssert.notNull(activityId, BizCode.PARAM_NULL.getMessage());
+            Integer integer = activityUserService.shareAndAdd(token, activityId);
+            responseDto.setData(integer);
+            return responseDto;
+        } catch (BizException e) {
+            log.error("插入活动信息异常, 原因: {}", e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+            log.error("插入活动信息异常", e);
+            return responseDto.failSys();
+        }
     }
-  }
 }

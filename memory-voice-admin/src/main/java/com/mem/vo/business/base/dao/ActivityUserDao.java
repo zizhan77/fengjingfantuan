@@ -71,14 +71,14 @@ public interface ActivityUserDao {
     int findCountPass();
 
     @Update({"UPDATE activity_user set lottery_qty=(lottery_qty+1) , is_share=1 where user_id = #{bizCode} and activity_id=#{activityId}"})
-    Integer updateLotteryQt(String paramString1, String paramString2);
+    Integer updateLotteryQt(String activityId, String bizCode);
 
     @Select({"SELECT * from activity_user where user_id = #{userId} and activity_id = #{activityId}  and pass_qty =#{code} and  date_format(update_time,'%e %b %y') = date_format(now(), '%e %b %y');"})
-    List<ActivityUser> findTodayByUserIdAndActivityId(@Param("userId") String paramString, @Param("activityId") Integer paramInteger1, @Param("code") Integer paramInteger2);
+    List<ActivityUser> findTodayByUserIdAndActivityId(@Param("userId") String userId, @Param("activityId") Integer activityId, @Param("code") Integer code);
 
     int queryShareAddUserListCount(@Param("act") ActivitysharePc paramActivitysharePc);
 
-    List<ActivitysharePc> queryShareAddUserList(@Param("act") ActivitysharePc paramActivitysharePc, @Param("pager") PageBean paramPageBean);
+    List<ActivitysharePc> queryShareAddUserList(@Param("act") ActivitysharePc act, @Param("pager") PageBean pager);
 
     int queryRewardByActivityCount(@Param("id") Integer paramInteger);
 

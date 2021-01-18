@@ -67,7 +67,7 @@ public interface UserDao {
      */
     List<User> findByCondition(@Param("page") Page page, @Param("condition") UserQuery query);
 
-    int updateBySourceAndBizCode(@Param("phoneNumber")String phoneNumber,@Param("sourceCode")String sourceCode,@Param("bizCode")String bizCode,@Param("userName") String userName);
+    int updateBySourceAndBizCode(@Param("phoneNumber")String phoneNumber,@Param("sourceCode")String sourceCode,@Param("bizCode")String bizCode,@Param("userName") String userName,@Param("gender") Integer gender, @Param("avatarurl") String avatarurl);
 
 
     @Select({"SELECT CASE gender  WHEN 1 THEN '  WHEN 2 THEN '  WHEN 0 THEN ' END AS gender,COUNT(1) AS COUNT FROM USER  WHERE`source_name` = 'AND `is_delete` = 0  GROUP BY `gender` "})
@@ -77,18 +77,18 @@ public interface UserDao {
     String findAge(AgePo paramAgePo);
 
     @Update({"UPDATE user set integral = integral + #{code} where biz_code = #{userId}"})
-    void addIntegral(@Param("code") Integer paramInteger, @Param("userId") String paramString);
+    void addIntegral(@Param("code") Integer code, @Param("userId") String userId);
 
     @Update({"update user set integral= integral-#{integral} where biz_code = #{bizCode}"})
-    int updateIntegral(@Param("bizCode") String paramString, @Param("integral") Integer paramInteger);
+    int updateIntegral(@Param("bizCode") String bizCode, @Param("integral") Integer integral);
 
-    void updateByIntegral(@Param("num") Integer paramInteger, @Param("userid") Long paramLong);
+    void updateByIntegral(@Param("num") Integer num, @Param("userid") Long userid);
 
     Integer getUserWhoCount(@Param("id") Long paramLong);
 
     Integer getUserActCount(@Param("code") String paramString);
 
-    Integer insertIntegralPageage(@Param("count") Integer paramInteger, @Param("flag") int paramInt, @Param("id") Long paramLong);
+    Integer insertIntegralPageage(@Param("count") Integer count, @Param("flag") int flag, @Param("id") Long id);
 
     int myRankingByUserCount(@Param("id") Long paramLong);
 

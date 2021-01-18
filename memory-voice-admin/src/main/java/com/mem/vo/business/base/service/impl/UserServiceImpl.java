@@ -103,8 +103,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateBySourceAndBizCode(String phoneNumber, String sourceCode, String bizCode,String userName) {
-        return userDao.updateBySourceAndBizCode(phoneNumber,sourceCode,bizCode,userName);
+    public int updateBySourceAndBizCode(String phoneNumber, String sourceCode, String bizCode,String userName,Integer gender, String avatarUrl) {
+        return userDao.updateBySourceAndBizCode(phoneNumber,sourceCode,bizCode,userName,gender,avatarUrl);
     }
 
     @Override

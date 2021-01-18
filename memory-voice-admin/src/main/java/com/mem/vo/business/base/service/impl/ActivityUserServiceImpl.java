@@ -141,7 +141,7 @@ public class ActivityUserServiceImpl implements ActivityUserService {
         activityUser.setUserId(bizCode);
         activityUser.setActivityId(Integer.valueOf(Integer.parseInt(activityId)));
         List<ActivityUser> list = activityUserDao.findByCondition(activityUser);
-        if (((ActivityUser)list.get(0)).getIsShare().equals(IsShare.IS.getCode())) {
+        if (list.size() > 0 && list.get(0).getIsShare().equals(IsShare.IS.getCode())) {
             throw new BizException("你已经分享过此活动，不能再为你增加抽奖次数");
         }
         Integer integer = activityUserDao.updateLotteryQt(activityId, bizCode);

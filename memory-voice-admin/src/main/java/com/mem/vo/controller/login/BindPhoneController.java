@@ -62,18 +62,25 @@ public class BindPhoneController {
             BizAssert.notNull(encodeObject.get("phoneNumber"), BizCode.BIZ_1011.getMessage());
             log.info("小程序解密后的数据：{}", JsonUtil.toJson(encodeObject));
             String phoneNumber = (String)encodeObject.get("phoneNumber");
-
+            int gender = 0;
             String userName = "";
+            String avatarUrl = "";
+            System.out.println(decodeWxUserInfoDto.getUserInfo());
             if(StringUtils.isNotBlank(decodeWxUserInfoDto.getUserInfo())){
                 //demo  {"nickName":"红鲤鱼与绿鲤鱼与驴","gender":1,"language":"zh_CN","city":"Chaoyang","province":"Beijing","country":"China","avatarUrl":"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLxEySCn2IXXeMVX8AP8bAGdrusMMftlql9iaOsJzTytDVCGG7rzY4uzf0NIibpfdprvDJjAI8uXEnQ/132"}
+
 
                 com.alibaba.fastjson.JSONObject jsonObject= com.alibaba.fastjson.JSONObject.parseObject(decodeWxUserInfoDto.getUserInfo());
                 if(jsonObject.get("nickName")!=null){
                     userName = (String) jsonObject.get("nickName");
                 }
+                gender = ((Integer)jsonObject.get("gender")).intValue();
+                if (jsonObject.get("avatarUrl") != null) {
+                    avatarUrl = (String)jsonObject.get("avatarUrl");
+                }
             }
             //手机号回写到数据库，修改数据库的授权状态
-            userService.updateBySourceAndBizCode(phoneNumber,commonLoginContext.getSourceCode(),commonLoginContext.getBizCode(),userName);
+            userService.updateBySourceAndBizCode(phoneNumber,commonLoginContext.getSourceCode(),commonLoginContext.getBizCode(),userName,Integer.valueOf(gender), avatarUrl);
             commonLoginContext.setStatus(LoginStatus.SUCCESSFUL.getCode());
             //修改redis中的 token状态
             tokenService.updateTokenContext(token,commonLoginContext);

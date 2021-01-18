@@ -121,23 +121,23 @@ public class ActivityController {
     }
 
     @PostMapping("/queryAll")
-    public ResponseDto<List<Activity>> queryAll(ActivityQuery activityQuery, Page page) {
+    public ResponseDto<Page<ActivityVO>> queryAll(ActivityQuery activityQuery, Page page) {
         //权限验证
-        ResponseDto<List<Activity>> responseDto = ResponseDto.successDto();
+        ResponseDto<Page<ActivityVO>> responseDto = ResponseDto.successDto();
         List<Sponsor> sponsors = new ArrayList<>();
 
 
         try {
-            Page<Activity> byPage = this.activityService.findByPage(activityQuery, page);
+            Page<Activity> byPage = activityService.findByPage(activityQuery, page);
             List<ActivityVO> activityVOS = new ArrayList<>();
             ActivityVO activityVO = new ActivityVO();
             for (Activity ac : byPage.getData()) {
                 sponsors.clear();
-                ActivityVO activityVO1 = (ActivityVO)BeanCopyUtil.copyProperties(ac, activityVO.getClass());
+                ActivityVO activityVO1 = BeanCopyUtil.copyProperties(ac, activityVO.getClass());
                 if (ac.getSponsorId() != null && !"".equals(ac.getSponsorId())) {
                     String[] split = ac.getSponsorId().split("~");
                     for (String s : split) {
-                        Sponsor sponsor = this.sponsorService.findById(Long.valueOf(s));
+                        Sponsor sponsor = sponsorService.findById(Long.valueOf(s));
                         sponsors.add(sponsor);
                     }
                     activityVO1.setSponsors(sponsors);
@@ -149,7 +149,8 @@ public class ActivityController {
             activityVOPage.setPage(byPage.getPage());
             activityVOPage.setTotal(byPage.getTotal());
             activityVOPage.setLimit(byPage.getLimit());
-            return responseDto.successData(activityService.findByConditionAvailable(new ActivityQuery()));
+            return responseDto.successData(activityVOPage);
+//            return responseDto.successData(activityService.findByConditionAvailable(new ActivityQuery()));
         } catch (BizException e) {
 
             log.error("查询活动异常，原因：{}", e.getMessage());

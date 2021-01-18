@@ -21,9 +21,9 @@ public interface RankingDao {
     List<Ranking> queryByName(@Param("name") String paramString);
 
     @Update({"update ranking set count = count + #{count} where id = #{id}"})
-    int addIntegral(@Param("id") String paramString1, @Param("count") String paramString2);
+    int addIntegral(@Param("id") String id, @Param("count") String count);
 
-    List<RankingVO> queryGetOne(@Param("ranking") Ranking paramRanking, @Param("page") Page paramPage);
+    List<RankingVO> queryGetOne(@Param("ranking") Ranking ranking, @Param("page") Page page);
 
     int findByPageToPhoneCount();
 
@@ -44,5 +44,5 @@ public interface RankingDao {
     int deleteById(Long paramLong);
 
     @Update({"update actor set integral = integral + #{count} where id = #{id}"})
-    int addIntegralForActor(@Param("id") String paramString1, @Param("count") String paramString2);
+    int addIntegralForActor(@Param("id") String id, @Param("count") String count);
 }

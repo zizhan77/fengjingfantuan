@@ -64,7 +64,7 @@ public interface UserService {
      */
     Page<User> findPageByCondition(Page page, UserQuery query);
 
-    int updateBySourceAndBizCode(String phoneNumber,String sourceCode,String bizCode,String userName);
+    int updateBySourceAndBizCode(String phoneNumber,String sourceCode,String bizCode,String userName,Integer gender, String avatarUrl);
 
     MtaBean findGender();
 
