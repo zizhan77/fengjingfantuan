@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.CodeTypeDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.CodeType">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="des" property="des" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="sponsorId" property="sponsorId" jdbcType="INTEGER"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- prize table all fields -->
+    <sql id="Base_Column_List">
+		 id,
+		name,
+		des,
+		createTime,
+		sponsorId,
+		url,
+		count
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim suffixOverrides=",">
+            <if test="condition.id != null">
+                and id = #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.name != null and condition.name != ''">
+                and name = #{condition.name,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.des != null and condition.des != ''">
+                and des = #{condition.des,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.sponsorId != null">
+                and sponsorId = #{condition.sponsorId}
+            </if>
+            <if test="condition.createTime != null  ">
+                and createTime =#{condition.createTime}
+            </if>
+            <if test="condition.url != null and condition.url != ''">
+                and url = #{condition.url,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.count != null and condition.count != ''">
+                and url = #{condition.count}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="getCodeTypeForAdd" resultType="com.mem.vo.business.base.model.po.CodeType" parameterType="int">
+        <!-- SELECT * FROM codetype WHERE count>100 AND isovertime>NOW() -->
+        SELECT * FROM codetype WHERE count>100
+    </select>
+    <insert id="insert" >
+        insert into codetype
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="des != null and des != ''">
+                des,
+            </if>
+            <if test="sponsorId != null">
+                sponsorId,
+            </if>
+            <if test="url != null and url != ''">
+                url,
+            </if>
+            <if test="count != null and count != ''">
+                count,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                 #{name},
+            </if>
+
+            <if test="des != null and des != ''">
+                 #{des},
+            </if>
+            <if test="sponsorId != null">
+                 #{sponsorId},
+            </if>
+            <if test="url != null and url != ''">
+                #{url},
+            </if>
+            <if test="count != null and count != ''">
+                #{count},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" >
+        update codetype set
+        <trim suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name=#{name},
+            </if>
+            <if test="des != null and des != ''">
+                des=#{des},
+            </if>
+            <if test="sponsorId != null">
+                sponsorId=#{sponsorId},
+            </if>
+            <if test="url != null and url != ''">
+                url=#{url},
+            </if>
+            <if test="count != null and count != ''">
+                count=#{count},
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+
+    <select id="queryBySponsorId" resultMap="BaseResultMap" parameterType="java.util.List">
+      select   id,
+		name,
+		des,
+		createTime,
+		sponsorId,
+		url,
+        count
+      from codetype
+        where sponsorId in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+    </select>
+</mapper>

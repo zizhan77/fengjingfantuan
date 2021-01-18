@@ -31,6 +31,7 @@
 		<result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
 		<result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
 		<result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+		<result column="sponsorId" property="sponsorId" jdbcType="VARCHAR"/>
 	</resultMap>
 
 	<!-- performance table all fields -->
@@ -58,7 +59,8 @@
 		create_time,
 		create_user,
 		update_time,
-		update_user
+		update_user,
+		sponsorId
 	</sql>
 	<!-- 查询条件 -->
 	<sql id="whereCondition">
@@ -161,6 +163,9 @@
 				and ts =  #{condition.ts,jdbcType=TIMESTAMP}
 			</if>
 
+			<if test="condition.sponsorId != null and condition.sponsorId != ''" >
+				and sponsorId =  #{condition.sponsorId,jdbcType=VARCHAR}
+			</if>
 		</trim>
 	</sql>
 
@@ -241,6 +246,9 @@
 			<if test="isDelete != null  ">
 				is_delete,
 			</if>
+			<if test="sponsorId != null  and sponsorId != '' ">
+				sponsorId,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="title != null  and title != '' ">
@@ -315,6 +323,9 @@
 			<if test="isDelete != null  ">
 				#{isDelete,jdbcType=TINYINT},
 			</if>
+			<if test="sponsorId != null  and sponsorId != '' ">
+				#{sponsorId,jdbcType=VARCHAR},
+			</if>
 		</trim>
 	</insert>
 
@@ -385,6 +396,9 @@
 			<if test="updateUser != null  and updateUser != '' ">
 				update_user=#{updateUser,jdbcType=VARCHAR},
 			</if>
+			<if test="sponsorId != null  and sponsorId != '' ">
+				sponsorId=#{sponsorId,jdbcType=VARCHAR},
+			</if>
 		</trim>
 		where id=#{id,jdbcType=BIGINT} and is_delete = 0
 	</update>
@@ -432,7 +446,8 @@
         pe.detail,
         pe.buy_notes,
         pe.performance_nature,
-        pe.limit_number
+        pe.limit_number,
+		pe.sponsorId
         from performance pe left join basic_place bp
         on pe.place_id = bp.id
         where

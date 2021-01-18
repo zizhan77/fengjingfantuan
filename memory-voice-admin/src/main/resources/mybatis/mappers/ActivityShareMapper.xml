@@ -72,6 +72,92 @@
             </if>
         </trim>
     </sql>
+    <select id="getUserShareForuser"  resultType="string" parameterType="long">
+        select  updatetime from  user_sign where userid = #{userId}
+
+    </select>
+
+    <select id="findAllForUserShare" parameterType="long" resultType="com.mem.vo.business.base.model.po.ActivityShare">
+      select
+                      id,
+                user_id AS userId,
+                user_name AS userName,
+                target_id AS targetId,
+                create_time AS createTime,
+                update_time AS updateTime,
+                type,
+                share_from AS shareFrom
+
+      from user_share where is_delete = 0
+            AND  to_days(create_time) = to_days(now())
+            and user_id =
+            (
+            SELECT biz_code FROM `user` WHERE id=#{userId}
+            )
+    </select>
+
+    <select id="getUserShareForSign" parameterType="string" resultType="com.mem.vo.business.base.model.po.User">
+                                    SELECT
+                            u.id,
+                            u.`name`,
+                            u.avatarurl
+                        FROM
+                            user_share us
+                        JOIN `user` u ON us.target_id = u.biz_code
+                        WHERE
+                            us.is_delete = 0
+                        AND to_days(us.create_time) = to_days(now())
+                        AND us.user_id =#{bizCode}
+    </select>
+
+
+    <insert id="insertUserShare"  parameterType="com.mem.vo.business.base.model.po.UserShareClass">
+                    INSERT INTO `user_share` (
+
+                `user_id`,
+                `user_name`,
+                `target_id`,
+                `create_time`,
+                `update_time`,
+                `type`,
+                `share_from`
+            )
+            VALUES
+                (
+                    #{userId},
+                    #{userName},
+                    #{targetId},
+                    NOW(),
+                   NOW(),
+                    #{type},
+                    #{shareFrom}
+                );
+
+
+
+    </insert>
+    <select id="selectACT" parameterType="com.mem.vo.business.base.model.po.ActivityShare" resultType="int">
+        SELECT count(1) FROM activity_share WHERE user_id = #{userId}
+          AND target_id = #{targetId} and is_delete =0
+    </select>
+
+    <select id="showShareInUser" parameterType="long" resultType="com.mem.vo.business.base.model.po.ActivityShare">
+        SELECT count(1) as count
+    FROM activity_share a JOIN `user` u ON a.user_id =u.biz_code
+    WHERE u.id=#{userId}
+    </select>
+
+    <select id="findAll" parameterType="long" resultType="com.mem.vo.business.base.model.po.ActivityShare">
+
+            select * from activity_share where is_delete = 0 and  activity_id!=0
+            AND  to_days(create_time) = to_days(now())
+            and user_id =
+            (
+            SELECT biz_code FROM `user` WHERE id=#{shareId}
+            )
+
+
+    </select>
 
     <!-- 单个插入，只插入不为空的字段  -->
     <insert id="insert" parameterType="com.mem.vo.business.base.model.po.ActivityShare">

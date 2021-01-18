@@ -73,7 +73,7 @@ public interface ActivityShareDao {
      */
     Integer findCountByConditionToday(@Param("condition") ActivityShareQuery query);
 
-    @Select("select * from activity_share where is_delete = 0 ")
+//    @Select("select * from activity_share where is_delete = 0 ")
     List<ActivityShare> findAll();
 
     ActivityShare showShareInUser(Long paramLong);

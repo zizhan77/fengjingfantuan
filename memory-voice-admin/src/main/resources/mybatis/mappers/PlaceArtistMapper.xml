@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.PlaceArtistMapper">
+  <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.PlaceArtist">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="artistId" jdbcType="INTEGER" property="artistId" />
+    <result column="placeId" jdbcType="INTEGER" property="placeId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, artistId, placeId
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from place_artist
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from place_artist
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.mem.vo.business.base.model.po.PlaceArtist">
+    insert into place_artist (id, artistId, placeId
+      )
+    values (#{id,jdbcType=INTEGER}, #{artistid,jdbcType=INTEGER}, #{placeid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mem.vo.business.base.model.po.PlaceArtist">
+    insert into place_artist
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="artistId != null">
+        artistId,
+      </if>
+      <if test="placeId != null">
+        placeId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="artistId != null">
+        #{artistId,jdbcType=INTEGER},
+      </if>
+      <if test="placeId != null">
+        #{placeId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.mem.vo.business.base.model.po.PlaceArtist">
+    update place_artist
+    <set>
+      <if test="artistId != null">
+        artistId = #{artistId,jdbcType=INTEGER},
+      </if>
+      <if test="placeId != null">
+        placeId = #{placeId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mem.vo.business.base.model.po.PlaceArtist">
+    update place_artist
+    set artistId = #{artistId,jdbcType=INTEGER},
+      placeId = #{placeId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByPlaceId">
+    delete  from  place_artist
+    where placeId=#{id}
+  </delete>
+  <insert id="insertList">
+    insert into place_artist
+    (artistId, placeId)
+
+    values
+    <foreach collection="artistList" item="i" separator=",">
+      (
+      #{i},
+      #{insert}
+      )
+    </foreach>
+  </insert>
+  <select id="selectByPlaceId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from place_artist
+    where placeId=#{id}
+  </select>
+</mapper>

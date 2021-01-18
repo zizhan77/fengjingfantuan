@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class ActivityCountServiceImpl implements ActivityCountService{
+
     @Resource
     private ActivitycountMapper activitycountMapper;
 

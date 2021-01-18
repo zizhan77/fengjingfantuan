@@ -15,6 +15,7 @@
         <result column="two_address" property="twoAddress" jdbcType="VARCHAR"/>
         <result column="all_place" property="allPlace" jdbcType="INTEGER"/>
         <result column="thumb_url" property="thumbUrl" jdbcType="VARCHAR"/>
+        <result column="thumb_type" property="thumbType" jdbcType="VARCHAR"/>
         <result column="enable" property="enable" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
@@ -37,10 +38,14 @@
 		all_place,
 		thumb_url,
 		enable,
+		thumb_type,
 		create_time,
 		create_user,
 		update_time,
-		update_user
+		update_user,
+		onlinetime,
+		offlinetime
+
 	</sql>
     <!-- 查询条件 -->
     <sql id="whereCondition">
@@ -52,6 +57,10 @@
 
             <if test="condition.bannerName != null and condition.bannerName != ''">
                 and banner_name = #{condition.bannerName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.thumbUrl != null and condition.thumbUrl != ''">
+                and thumb_url = #{condition.thumbUrl,jdbcType=VARCHAR}
             </if>
 
             <if test="condition.sort != null">
@@ -112,6 +121,28 @@
         </trim>
     </sql>
 
+    <update id="updatelineFlag">
+        update  banner set  enable = #{flag} where
+        id in
+        <foreach collection="list" open="(" close=")" separator="," item="item" >
+            #{item}
+        </foreach>
+
+    </update>
+
+    <select id="getOffLineFlag" resultType="int">
+        SELECT b.id FROM banner b
+        WHERE b.offlinetime >= #{nowtime}
+        AND b.offlinetime &lt; #{nexttime}
+        AND b.is_delete = 0 and b.enable = 1
+    </select>
+    <select id="getOnLineFlag" resultType="int">
+        SELECT b.id FROM banner b
+        WHERE b.onlinetime >= #{nowtime}
+        AND b.onlinetime &lt; #{nexttime}
+        AND b.is_delete = 0 and b.enable = 0
+    </select>
+
     <!-- 单个插入，只插入不为空的字段  -->
     <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Banner">
         insert into banner
@@ -143,6 +174,9 @@
             <if test="thumbUrl != null  and thumbUrl != '' ">
                 thumb_url,
             </if>
+            <if test="thumbType != null  and thumbType != '' ">
+                thumb_type,
+            </if>
             <if test="enable != null  ">
                 enable,
             </if>
@@ -160,6 +194,12 @@
             </if>
             <if test="isDelete != null  ">
                 is_delete,
+            </if>
+            <if test="onlinetime != null  ">
+                onlinetime,
+            </if>
+            <if test="offlinetime != null  ">
+                offlinetime,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -190,6 +230,9 @@
             <if test="thumbUrl != null  and thumbUrl != '' ">
                 #{thumbUrl,jdbcType=VARCHAR},
             </if>
+            <if test="thumbType != null  and thumbType != '' ">
+                #{thumbType,jdbcType=VARCHAR},
+            </if>
             <if test="enable != null  ">
                 #{enable,jdbcType=INTEGER},
             </if>
@@ -208,6 +251,12 @@
             <if test="isDelete != null  ">
                0,
             </if>
+            <if test="onlinetime != null  ">
+                #{onlinetime},
+            </if>
+            <if test="offlinetime != null  ">
+                #{offlinetime},
+            </if>
         </trim>
     </insert>
 
@@ -215,6 +264,12 @@
     <update id="updateById" parameterType="com.mem.vo.business.base.model.po.Banner">
         update banner set
         <trim suffixOverrides=",">
+            <if test="onlinetime != null  ">
+                onlinetime=#{onlinetime},
+            </if>
+            <if test="offlinetime != null  ">
+                offlinetime=#{offlinetime},
+            </if>
             <if test="bannerName != null  and bannerName != '' ">
                 banner_name=#{bannerName,jdbcType=VARCHAR},
             </if>
@@ -238,6 +293,9 @@
             </if>
             <if test="allPlace != null  ">
                 all_place=#{allPlace,jdbcType=INTEGER},
+            </if>
+            <if test="thumbType != null  and thumbType != '' ">
+                thumb_type=#{thumbType,jdbcType=VARCHAR},
             </if>
             <if test="thumbUrl != null  and thumbUrl != '' ">
                 thumb_url=#{thumbUrl,jdbcType=VARCHAR},

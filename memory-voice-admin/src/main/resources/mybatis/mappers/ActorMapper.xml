@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.ActorDao" >
+
+	<update id="clickSponsor" >
+		update sponsor SET peopleclick=peopleclick+#{people},clicknum=clicknum+#{clicknum} WHERE id =#{id}
+	</update>
+	<update id="updateBanner" >
+		update banner SET peopleclick=peopleclick+#{people},clicknum=clicknum+#{clicknum}  WHERE id =#{id}
+	</update>
+	<select id="selectCodeidByPrize" resultType="int" parameterType="long">
+
+		SELECT p.codeType FROM prize_d d
+		JOIN prize p ON d.prize_id=p.id
+		where d.id= #{id}
+	</select>
+	<update id="updateCodetype" >
+		UPDATE codetype SET peopleclick=peopleclick+#{people},clicknum=clicknum+#{clicknum}  WHERE id =#{id}
+	</update>
+	<select id="getCilckForall" resultType="int">
+		SELECT count(1) FROM click WHERE userid=#{userid} AND `from`=#{from} AND CURDATE()=DATE(createtime)
+	</select>
+	<insert id="insertClick" >
+		insert into click(userid,`from`,createtime,updatetime) values(#{userid},#{from},NOW(),NOW())
+	</insert>
+
+	<select id="getPhoneActorTripList" resultType="com.mem.vo.business.base.model.po.ActorTirp">
+		SELECT  *  FROM actor_trip WHERE actorid=#{id} AND time BETWEEN #{first} AND #{last}
+		ORDER BY time 
+		limit #{p.start},#{p.pageSize}
+
+	</select>
+	<select id="getPhoneActorTripListCount" resultType="int">
+		SELECT  count(1) FROM actor_trip WHERE actorid=#{id} AND time BETWEEN #{first} AND #{last}
+	</select>
+	<select id="getActorTripNextOne" resultType="string" parameterType="int">
+		SELECT
+			tripname
+		FROM
+			actor_trip
+		WHERE
+			actorid = #{id}
+		AND time > NOW()
+		ORDER BY
+			time
+
+	</select>
+
+	<select id="getPhoneActorList" resultType="com.mem.vo.business.base.model.po.Actor">
+
+			SELECT a.id, a.name, a.url, a.integral,a.nexttrip,(@rownum:=@rownum+1) AS count FROM actor a
+			 ,(SELECT @rownum:=0) r
+			  ORDER BY a.integral DESC
+			  limit #{p.start},#{p.pageSize}
+	</select>
+	<select id="getActorTripList" resultType="com.mem.vo.business.base.model.po.ActorTirp">
+		SELECT * FROM actor_trip where actorid=#{a.actorid}
+		<if test="a.tripname!=null and a.tripname!=''">
+			and tripname like '%${a.tripname}%'
+		</if>
+		<if test="a.id!=null ">
+			and id =#{id}
+		</if>
+		limit #{p.start},#{p.pageSize}
+	</select>
+	<select id="getActorList" resultType="com.mem.vo.business.base.model.po.Actor">
+		SELECT * FROM actor
+		where 1=1
+		<if test="a.name!=null and a.name!=''">
+			and name like '%${a.name}%'
+		</if>
+		<if test="a.id !=null">
+		and 	id =#{a.id}
+		</if>
+		limit #{p.start},#{p.pageSize}
+
+	</select>
+	<update id="updateActorTrip" parameterType="com.mem.vo.business.base.model.po.ActorTirp">
+		update actor_trip
+		<set>
+			<if test="tripname!=null and tripname!=''">
+				tripname=#{tripname},
+			</if>
+			<if test="time!=null and time!=''">
+				time=#{time},
+			</if>
+			<if test="address!=null and address!=''">
+			address=#{address},
+			</if>
+			<!--<if test="activityid!=null ">
+				activityid=#{activityid},
+			</if>-->
+			<if test="intro!=null and intro!=''">
+				intro=#{intro},
+			</if>
+		</set>
+		where  id =#{id}
+	</update>
+	<update id="updateActor" parameterType="com.mem.vo.business.base.model.po.Actor">
+		update actor
+		<set>
+			<if test="name!=null and name!=''">
+				name=#{name},
+			</if>
+			<if test="url!=null and url!=''">
+				url=#{url},
+			</if>
+			<if test="integral!=null ">
+				integral=#{integral},
+			</if>
+		</set>
+		where  id =#{id}
+	</update>
+	<select id="getActorTripListCount" parameterType="com.mem.vo.business.base.model.po.ActorTirp" resultType="int">
+		SELECT count(1) FROM actor_trip
+		where actorid=#{actorid}
+		<if test="tripname!=null and tripname!=''">
+			and tripname like '%${tripname}%'
+		</if>
+		<if test="id!=null ">
+			and id =#{id}
+		</if>
+
+	</select>
+	<select id="getPhoneActorListCount" resultType="int">
+		SELECT count(1) FROM actor a
+	</select>
+	<select id="findByPageToPhoneCount" resultType="int" parameterType="com.mem.vo.business.base.model.po.Actor">
+		SELECT count(1) FROM actor a
+		where 1=1
+		<if test="name!=null and name!=''">
+		and name like '%${name}%'
+		</if>
+		<if test="id !=null">
+		and id =#{id}
+		</if>
+	</select>
+
+	<delete id="deleteActor" parameterType="int">
+		delete from actor where  id =#{id}
+	</delete>
+	<delete id="deleteActorTrip" parameterType="com.mem.vo.business.base.model.po.ActorTirp">
+		delete from actor_trip where id =#{id}
+	</delete>
+
+	<delete id="deleteActortrip" parameterType="int">
+		delete from actor_trip where actorid =#{id}
+	</delete>
+
+	<insert id="addActor" parameterType="com.mem.vo.business.base.model.po.Actor">
+		insert  into actor (name,url,integral) values(#{name},#{url},#{integral});
+	</insert>
+
+	<select id="findByActivityId" parameterType="int" resultType="com.mem.vo.business.base.model.po.Activity">
+		select
+		a.id,
+		a.activity_title,
+		a.activity_intro,
+		a.type,
+		a.start_date,
+		a.end_date,
+		a.status,
+		a.sort,
+		a.activity_url,
+		a.create_time,
+		a.create_user,
+		a.update_time,
+		a.update_user,
+		a.sponsor_id,
+		a.sponsor_name,
+		a.is_only,
+		a.thumbnail_url,
+		a.performanceId,
+		a.bgUrl,
+
+		a.top_sp as topsp,
+		a.of_ranking as ofranking,
+		a.crossimage,
+		a.provence
+
+		from activity a where a.id =#{activityid}
+		and a.start_date &lt; NOW()
+		and a.end_date >NOW()
+
+
+
+
+	</select>
+	<insert id="addActorTrip" parameterType="com.mem.vo.business.base.model.po.ActorTirp">
+		insert into actor_trip
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="tripname != null and tripname!=''">
+				tripname,
+			</if>
+			<if test="time != null and time!=''">
+				time,
+			</if>
+			<if test="createtime != null and createtime!=''">
+				createtime,
+			</if>
+			<if test="actorid != null ">
+				actorid,
+			</if>
+			<if test="address != null and address!=''">
+				address,
+			</if>
+			<!--<if test="activityid != null and activityid != '' ">
+				activityid,
+			</if>-->
+			<if test="intro != null and intro!=''">
+				intro,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="tripname != null and tripname!=''">
+				#{tripname},
+			</if>
+			<if test="time != null and time!=''">
+				#{time},
+			</if>
+			<if test="createtime != null and createtime!=''">
+				NOW(),
+			</if>
+			<if test="actorid != null ">
+				#{actorid},
+			</if>
+			<if test="address != null and address!=''">
+				#{address},
+			</if>
+                        <!--<if test="activityid != null and activityid != '' ">
+				#{activityid},
+			</if>-->
+			<if test="intro != null and intro!=''">
+				#{intro},
+			</if>
+		</trim>
+
+	</insert>
+</mapper>   

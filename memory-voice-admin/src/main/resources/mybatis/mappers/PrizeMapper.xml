@@ -20,7 +20,18 @@
         <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
         <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
         <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="sponsor_id" property="sponsorId" jdbcType="INTEGER"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="count" property="count" jdbcType="VARCHAR"/>
+        <result column="miniType" property="miniType" jdbcType="INTEGER"/>
+        <result column="codeType" property="codeType" jdbcType="INTEGER"/>
+        <result column="daily_ticket_limit" property="dailyTicketLimit" jdbcType="INTEGER"/>
+        <!--
+         private Integer status;
+
+    private  Integer level;
+        -->
     </resultMap>
 
     <!-- prize table all fields -->
@@ -38,7 +49,13 @@
 		create_user,
 		update_time,
 		update_user,
-		sponsor_id
+		sponsor_id,
+		level,
+		status,
+		count,
+		miniType,
+		codeType,
+		daily_ticket_limit
 	</sql>
     <!-- 查询条件 -->
     <sql id="whereCondition">
@@ -46,6 +63,8 @@
         <trim  suffixOverrides="," >
             <if test="condition.id != null" >
                 and id =  #{condition.id,jdbcType=BIGINT}
+
+
             </if>
 
             <if test="condition.prizeName != null and condition.prizeName != ''" >
@@ -103,9 +122,160 @@
                 and sponsor_id =  #{condition.sponsorId,jdbcType=INTEGER}
             </if>
 
+            <if test="condition.status != null" >
+                and status =  #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.level != null" >
+                and level =  #{condition.level,jdbcType=INTEGER}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''" >
+                and count =  #{condition.count,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.miniType != null" >
+                and miniType =  #{condition.miniType,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.codeType != null" >
+                and codeType =  #{condition.codeType,jdbcType=INTEGER}
+            </if>
+            <if test="condition.dailyTicketLimit != null" >
+                and daily_ticket_limit = #{dailyTicketLimit,,jdbcType=INTEGER}
+            </if>
         </trim>
     </sql>
 
+    <select id="gettotalandgived" resultType="com.mem.vo.business.base.model.vo.ActivityVO" parameterType="long">
+        SELECT p.total_num as totalnum,p.gived_num AS givednum FROM prize p WHERE p.activity_id = #{id} AND p.prize_type=1 AND p.is_delete=0
+    </select>
+    <insert id="insertforprize"   useGeneratedKeys="true" keyProperty="id" parameterType="com.mem.vo.business.base.model.po.Prize">
+        insert into prize
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prizeName != null  and prizeName != '' ">
+                prize_name,
+            </if>
+            <if test="activityId != null  ">
+                activity_id,
+            </if>
+            <if test="prob != null  ">
+                prob,
+            </if>
+            <if test="totalNum != null  ">
+                total_num,
+            </if>
+            <if test="givedNum != null  ">
+                gived_num,
+            </if>
+            <if test="prizeType != null  ">
+                prize_type,
+            </if>
+            <if test="prizeIntro != null  and prizeIntro != '' ">
+                prize_intro,
+            </if>
+            <if test="prizeRule != null  and prizeRule != '' ">
+                prize_rule,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+            <if test="sponsorId != null  ">
+                sponsor_id,
+            </if>
+            <if test="status != null  and status != '' ">
+                status,
+            </if>
+            <if test="level != null  and level != '' ">
+                level,
+            </if>
+            <if test="count != null  and count != '' ">
+                count,
+            </if>
+            <if test="miniType != null" >
+                miniType,
+            </if>
+            <if test="codeType != null" >
+                codeType,
+            </if>
+            <if test="dailyTicketLimit != null" >
+                daily_ticket_limit,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prizeName != null  and prizeName != '' ">
+                #{prizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="activityId != null  ">
+                #{activityId,jdbcType=BIGINT},
+            </if>
+            <if test="prob != null  ">
+                #{prob,jdbcType=DECIMAL},
+            </if>
+            <if test="totalNum != null  ">
+                #{totalNum,jdbcType=INTEGER},
+            </if>
+            <if test="givedNum != null  ">
+                #{givedNum,jdbcType=INTEGER},
+            </if>
+            <if test="prizeType != null  ">
+                #{prizeType,jdbcType=TINYINT},
+            </if>
+            <if test="prizeIntro != null  and prizeIntro != '' ">
+                #{prizeIntro,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeRule != null  and prizeRule != '' ">
+                #{prizeRule,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="sponsorId != null  ">
+                #{sponsorId,jdbcType=INTEGER},
+            </if>
+
+            <if test="status != null  and status != '' ">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="level != null  and level != '' ">
+                #{level,jdbcType=INTEGER},
+            </if>
+
+            <if test="count != null  and count != '' ">
+                #{count,jdbcType=INTEGER},
+            </if>
+            <if test="miniType != null" >
+                #{miniType}
+            </if>
+            <if test="codeType != null" >
+                #{codeType}
+            </if>
+            <if test="dailyTicketLimit != null" >
+                #{dailyTicketLimit}
+            </if>
+        </trim>
+    </insert>
     <!-- 单个插入，只插入不为空的字段  -->
     <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Prize">
         insert into prize
@@ -152,6 +322,24 @@
             <if test="sponsorId != null  ">
                 sponsor_id,
             </if>
+            <if test="status != null  and status != '' ">
+                status,
+            </if>
+            <if test="level != null  and level != '' ">
+                level,
+            </if>
+            <if test="count != null  and count != '' ">
+                count,
+            </if>
+            <if test="miniType != null" >
+                miniType,
+            </if>
+            <if test="codeType != null" >
+                codeType,
+            </if>
+            <if test="dailyTicketLimit != null" >
+                daily_ticket_limit,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="prizeName != null  and prizeName != '' ">
@@ -196,6 +384,26 @@
             <if test="sponsorId != null  ">
                 #{sponsorId,jdbcType=INTEGER},
             </if>
+
+            <if test="status != null  and status != '' ">
+                 #{status,jdbcType=INTEGER},
+            </if>
+            <if test="level != null  and level != '' ">
+                #{level,jdbcType=INTEGER},
+            </if>
+
+            <if test="count != null  and count != '' ">
+                #{count,jdbcType=INTEGER},
+            </if>
+            <if test="miniType != null" >
+                #{miniType}
+            </if>
+            <if test="codeType != null" >
+                #{codeType}
+            </if>
+            <if test="dailyTicketLimit != null" >
+                #{dailyTicketLimit}
+            </if>
         </trim>
     </insert>
 
@@ -237,7 +445,26 @@
                 sponsor_id=#{sponsorId,jdbcType=INTEGER},
             </if>
             <if test="isDelete != null  ">
-                is_delete=#{isDelete,jdbcType=INTEGER}
+                is_delete=#{isDelete,jdbcType=INTEGER},
+            </if>
+
+            <if test="status != null  and status != '' ">
+                status=#{status,jdbcType=INTEGER},
+            </if>
+            <if test="level != null  and level != '' ">
+                level=#{level,jdbcType=INTEGER},
+            </if>
+            <if test="count != null  and count != '' ">
+                count=#{count,jdbcType=INTEGER},
+            </if>
+            <if test="miniType != null" >
+                miniType=#{miniType},
+            </if>
+            <if test="codeType != null" >
+                codeType= #{codeType},
+            </if>
+            <if test="dailyTicketLimit != null" >
+                daily_ticket_limit= #{dailyTicketLimit},
             </if>
         </trim>
         where id=#{id,jdbcType=BIGINT} and is_delete = 0

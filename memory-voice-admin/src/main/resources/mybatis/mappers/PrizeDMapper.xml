@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mem.vo.business.base.dao.PrizeDDao" >
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.PrizeDDao">
 
-	<resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.PrizeD" >
-		<result column="id" property="id" jdbcType="INTEGER"/>
-		<result column="prize_id" property="prizeId" jdbcType="INTEGER"/>
-		<result column="prize_type" property="prizeType" jdbcType="TINYINT"/>
-		<result column="integral_qty" property="integralQty" jdbcType="INTEGER"/>
-		<result column="prob" property="prob" jdbcType="DECIMAL"/>
-		<result column="eticket_code" property="eticketCode" jdbcType="VARCHAR"/>
-		<result column="name" property="name" jdbcType="VARCHAR"/>
-		<result column="is_change" property="isChange" jdbcType="TINYINT"/>
-		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-		<result column="create_user" property="createUser" jdbcType="VARCHAR"/>
-		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-		<result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
-		<result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
-		<result column="ts" property="ts" jdbcType="TIMESTAMP"/>
-		<result column="activity_id" property="activityId" jdbcType="BIGINT"/>
-		<result column="prize_intro" property="prizeIntro" jdbcType="VARCHAR"/>
-		<result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
-	</resultMap>
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.PrizeD">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="prize_id" property="prizeId" jdbcType="INTEGER"/>
+        <result column="prize_type" property="prizeType" jdbcType="TINYINT"/>
+        <result column="integral_qty" property="integralQty" jdbcType="INTEGER"/>
+        <result column="prob" property="prob" jdbcType="DECIMAL"/>
+        <result column="eticket_code" property="eticketCode" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="is_change" property="isChange" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+        <result column="activity_id" property="activityId" jdbcType="BIGINT"/>
+        <result column="prize_intro" property="prizeIntro" jdbcType="VARCHAR"/>
+        <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
+        <result column="integral_prob" property="integralProb" jdbcType="DECIMAL"/>
+        <result column="prized_count" property="prizedCount" jdbcType="INTEGER"/>
+        <result column="ticket_unit" property="ticketUnit" jdbcType="INTEGER"/>
 
-	<!-- prize_d table all fields -->
-	<sql id="Base_Column_List" >
+        <result column="keyId" property="keyId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- prize_d table all fields -->
+    <sql id="Base_Column_List">
 		 id,
 		prize_id,
 		prize_type,
@@ -40,277 +45,357 @@
 		update_user,
 		activity_id,
 		prize_intro,
-		prize_name
+		prize_name,
+		integral_prob,
+		prized_count,
+		ticket_unit,
+
+
+		keyId
 	</sql>
-	<!-- 查询条件 -->
-	<sql id="whereCondition">
-		where is_delete = 0
-		<trim  suffixOverrides="," >
-			<if test="condition.id != null" >
-				and id =  #{condition.id,jdbcType=INTEGER}
-			</if>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim suffixOverrides=",">
+            <if test="condition.id != null">
+                and id = #{condition.id,jdbcType=INTEGER}
+            </if>
 
-			<if test="condition.prizeId != null" >
-				and prize_id =  #{condition.prizeId,jdbcType=INTEGER}
-			</if>
+            <if test="condition.prizeId != null">
+                and prize_id = #{condition.prizeId,jdbcType=INTEGER}
+            </if>
 
-			<if test="condition.prizeType != null" >
-				and prize_type =  #{condition.prizeType,jdbcType=TINYINT}
-			</if>
+            <if test="condition.prizeType != null">
+                and prize_type = #{condition.prizeType,jdbcType=TINYINT}
+            </if>
 
-			<if test="condition.integralQty != null" >
-				and integral_qty =  #{condition.integralQty,jdbcType=INTEGER}
-			</if>
+            <if test="condition.integralQty != null">
+                and integral_qty = #{condition.integralQty,jdbcType=INTEGER}
+            </if>
 
-			<if test="condition.prob != null" >
-				and prob =  #{condition.prob,jdbcType=DECIMAL}
-			</if>
+            <if test="condition.prob != null">
+                and prob = #{condition.prob,jdbcType=DECIMAL}
+            </if>
 
-			<if test="condition.eticketCode != null and condition.eticketCode != ''" >
-				and eticket_code =  #{condition.eticketCode,jdbcType=VARCHAR}
-			</if>
+            <if test="condition.eticketCode != null and condition.eticketCode != ''">
+                and eticket_code = #{condition.eticketCode,jdbcType=VARCHAR}
+            </if>
 
-			<if test="condition.name != null and condition.name != ''" >
-				and name =  #{condition.name,jdbcType=VARCHAR}
-			</if>
+            <if test="condition.name != null and condition.name != ''">
+                and name = #{condition.name,jdbcType=VARCHAR}
+            </if>
 
-			<if test="condition.isChange != null" >
-				and is_change =  #{condition.isChange,jdbcType=TINYINT}
-			</if>
+            <if test="condition.isChange != null">
+                and is_change = #{condition.isChange,jdbcType=TINYINT}
+            </if>
 
-			<if test="condition.createTime != null" >
-				and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
-			</if>
-			<if test="condition.createUser != null and condition.createUser != ''" >
-				and create_user =  #{condition.createUser,jdbcType=VARCHAR}
-			</if>
+            <if test="condition.createTime != null">
+                and create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''">
+                and create_user = #{condition.createUser,jdbcType=VARCHAR}
+            </if>
 
-			<if test="condition.updateTime != null" >
-				and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
-			</if>
-			<if test="condition.updateUser != null and condition.updateUser != ''" >
-				and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
-			</if>
+            <if test="condition.updateTime != null">
+                and update_time = #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''">
+                and update_user = #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
 
 
-			<if test="condition.ts != null" >
-				and ts =  #{condition.ts,jdbcType=TIMESTAMP}
-			</if>
+            <if test="condition.ts != null">
+                and ts = #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
 
-			<if test="condition.activityId != null" >
-				and activity_id =  #{condition.activityId,jdbcType=BIGINT}
-			</if>
+            <if test="condition.activityId != null">
+                and activity_id = #{condition.activityId,jdbcType=BIGINT}
+            </if>
 
-			<if test="condition.prizeIntro != null and condition.prizeIntro != ''" >
-				and prize_intro =  #{condition.prizeIntro,jdbcType=VARCHAR}
-			</if>
+            <if test="condition.prizeIntro != null and condition.prizeIntro != ''">
+                and prize_intro = #{condition.prizeIntro,jdbcType=VARCHAR}
+            </if>
 
-			<if test="condition.prizeName != null and condition.prizeName != ''" >
-				and prize_name =  #{condition.prizeName,jdbcType=VARCHAR}
-			</if>
+            <if test="condition.prizeName != null and condition.prizeName != ''">
+                and prize_name = #{condition.prizeName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.integralProb != null">
+                and integral_prob = #{condition.integralProb,jdbcType=DECIMAL}
+            </if>
+            <if test="condition.ticketUnit != null">
+                and ticket_unit = #{condition.ticketUnit,jdbcType=INTEGER}
+            </if>
+            <if test="condition.prizedCount != null">
+                and prized_count = #{condition.prizedCount,jdbcType=INTEGER}
+            </if>
+         <!--   <if test="condition.codeType != null">
+                and codeType = #{condition.codeType,jdbcType=INTEGER}
+            </if>-->
 
-		</trim>
-	</sql>
+            <if test="condition.keyId != null">
+                and keyId = #{condition.keyId,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </sql>
 
-	<!-- 单个插入，只插入不为空的字段  -->
-	<insert id="insertBatch" parameterType="java.util.List" >
-		insert into
-				prize_id,
-				prize_type,
-				integral_qty,
-				prob,
-				eticket_code,
-				name,
-				is_change,
-				create_time,
-				create_user,
-				update_time,
-				update_user,
-				is_delete
-				values
-		<foreach collection="list" item="item" index="index" separator=",">
-				   (#{item.prizeId,jdbcType=INTEGER},
-					#{item.prizeType,jdbcType=TINYINT},
-					#{item.integralQty,jdbcType=INTEGER},
-					#{item.prob,jdbcType=DECIMAL},
-					#{item.eticketCode,jdbcType=VARCHAR},
-					#{item.name,jdbcType=VARCHAR},
-					#{item.isChange,jdbcType=TINYINT},
-					#{item.createTime,jdbcType=TIMESTAMP},
-					#{item.createUser,jdbcType=VARCHAR},
-					#{item.updateTime,jdbcType=TIMESTAMP},
-					#{item.updateUser,jdbcType=VARCHAR},
-					#{item.isDelete,jdbcType=TINYINT})
-		</foreach>
-	</insert>
+    <!--&lt;!&ndash; 单个插入，只插入不为空的字段  &ndash;&gt;
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into
+        prize_id,
+        prize_type,
+        integral_qty,
+        prob,
+        eticket_code,
+        name,
+        is_change,
+        create_time,
+        create_user,
+        update_time,
+        update_user,
+        is_delete,
+        integral_prob,
+        prized_count,
+        ticket_unit,
+        codeType
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.prizeId,jdbcType=INTEGER},
+            #{item.prizeType,jdbcType=TINYINT},
+            #{item.integralQty,jdbcType=INTEGER},
+            #{item.prob,jdbcType=DECIMAL},
+            #{item.eticketCode,jdbcType=VARCHAR},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.isChange,jdbcType=TINYINT},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.createUser,jdbcType=VARCHAR},
+            #{item.updateTime,jdbcType=TIMESTAMP},
+            #{item.updateUser,jdbcType=VARCHAR},
+            #{item.isDelete,jdbcType=TINYINT}),
+            #{item.integralProb,jdbcType=DECIMAL},
+            #{item.prizedCount,jdbcType=INTEGER},
+            #{item.ticketUnit,jdbcType=INTEGER},
+            #{item.codeType,jdbcType=INTEGER},
+        </foreach>
+    </insert>-->
 
-	<insert id="insert" parameterType="com.mem.vo.business.base.model.po.PrizeD" >
-		insert into prize_d
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="prizeId != null  ">
-				prize_id,
-			</if>
-			<if test="prizeType != null  ">
-				prize_type,
-			</if>
-			<if test="integralQty != null  ">
-				integral_qty,
-			</if>
-			<if test="prob != null  ">
-				prob,
-			</if>
-			<if test="eticketCode != null  and eticketCode != '' ">
-				eticket_code,
-			</if>
-			<if test="name != null  and name != '' ">
-				name,
-			</if>
-			<if test="isChange != null  ">
-				is_change,
-			</if>
-			<if test="createTime != null  ">
-				create_time,
-			</if>
-			<if test="createUser != null  and createUser != '' ">
-				create_user,
-			</if>
-			<if test="updateTime != null  ">
-				update_time,
-			</if>
-			<if test="updateUser != null  and updateUser != '' ">
-				update_user,
-			</if>
-			<if test="isDelete != null  ">
-				is_delete,
-			</if>
-			<if test="activityId != null  ">
-				activity_id,
-			</if>
-			<if test="prizeIntro != null  and prizeIntro != '' ">
-				prize_intro,
-			</if>
-			<if test="prizeName != null  and prizeName != '' ">
-				prize_name,
-			</if>
-		</trim>
-		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="prizeId != null  ">
-				#{prizeId,jdbcType=INTEGER},
-			</if>
-			<if test="prizeType != null  ">
-				#{prizeType,jdbcType=TINYINT},
-			</if>
-			<if test="integralQty != null  ">
-				#{integralQty,jdbcType=INTEGER},
-			</if>
-			<if test="prob != null  ">
-				#{prob,jdbcType=DECIMAL},
-			</if>
-			<if test="eticketCode != null  and eticketCode != '' ">
-				#{eticketCode,jdbcType=VARCHAR},
-			</if>
-			<if test="name != null  and name != '' ">
-				#{name,jdbcType=VARCHAR},
-			</if>
-			<if test="isChange != null  ">
-				#{isChange,jdbcType=TINYINT},
-			</if>
-			<if test="createTime != null  ">
-				#{createTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="createUser != null  and createUser != '' ">
-				#{createUser,jdbcType=VARCHAR},
-			</if>
-			<if test="updateTime != null  ">
-				#{updateTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="updateUser != null  and updateUser != '' ">
-				#{updateUser,jdbcType=VARCHAR},
-			</if>
-			<if test="isDelete != null  ">
-				#{isDelete,jdbcType=TINYINT},
-			</if>
-			<if test="activityId != null  ">
-				#{activityId,jdbcType=BIGINT},
-			</if>
-			<if test="prizeIntro != null  and prizeIntro != '' ">
-				#{prizeIntro,jdbcType=VARCHAR},
-			</if>
-			<if test="prizeName != null  and prizeName != '' ">
-				#{prizeName,jdbcType=VARCHAR},
-			</if>
-		</trim>
-	</insert>
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.PrizeD">
+        insert into prize_d
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prizeId != null  ">
+                prize_id,
+            </if>
+            <if test="prizeType != null  ">
+                prize_type,
+            </if>
+            <if test="integralQty != null  ">
+                integral_qty,
+            </if>
+            <if test="prob != null  ">
+                prob,
+            </if>
+            <if test="eticketCode != null  and eticketCode != '' ">
+                eticket_code,
+            </if>
+            <if test="name != null  and name != '' ">
+                name,
+            </if>
+            <if test="isChange != null  ">
+                is_change,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+            <if test="activityId != null  ">
+                activity_id,
+            </if>
+            <if test="prizeIntro != null  and prizeIntro != '' ">
+                prize_intro,
+            </if>
+            <if test="prizeName != null  and prizeName != '' ">
+                prize_name,
+            </if>
+            <if test="integralProb != null  ">
+                integral_prob,
+            </if>
+            <if test="ticketUnit != null  ">
+                prized_count,
+            </if>
+            <if test="prizedCount != null  ">
+                ticket_unit,
+            </if>
+        <!--    <if test="prizedCount != null  ">
+                codeType,
+            </if>-->
+            <if test="keyId != null  ">
+                keyId,
+            </if>
+        </trim>
 
-	<!-- 修改记录，只修改只不为空的字段 -->
-	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.PrizeD" >
-		update prize_d set
-		<trim  suffixOverrides="," >
-			<if test="prizeId != null  ">
-				prize_id=#{prizeId,jdbcType=INTEGER},
-			</if>
-			<if test="prizeType != null  ">
-				prize_type=#{prizeType,jdbcType=TINYINT},
-			</if>
-			<if test="integralQty != null  ">
-				integral_qty=#{integralQty,jdbcType=INTEGER},
-			</if>
-			<if test="prob != null  ">
-				prob=#{prob,jdbcType=DECIMAL},
-			</if>
-			<if test="eticketCode != null  and eticketCode != '' ">
-				eticket_code=#{eticketCode,jdbcType=VARCHAR},
-			</if>
-			<if test="name != null  and name != '' ">
-				name=#{name,jdbcType=VARCHAR},
-			</if>
-			<if test="isChange != null  ">
-				is_change=#{isChange,jdbcType=TINYINT},
-			</if>
-			<if test="updateTime != null  ">
-				update_time=#{updateTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="updateUser != null  and updateUser != '' ">
-				update_user=#{updateUser,jdbcType=VARCHAR},
-			</if>
-			<if test="activityId != null  ">
-				activity_id=#{activityId,jdbcType=BIGINT},
-			</if>
-			<if test="prizeIntro != null  and prizeIntro != '' ">
-				prize_intro=#{prizeIntro,jdbcType=VARCHAR},
-			</if>
-			<if test="prizeName != null  and prizeName != '' ">
-				prize_name=#{prizeName,jdbcType=VARCHAR},
-			</if>
-			<if test="isDelete != null  ">
-				is_delete= #{isDelete,jdbcType=TINYINT},
-			</if>
-		</trim>
-		where id=#{id,jdbcType=INTEGER} and is_delete = 0
-	</update>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prizeId != null  ">
+                #{prizeId,jdbcType=INTEGER},
+            </if>
+            <if test="prizeType != null  ">
+                #{prizeType,jdbcType=TINYINT},
+            </if>
+            <if test="integralQty != null  ">
+                #{integralQty,jdbcType=INTEGER},
+            </if>
+            <if test="prob != null  ">
+                #{prob,jdbcType=DECIMAL},
+            </if>
+            <if test="eticketCode != null  and eticketCode != '' ">
+                #{eticketCode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null  and name != '' ">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="isChange != null  ">
+                #{isChange,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="activityId != null  ">
+                #{activityId,jdbcType=BIGINT},
+            </if>
+            <if test="prizeIntro != null  and prizeIntro != '' ">
+                #{prizeIntro,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeName != null  and prizeName != '' ">
+                #{prizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="integralProb != null  ">
+                #{integralProb,jdbcType=DECIMAL},
+            </if>
+            <if test="prizedCount != null  ">
+                #{prizedCount,jdbcType=INTEGER},
+            </if>
+            <if test="ticketUnit != null  ">
+                #{ticketUnit,jdbcType=INTEGER},
+            </if>
+ <!--           <if test="codeType != null  ">
+                #{codeType},
+            </if>-->
+            <if test="keyId != null  ">
+                #{keyId},
+            </if>
+        </trim>
 
-	<!-- 删除记录 -->
-	<update id="deleteById" parameterType="java.lang.Long">
-		update prize_d set is_delete = 1 where is_delete = 0 and id in
-		<foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
-			#{item,jdbcType=BIGINT}
-		</foreach>
-	</update>
 
-	<!-- 根据id查询 奖品明细表 -->
-	<select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
-		select <include refid="Base_Column_List" />
-		from prize_d where id = #{id,jdbcType=INTEGER}
-	</select>
+    </insert>
 
-	<!-- 根据条件查询列表 -->
-	<select id="findByCondition" resultMap="BaseResultMap"  parameterType="com.mem.vo.business.base.model.po.PrizeDQuery">
-		select
-		<include refid="Base_Column_List"/>
-		from prize_d
-		<include refid="whereCondition"/>
-	</select>
-	<select id="selectIdByEt" parameterType="com.mem.vo.business.base.model.po.PrizeDQuery" resultType="java.lang.Integer">
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.PrizeD">
+        update prize_d set
+        <trim suffixOverrides=",">
+            <if test="prizeId != null  ">
+                prize_id=#{prizeId,jdbcType=INTEGER},
+            </if>
+            <if test="prizeType != null  ">
+                prize_type=#{prizeType,jdbcType=TINYINT},
+            </if>
+            <if test="integralQty != null  ">
+                integral_qty=#{integralQty,jdbcType=INTEGER},
+            </if>
+            <if test="prob != null  ">
+                prob=#{prob,jdbcType=DECIMAL},
+            </if>
+            <if test="eticketCode != null  and eticketCode != '' ">
+                eticket_code=#{eticketCode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null  and name != '' ">
+                name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="isChange != null  ">
+                is_change=#{isChange,jdbcType=TINYINT},
+            </if>
+            <if test="updateTime != null  ">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="activityId != null  ">
+                activity_id=#{activityId,jdbcType=BIGINT},
+            </if>
+            <if test="prizeIntro != null  and prizeIntro != '' ">
+                prize_intro=#{prizeIntro,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeName != null  and prizeName != '' ">
+                prize_name=#{prizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                is_delete= #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="integralProb != null  ">
+                integral_prob=#{integralProb,jdbcType=DECIMAL},
+            </if>
+            <if test="ticketUnit != null  ">
+                ticket_unit=#{ticketUnit,jdbcType=INTEGER},
+            </if>
+            <if test="prizedCount != null  ">
+                prized_count=#{prizedCount,jdbcType=INTEGER},
+            </if>
+         <!--   <if test="codeType != null  ">
+                codeType=#{codeType},
+            </if>-->
+            <if test="keyId != null  ">
+                keyId=#{keyId},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=INTEGER} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+        update prize_d set is_delete = 1 where is_delete = 0 and id in
+        <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+            #{item,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+    <!-- 根据id查询 奖品明细表 -->
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from prize_d where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="findByCondition" resultMap="BaseResultMap"
+            parameterType="com.mem.vo.business.base.model.po.PrizeDQuery">
+        select
+        <include refid="Base_Column_List"/>
+        from prize_d
+        <include refid="whereCondition"/>
+    </select>
+    <select id="selectIdByEt" parameterType="com.mem.vo.business.base.model.po.PrizeDQuery"
+            resultType="java.lang.Integer">
 		select id from prize_d where
 	activity_id=#{condition.activityId,jdbcType=BIGINT} and prize_type=#{condition.prizeType,jdbcType=TINYINT} and eticket_code = #{condition.eticketCode,jdbcType=VARCHAR}
 	</select>

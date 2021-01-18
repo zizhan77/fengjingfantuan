@@ -77,7 +77,7 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
-    public Page<Banner> findPageByCondition(Page page, BannerQuery query) {
+    public Page<Banner> findPageByCondition(Page<Banner> page, BannerQuery query) {
 
         List<Banner> list = bannerDao.findByCondition(page, query);
         page.setData(list);

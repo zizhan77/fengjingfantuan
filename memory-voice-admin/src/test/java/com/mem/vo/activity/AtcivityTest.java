@@ -43,8 +43,8 @@ public class AtcivityTest {
         activity.setActivityTitle("setActivityTitle");
         activity.setActivityIntro("setActivityIntro");
         activity.setType(0);
-        activity.setStartDate(new Date());
-        activity.setEndDate(new Date());
+        activity.setStartDate((new Date()).toString());
+        activity.setEndDate((new Date()).toString());
         activity.setStatus(0);
         activity.setSort(1);
         activity.setActivityUrl("setActivityUrl1");

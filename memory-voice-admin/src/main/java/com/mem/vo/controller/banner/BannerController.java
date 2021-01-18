@@ -115,6 +115,7 @@ public class BannerController {
 
         ResponseDto<Page<Banner>> responseDto = new ResponseDto<>();
         try {
+            query.setIsDelete(0);
             Page<Banner> banners = bannerService.findPageByCondition(page, query);
             if (CollectionUtils.isNotEmpty(banners.getData())) {
                 for (Banner banner : banners.getData()) {

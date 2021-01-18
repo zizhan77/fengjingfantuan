@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.ChangeCodeDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.ChangeCode">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="codeKey" property="key" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="isChange" property="isChange" jdbcType="VARCHAR"/>
+        <result column="codeType" property="codeType" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- prize table all fields -->
+    <sql id="Base_Column_List" >
+		 id,
+		codeKey,
+		password,
+		isChange,
+		codeType
+	</sql>
+    <!-- 查询条件 -->
+    <sql id="whereCondition">
+        where is_delete = 0
+        <trim  suffixOverrides="," >
+            <if test="condition.id != null" >
+                and id =  #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.key != null and condition.key != ''" >
+                and codeKey =  #{condition.key,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.password != null and condition.password != ''" >
+                and password =  #{condition.password,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.isChange != null and condition.isChange != ''" >
+                and isChange =  #{condition.isChange,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.codeType != null and condition.codeType != ''" >
+                and codeType =  #{condition.codeType}
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="inserts" parameterType="java.util.List" >
+        insert into changecode
+        (
+        codeKey,password,codeType
+        )
+        values
+        <foreach collection="list" item="item" index="i" separator=",">
+            (
+            #{item.key},#{item.password},#{item.codeType}
+            )
+        </foreach>
+
+    </insert>
+</mapper>

@@ -6,12 +6,13 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
-    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="chargeName" jdbcType="VARCHAR" property="chargeName" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, phone, password, status, create_time, create_user, update_time, update_user, 
+    id, name, phone, password,chargeName , status, create_time, create_user, update_time, update_user,
     is_delete
   </sql>
 
@@ -88,14 +89,12 @@
   </delete>
 
   <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Organizer">
-    insert into organizer (id, name, phone, 
-      password, status, create_time, 
-      create_user, update_time, update_user, 
+    insert into organizer (id, name,chargeName ,phone,
+      password, status,
       is_delete)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=TINYINT})
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},#{chargeName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+      #{isDelete,jdbcType=INTEGER})
   </insert>
 
   <update id="updateByPrimaryKey" parameterType="com.mem.vo.business.base.model.po.Organizer">
@@ -103,15 +102,78 @@
     set name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      create_user = #{createUser,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_user = #{updateUser,jdbcType=VARCHAR},
-      is_delete = #{isDelete,jdbcType=TINYINT}
+      status = #{status,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <select id="queryPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from organizer
+  </select>
+  <update id="update" parameterType="com.mem.vo.business.base.model.po.Organizer">
+    update organizer
+    set
+    <trim  suffixOverrides="," >
+      <if test="name != null  and name != '' ">
+      name = #{name,jdbcType=VARCHAR},
+    </if>
+      <if test="phone != null  and phone != '' ">
+      phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null  and password != '' ">
+      password = #{password,jdbcType=VARCHAR},
+    </if>
 
+      <if test="status != null  and status != '' ">
+      status = #{status,jdbcType=INTEGER},
+      </if>
 
+      <if test="isDelete != null  and isDelete != '' ">
+      is_delete = #{isDelete,jdbcType=VARCHAR}
+      </if>
+
+      <if test="chargeName != null  and chargeName != '' ">
+        chargeName = #{chargeName,jdbcType=VARCHAR}
+      </if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+<!--
+
+id, name, phone, password,chargeName , status, create_time, create_user, update_time, update_user,
+    is_delete
+-->
+
+  <select id="queryBy" resultMap="BaseResultMap" parameterType="com.mem.vo.business.base.model.po.Organizer">
+    select
+    <include refid="Base_Column_List" />
+    from organizer
+    where 1=1
+      <if test="id != null  and id != '' ">
+          and id = #{id,jdbcType=VARCHAR}
+      </if>
+    <if test="name != null  and name != '' ">
+      and name = #{name,jdbcType=VARCHAR}
+    </if>
+    <if test="phone != null  and phone != '' ">
+      and phone = #{phone,jdbcType=VARCHAR}
+    </if>
+    <if test="password != null  and password != '' ">
+      and password = #{password,jdbcType=VARCHAR}
+    </if>
+
+    <if test="status != null  and status != '' ">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+
+    <if test="isDelete != null  and isDelete != '' ">
+      and is_delete = #{isDelete,jdbcType=VARCHAR}
+    </if>
+
+    <if test="chargeName != null  and chargeName != '' ">
+      and chargeName = #{chargeName,jdbcType=VARCHAR}
+    </if>
+  </select>
 </mapper>

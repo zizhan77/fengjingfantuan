@@ -80,6 +80,41 @@ public class LoginController {
     @Resource
     private UserOperateService userOperateService;
 
+    @PostMapping({"/minoPro/getUser"})
+    public ResponseDto<List<String>> miniProGetTokenforUser(String jscode) {
+        ResponseDto<List<String>> responseDto = ResponseDto.successDto();
+        try {
+            BizAssert.hasText(jscode, BizCode.PARAM_NULL.getMessage());
+            WxRpcContext wxRpcContext = wxLoginService.getRpcContext(jscode);
+            BizAssert.isBlank(wxRpcContext.getErrmsg(), wxRpcContext.getErrmsg());
+            BizAssert.isBlank(wxRpcContext.getErrcode(), wxRpcContext.getErrcode());
+            UserQuery userQuery = new UserQuery();
+            userQuery.setSource(SourceType.WX_MINI.getCode());
+            userQuery.setBizCode(wxRpcContext.getOpenid());
+            List<String> list = new ArrayList<>();
+            String token = "";
+            List<User> users = userService.findByCondition(userQuery);
+            if (CollectionUtils.isEmpty(users)) {
+                list.add("1");
+            } else {
+                BizAssert.notNull(((User)users.get(0)).getStatus(), "用户状态不存在");
+                        BizAssert.notNull(((User)users.get(0)).getIsDelete(), "用户状态不存在");
+                if (((User)users.get(0)).getStatus().equals(EnableStatus.ON.getCode()) && ((User)users.get(0)).getIsDelete().equals(Integer.valueOf(0))) {
+                    User userInfo = users.get(0);
+                    list.add("0");
+                    token = this.wxLoginService.getToken(wxRpcContext, false, userInfo.getId());
+                    list.add(token);
+                } else {
+                    throw new BizException("此用户已经被锁定或者被删除");
+                }
+            }
+            return responseDto.successData(list);
+        } catch (Exception e) {
+            log.error("小程序登录业务异常, 参数: {},原因: {}", jscode, e.getMessage());
+            return responseDto.failData(e.getMessage());
+        }
+    }
+
     @PostMapping("/minoPro/getToken")
     public ResponseDto<String> miniProGetToken(String jscode) {
 

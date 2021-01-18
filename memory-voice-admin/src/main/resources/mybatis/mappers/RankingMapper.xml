@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.RankingDao">
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.Ranking">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="startTime" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="isDelete" property="isDelete" jdbcType="VARCHAR"/>
+        <result column="count" property="count" jdbcType="VARCHAR"/>
+        <result column="enable" property="enable" jdbcType="VARCHAR"/>
+        <result column="creatTime" property="creatTime" jdbcType="TIMESTAMP"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- prize table all fields -->
+    <sql id="Base_Column_List" >
+		 id,
+		name,
+		startTime,
+		endTime,
+		isDelete,
+		count,
+		enable,
+		creatTime,
+		url
+	</sql>
+    <select id="queryUserByRankingCount" resultType="int">
+                  SELECT
+            COUNT(DISTINCT u.id)
+            FROM integral i JOIN `user` u ON i.user_id=u.id
+             WHERE i.activity_id=#{id}
+             AND i.integral_qty &lt; 0
+
+    </select>
+    <select id="queryUserByRanking"  resultType="com.mem.vo.business.base.model.po.User">
+              SELECT  SUM(i.integral_qty) sort ,u.name,u.avatarurl
+        FROM integral i JOIN `user` u ON i.user_id=u.id
+         WHERE i.activity_id=#{id}
+        AND i.integral_qty &lt;0
+        GROUP BY u.id
+        ORDER BY sort
+        limit #{paging.start},#{paging.pageSize}
+    </select>
+
+    <select id="queryRankingDetail" resultType="com.mem.vo.business.base.model.po.Ranking">
+
+        SELECT
+        r.id,
+        r.name,
+        r.startTime,
+        r.endTime,
+        r.url,
+        r.count,
+        a.activity_intro AS intro,
+        a.provence
+        FROM ranking r
+        LEFT JOIN activity a ON r.id = a.of_ranking
+        WHERE r.id = #{id}
+        GROUP BY r.id
+    </select>
+    <select id="getRankingOfuser"  resultType="com.mem.vo.business.base.model.po.User">
+            SELECT u.id,u.name,u.avatarurl,u.phone_number as phoneNumber,SUM(i.integral_qty) c
+            FROM integral i JOIN `user` u ON i.user_id=u.id
+             WHERE i.activity_id=#{id}
+            GROUP BY u.id
+            ORDER BY c
+            LIMIT 3
+    </select>
+    <select id="findByPageToPhoneCount" resultType="int">
+        SELECT
+        count(1)
+        FROM ranking ,(SELECT @rownum:=0) r
+        where isDelete=0 AND `enable` =1
+        AND startTime &lt;= NOW() AND endTime >=NOW()
+    </select>
+    <select id="getCountByActivityintegrey" resultType="int">
+                          SELECT  SUM(i.integral_qty) sort
+                    FROM integral i
+                     WHERE i.activity_id=#{id} AND type =1
+                     AND user_id =#{userid}
+
+    </select>
+    <select id="getCountByActivityintegreySort" resultType="int">
+
+            SELECT x.count FROM(SELECT a.user_id,(@rownum:=@rownum+1) AS count,a.sort FROM (SELECT SUM(i.integral_qty) sort,i.user_id
+            FROM integral i
+              WHERE i.activity_id=#{id}
+            GROUP BY i.user_id
+            ORDER BY sort) a  ,(SELECT @rownum:=0) r
+            ORDER BY sort) x WHERE x.user_id = #{userid}
+    </select>
+
+    <select id="findByPageToPhone" resultType="com.mem.vo.business.base.model.po.Ranking">
+        SELECT
+        id,
+        name,
+        count,
+        startTime,
+        endTime,url ,
+        (@rownum:=@rownum+1) AS sort
+        FROM ranking ,(SELECT @rownum:=0) r
+        where isDelete=0 AND `enable` =1
+        AND startTime &lt;= NOW() AND endTime >=NOW()
+        ORDER BY count*1 DESC
+        limit #{paging.start},#{paging.pageSize}
+
+
+    </select>
+
+
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Ranking">
+        <selectKey resultType="_long" keyProperty="id" order="AFTER">
+            select @@IDENTITY as id
+        </selectKey>
+        insert into ranking
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''" >
+                name ,
+            </if>
+
+            <if test="startTime != null" >
+                startTime,
+            </if>
+
+            <if test="endTime != null" >
+                endTime,
+            </if>
+
+            <if test="url != null and url != ''" >
+                url,
+            </if>
+            <if test="enable != null and enable != ''" >
+                enable,
+            </if>
+            <if test="count != null and count != ''" >
+                count,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''" >
+                #{name} ,
+            </if>
+
+            <if test="startTime != null" >
+                #{startTime},
+            </if>
+
+            <if test="endTime != null" >
+                #{endTime},
+            </if>
+
+            <if test="url != null and url != ''" >
+                #{url},
+            </if>
+
+            <if test="enable != null and enable != ''" >
+                #{enable},
+            </if>
+            <if test="count != null and count != ''" >
+                #{count},
+            </if>
+        </trim>
+    </insert>
+    <update id="deleteById" parameterType="long">
+        update  ranking set isDelete =1 where id  = #{ofranking}
+    </update>
+    <update id="update" >
+        update  ranking set
+        <trim  suffixOverrides="," >
+            <if test="name != null  and name != '' ">
+                `name`=#{name},
+            </if>
+            <if test="startTime != null  ">
+                startTime=#{startTime},
+            </if>
+            <if test="endTime != null  ">
+                endTime=#{endTime},
+            </if>
+            <if test="url != null  and url != '' ">
+                url=#{url},
+            </if>
+            <if test="isDelete != null  and isDelete != '' ">
+                isDelete=#{isDelete},
+            </if>
+            <if test="count != null  and count != '' ">
+                `count`=#{count},
+            </if>
+            <if test="enable != null  and enable != '' ">
+                `enable`=#{enable},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <select id="query" >
+        select <include refid="Base_Column_List" />
+        from ranking where 1=1
+        <if test="id != null  and id != '' ">
+            and id = #{id}
+        </if>
+        <if test="name != null  and name != '' ">
+            and name like "%"#{name}"%"
+        </if>
+        <if test="startTime != null   ">
+            and startTime=#{startTime}
+        </if>
+        <if test="endTime != null   ">
+            and endTime=#{endTime}
+        </if>
+        <if test="url != null  and url != '' ">
+            and url=#{url}
+        </if>
+        <if test="isDelete != null  and isDelete != '' ">
+            and is_delete=#{is_delete}
+        </if>
+        <if test="count != null  and count != '' ">
+            and count=#{count}
+        </if>
+        <if test="ranking.enable != null  and ranking.enable != '' ">
+            and enable=#{ranking.enable}
+        </if>
+
+    </select>
+
+    <select id="queryByName"  resultType="com.mem.vo.business.base.model.vo.RankingVO">
+        select c.id,
+        c.name,
+        c.startTime,
+        c.endTime,
+        c.isDelete,
+        c.count,
+        c.creatTime,
+        c.enable,
+        c.url,
+        c.ranking
+        from (
+        SELECT a.id,
+        a.name,
+        a.startTime,
+        a.endTime,
+        a.isDelete,
+        a.count,
+        a.creatTime,
+        a.url,
+        a.enable,@rank:=@rank+1 as ranking from(SELECT id,
+        name,
+        startTime,
+        endTime,
+        isDelete,
+        count,
+        creatTime,
+        url,
+        enable from ranking where isDelete=0 and enable = 1
+        ORDER BY (count+0)desc)a,(SELECT @rank:=0)b
+        where  a.endTime <![CDATA[>=]]> now() and a.startTime <![CDATA[<=]]>now()
+
+        ) c
+        <if test="name != null  and name != '' ">
+              where c.name like "%"#{name}"%"
+        </if>
+
+    </select>
+
+    <select id="queryPage"  resultType="com.mem.vo.business.base.model.vo.RankingVO">
+        select c.id,
+        c.name,
+        c.startTime,
+        c.endTime,
+        c.isDelete,
+        c.count,
+        c.creatTime,
+        c.enable,
+        c.url,
+        c.ranking
+        from (
+        SELECT a.id,
+        a.name,
+        a.startTime,
+        a.endTime,
+        a.isDelete,
+        a.count,
+        a.creatTime,
+        a.url,
+        a.enable,@rank:=@rank+1 as ranking from(SELECT id,
+        name,
+        startTime,
+        endTime,
+        isDelete,
+        count,
+        creatTime,
+        url,
+        enable from ranking where isDelete=0 and enable = 1
+        ORDER BY (count+0)desc)a,(SELECT @rank:=0)b
+        ) c
+    </select>
+    <select id="queryGetOne"  resultType="com.mem.vo.business.base.model.vo.RankingVO">
+          select c.id,
+                c.name,
+                c.startTime,
+                c.endTime,
+                c.isDelete,
+                c.count,
+                c.creatTime,
+                c.enable
+        FROM ranking c WHERE isDelete = 0
+            <if test="ranking.id != null">
+              and  c.id = #{ranking.id}
+
+            </if>
+    </select>
+</mapper>

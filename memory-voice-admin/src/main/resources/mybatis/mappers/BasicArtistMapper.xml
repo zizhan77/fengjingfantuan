@@ -212,4 +212,21 @@
             and artist_name like CONCAT(CONCAT('%',#{name} ),'%')
         </if>
     </select>
+
+    <select id="findByIdList" resultType="com.mem.vo.business.base.model.vo.PlaceArtistVO" parameterType="java.util.List">
+        select
+         id as artistId,
+		artist_name as artistName
+        from basic_artist
+        where
+        is_delete = 0
+        and
+        id in
+        <foreach collection="artistList"  item="i" index="index" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+
+    </select>
+
+
 </mapper>

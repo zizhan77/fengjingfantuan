@@ -21,10 +21,226 @@
         <result column="reward_description" property="rewardDescription" jdbcType="VARCHAR"/>
         <result column="activity_id" property="activityId" jdbcType="INTEGER"/>
         <result column="integral_num" property="integralNum" jdbcType="INTEGER"/>
+        <result column="miniType" property="miniType" jdbcType="INTEGER"/>
+        <result column="keyId" property="keyId" jdbcType="INTEGER"/>
+        <result column="prizedId" property="prizedId" jdbcType="INTEGER"/>
     </resultMap>
+    <update id="updateByIdToIntegralRole" parameterType="com.mem.vo.business.base.model.po.IntegralRoleClass" >
+        update integral_role set updatetime =NOW()
+        <if test="name !=null and name != '' ">
+            , name = #{name}
+        </if>
+        <if test="addcount !=null  ">
+            , addcount = #{addcount}
+        </if>
+        <if test="number !=null ">
+            , number = #{number}
+        </if>
+        <if test="numofday !=null ">
+            , numofday = #{numofday}
+        </if>
+        <if test="status !=null ">
+            , status = #{status}
+        </if>
+        <if test="otherjson !=null and otherjson != '' ">
+            , otherjson = #{otherjson}
+        </if>
+
+        where  id=#{id}
+    </update>
+    <update id="updateRewardFlag" parameterType="int">
+        UPDATE `reward`
+          `status` = '1'
+            WHERE
+                `id` = #{id};
+    </update>
+    <select id="getUserDefaultIntegral" resultType="int">
+         SELECT otherjson FROM integral_role WHERE id= 1 and  status = 0
+    </select>
+    <select id="getUserIntegralFlagCount" resultType="int">
+        SELECT addcount FROM integral_role WHERE id= 1 and  status = 0
+    </select>
+    <select id="getNewUserIntegral" resultType="int">
+          SELECT addcount FROM integral_role WHERE id= 4 and  status = 0
+    </select>
+    
+    <select id="integralRoleList"  resultType="com.mem.vo.business.base.model.po.IntegralRoleClass">
+        select * from integral_role
+        <if test="id!=null">
+            where  id = #{id}
+        </if>
+    </select>
+<!--    <select id="queryListByUserCount" resultType="int">
+                    SELECT count(1)
+            FROM reward r
+            JOIN user u ON r.user_id = u.id
+            WHERE r.prize_type=#{type}
+            AND u.id = #{id}
+
+    </select>-->
+    <select id="queryListByUserCount" resultType="int">
+                SELECT count(1)
+            FROM reward r
+
+            JOIN user u ON r.user_id = u.id
+            WHERE r.prize_type=#{type}
+            AND u.id = #{id}
+
+    </select>
+
+    <select id="queryYouhuiquan" resultType="com.mem.vo.business.base.model.vo.RewardVO">
+
+          SELECT
+                       r.reward_description as des,
+                        r.miniType as miniType,
+                        r.id as id,
+                        r.`prize_name` as prizeName,
+                        r.`time` as time,
+                        r.`status` as status,
+                        r.prize_type as prizeType,
+                        r.contact_name as contactName,
+                        r.contact_province as contactProvince,
+                        r.contact_address as contactAddress,
+                        c.url,
+                        sp.thumb_url AS spurl,
+                        x.isChange as isChange,
+                        x.`codeKey` as `key` ,
+                        x.`password` as `password`,
+                        r.prize_id as prizedId
+                            FROM reward r
+                             LEFT join changecode x on x.id = r.keyId
+                           LEFT JOIN codetype c on c.id = x.codeType
+                            LEFT JOIN sponsor sp ON c.sponsorId = sp.id
+
+                            JOIN user u ON r.user_id = u.id
+                            WHERE r.prize_type=#{type}
+                            AND u.id = #{id}
+                            ORDER BY r.time
+                limit #{paging.start},#{paging.pageSize}
+
+    </select>
+    <select id="queryListByUser" resultType="com.mem.vo.business.base.model.vo.RewardVO">
+                          SELECT
+                       r.reward_description as des,
+                        r.miniType as miniType,
+                        r.id as id,
+                        r.`prize_name` as prizeName,
+                        r.`time` as time,
+                        r.`status` as status,
+                        r.prize_type as prizeType,
+                        r.contact_name as contactName,
+                        r.contact_province as contactProvince,
+                        r.contact_address as contactAddress,
+                        r.prize_id as prizedId
+
+                            FROM reward r
+
+                            JOIN user u ON r.user_id = u.id
+                            WHERE r.prize_type=#{type}
+                            AND u.id = #{id}
+                            ORDER BY r.time
+                limit #{paging.start},#{paging.pageSize}
+
+    </select>
+
+    <select id="queryListByCount" resultType="int" parameterType="com.mem.vo.business.base.model.vo.RewardQueryDto">
+
+        SELECT count(1)
+        FROM `reward` r LEFT JOIN `activity` a ON a.`id`=r.`activity_id`
+
+        LEFT JOIN `user` u ON u.`id` = r.`user_id`
+
+        LEFT join changecode c on c.id = r.keyId
+
+        LEFT JOIN codetype t on t.id = c.codeType
+
+        WHERE   r.prize_type != 3
+
+
+        <if test="dto.contactPhone != null  and dto.contactPhone != '' ">
+            AND u.`phone_number` = #{dto.contactPhone}
+        </if>
+        <if test="dto.prizeType!= null   ">
+            AND r.`prize_type` = #{dto.prizeType}
+        </if>
+        <if test="dto.prizeName != null  and dto.prizeName != '' ">
+            AND r.`prize_name` like "%${dto.prizeName}%"
+        </if>
+        <if test="dto.activityName != null  and dto.activityName != '' ">
+        AND a.`activity_title` like "%${dto.activityName}%"
+        </if>
+        <if test="dto.startsedate != null  and dto.startsedate != '' ">
+            AND r.`time` >= #{dto.startsedate}
+        </if>
+        <if test="dto.endsedate != null  and dto.endsedate != '' ">
+            AND r.`time` &lt;= #{dto.endsedate}
+        </if>
+
+    </select>
+    <select id="queryListBy" resultType="com.mem.vo.business.base.model.vo.RewardVO" parameterType="com.mem.vo.business.base.model.vo.RewardQueryDto">
+
+        SELECT t.des as codeDes,
+        r.reward_description as des,
+        t.url as url,
+        a.activity_title as activityName,
+        c.isChange as isChange,
+        c.`codeKey` as `key` ,
+        c.`password` as `password`,
+        r.miniType as miniType,
+        r.id as id,
+        r.`prize_name` as prizeName,
+        r.`time` as time,
+        r.`status` as status,
+        r.prize_type as prizeType,
+        r.contact_name as contactName,
+       u.phone_number as contactPhone,
+        r.contact_province as contactProvince,
+        r.contact_address as contactAddress
+        FROM `reward` r LEFT JOIN `activity` a ON a.`id`=r.`activity_id`
+
+        LEFT JOIN `user` u ON u.`id` = r.`user_id`
+
+        LEFT join changecode c on c.id = r.keyId
+
+        LEFT JOIN codetype t on t.id = c.codeType
+
+        WHERE   r.prize_type != 3
+
+        <if test="dto.contactPhone != null  and dto.contactPhone != '' ">
+            AND u.`phone_number` = #{dto.contactPhone}
+        </if>
+        <if test="dto.prizeType!= null   ">
+            AND r.`prize_type` = #{dto.prizeType}
+        </if>
+        <if test="dto.prizeName != null  and dto.prizeName != '' ">
+            AND r.`prize_name` like "%${dto.prizeName}%"
+        </if>
+        <if test="dto.activityName != null  and dto.activityName != '' ">
+            AND a.`activity_title` like "%${dto.activityName}%"
+        </if>
+        <if test="dto.startsedate != null  and dto.startsedate != '' ">
+            AND r.`time` >= #{dto.startsedate}
+        </if>
+        <if test="dto.endsedate != null  and dto.endsedate != '' ">
+            AND r.`time` &lt;= #{dto.endsedate}
+        </if>
+
+        order by r.time
+
+        limit #{paging.start},#{paging.pageSize}
+    </select>
+
+    <select id="getUserForTickrt" resultType="com.mem.vo.business.base.model.po.Reward">
+        SELECT * FROM reward r
+        WHERE r.user_id=#{userid}
+        AND r.prize_type=#{code}
+        and r.time between  #{first} and  #{last}
+
+
+    </select>
 
     <!-- reward table all fields -->
-    <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
 		 id,
 		prize_id,
 		user_id,
@@ -39,77 +255,89 @@
 		draw_code,
 		reward_description,
 		activity_id,
-		integral_num
+		integral_num,
+		miniType,
+		keyId,
+		prizedId
 	</sql>
     <!-- 查询条件 -->
     <sql id="whereCondition">
         where is_delete = 0
-        <trim  suffixOverrides="," >
-            <if test="condition.id != null" >
-                and id =  #{condition.id,jdbcType=INTEGER}
+        <trim suffixOverrides=",">
+            <if test="condition.id != null">
+                and id = #{condition.id,jdbcType=INTEGER}
             </if>
 
-            <if test="condition.prizeId != null" >
-                and prize_id =  #{condition.prizeId,jdbcType=INTEGER}
+            <if test="condition.prizeId != null">
+                and prize_id = #{condition.prizeId,jdbcType=INTEGER}
             </if>
 
-            <if test="condition.userId != null" >
-                and user_id =  #{condition.userId,jdbcType=INTEGER}
+            <if test="condition.userId != null">
+                and user_id = #{condition.userId,jdbcType=INTEGER}
             </if>
 
-            <if test="condition.time != null" >
-                and time =  #{condition.time,jdbcType=TIMESTAMP}
+            <if test="condition.time != null">
+                and time = #{condition.time,jdbcType=TIMESTAMP}
             </if>
-            <if test="condition.prizeType != null" >
-                and prize_type =  #{condition.prizeType,jdbcType=TINYINT}
-            </if>
-
-            <if test="condition.prizeName != null and condition.prizeName != ''" >
-                and prize_name =  #{condition.prizeName,jdbcType=VARCHAR}
+            <if test="condition.prizeType != null">
+                and prize_type = #{condition.prizeType,jdbcType=TINYINT}
             </if>
 
-            <if test="condition.contactName != null and condition.contactName != ''" >
-                and contact_name =  #{condition.contactName,jdbcType=VARCHAR}
+            <if test="condition.prizeName != null and condition.prizeName != ''">
+                and prize_name = #{condition.prizeName,jdbcType=VARCHAR}
             </if>
 
-            <if test="condition.contactPhone != null and condition.contactPhone != ''" >
-                and contact_phone =  #{condition.contactPhone,jdbcType=VARCHAR}
+            <if test="condition.contactName != null and condition.contactName != ''">
+                and contact_name = #{condition.contactName,jdbcType=VARCHAR}
             </if>
 
-            <if test="condition.contactProvince != null and condition.contactProvince != ''" >
-                and contact_province =  #{condition.contactProvince,jdbcType=VARCHAR}
+            <if test="condition.contactPhone != null and condition.contactPhone != ''">
+                and contact_phone = #{condition.contactPhone,jdbcType=VARCHAR}
             </if>
 
-            <if test="condition.contactAddress != null and condition.contactAddress != ''" >
-                and contact_address =  #{condition.contactAddress,jdbcType=VARCHAR}
+            <if test="condition.contactProvince != null and condition.contactProvince != ''">
+                and contact_province = #{condition.contactProvince,jdbcType=VARCHAR}
             </if>
 
-            <if test="condition.status != null" >
-                and status =  #{condition.status,jdbcType=TINYINT}
+            <if test="condition.contactAddress != null and condition.contactAddress != ''">
+                and contact_address = #{condition.contactAddress,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=TINYINT}
             </if>
 
 
-            <if test="condition.drawCode != null and condition.drawCode != ''" >
-                and draw_code =  #{condition.drawCode,jdbcType=VARCHAR}
+            <if test="condition.drawCode != null and condition.drawCode != ''">
+                and draw_code = #{condition.drawCode,jdbcType=VARCHAR}
             </if>
 
-            <if test="condition.rewardDescription != null and condition.rewardDescription != ''" >
-                and reward_description =  #{condition.rewardDescription,jdbcType=VARCHAR}
+            <if test="condition.rewardDescription != null and condition.rewardDescription != ''">
+                and reward_description = #{condition.rewardDescription,jdbcType=VARCHAR}
             </if>
 
-            <if test="condition.activityId != null" >
-                and activity_id =  #{condition.activityId,jdbcType=INTEGER}
+            <if test="condition.activityId != null">
+                and activity_id = #{condition.activityId,jdbcType=INTEGER}
             </if>
 
-            <if test="condition.integralNum != null" >
-                and integral_num =  #{condition.integralNum,jdbcType=INTEGER}
+            <if test="condition.integralNum != null">
+                and integral_num = #{condition.integralNum,jdbcType=INTEGER}
+            </if>
+            <if test="condition.miniType != null">
+                and miniType = #{condition.miniType,jdbcType=TINYINT}
+            </if>
+            <if test="condition.keyId != null">
+                and keyId = #{condition.keyId,jdbcType=TINYINT}
+            </if>
+            <if test="condition.prizedId != null">
+                and prizedId = #{condition.prizedId,jdbcType=INTEGER}
             </if>
 
         </trim>
     </sql>
 
     <!-- 单个插入，只插入不为空的字段  -->
-    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Reward">
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Reward" useGeneratedKeys="true" keyProperty="id">
         insert into reward
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="prizeId != null  ">
@@ -156,6 +384,15 @@
             </if>
             <if test="integralNum != null  ">
                 integral_num,
+            </if>
+            <if test="miniType != null">
+                miniType,
+            </if>
+            <if test="keyId != null">
+                keyId,
+            </if>
+            <if test="prizedId != null">
+                prizedId,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -204,13 +441,22 @@
             <if test="integralNum != null  ">
                 #{integralNum,jdbcType=INTEGER},
             </if>
+            <if test="miniType != null">
+                #{miniType},
+            </if>
+            <if test="keyId != null">
+                #{keyId},
+            </if>
+            <if test="prizedId != null">
+                #{prizedId},
+            </if>
         </trim>
     </insert>
 
     <!-- 修改记录，只修改只不为空的字段 -->
     <update id="updateById" parameterType="com.mem.vo.business.base.model.po.Reward">
         update reward set
-        <trim  suffixOverrides="," >
+        <trim suffixOverrides=",">
             <if test="prizeId != null  ">
                 prize_id=#{prizeId,jdbcType=INTEGER},
             </if>
@@ -239,7 +485,7 @@
                 contact_address=#{contactAddress,jdbcType=VARCHAR},
             </if>
             <if test="status != null  ">
-                status=#{status,jdbcType=TINYINT},
+                `status`=#{status,jdbcType=TINYINT},
             </if>
             <if test="drawCode != null  and drawCode != '' ">
                 draw_code=#{drawCode,jdbcType=VARCHAR},
@@ -252,6 +498,15 @@
             </if>
             <if test="integralNum != null  ">
                 integral_num=#{integralNum,jdbcType=INTEGER},
+            </if>
+            <if test="miniType != null">
+                miniType=#{miniType},
+            </if>
+            <if test="keyId != null">
+                keyId=#{keyId},
+            </if>
+            <if test="prizedId != null">
+                prizedId=#{prizedId},
             </if>
         </trim>
         where id=#{id,jdbcType=INTEGER} and is_delete = 0
@@ -277,8 +532,134 @@
         from reward
         <include refid="whereCondition"/>
     </select>
-    <select id="selectIdByEt" parameterType="com.mem.vo.business.base.model.po.RewardQuery" resultType="java.lang.Integer">
+    <select id="selectIdByEt" parameterType="com.mem.vo.business.base.model.po.RewardQuery"
+            resultType="java.lang.Integer">
 		select id from reward where
 	activity_id=#{condition.activityId,jdbcType=BIGINT} and prize_type=#{condition.prizeType,jdbcType=TINYINT} and draw_code = ''
 	</select>
+
+    <select id="findBy" parameterType="com.mem.vo.business.base.model.po.RewardQuery"
+            resultType="com.mem.vo.business.base.model.vo.RewardVO">
+        SELECT r.keyId as keyId,r.miniType as miniType,r.id as id,r.`prize_name` as prizeName,r.`time` as
+        time,r.`status` as status,u.`phone_number` as contactPhone
+        FROM `reward` r LEFT JOIN `activity` a ON a.`id`=r.`activity_id` LEFT JOIN `user` u ON u.`id` = r.`user_id`
+        WHERE a.`id` = #{query.activityId}
+        <if test="query.contactPhone != null  and query.contactPhone != '' ">
+            AND u.`phone_number` = #{query.contactPhone}
+        </if>
+        <if test="query.status != null  and query.status != '' ">
+            AND r.`status` = #{query.status}
+        </if>
+        <if test="query.prizeName != null  and query.prizeName != '' ">
+            AND r.`prize_name` like "%"#{query.prizeName}"%"
+        </if>
+    </select>
+    <select id="findByConditionAndDate" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from reward
+        where is_delete = 0
+        <trim suffixOverrides=",">
+            <if test="condition.userId != null">
+                and user_id = #{condition.userId,jdbcType=INTEGER}
+            </if>
+            <if test="condition.time != null">
+                and MONTH(#{condition.time})= MONTH(now())
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=TINYINT}
+            </if>
+            <if test="condition.miniType != null">
+                and miniType = #{condition.miniType,jdbcType=TINYINT}
+            </if>
+            <if test="condition.prizeType != null">
+                and prize_type = #{condition.prizeType,jdbcType=TINYINT}
+            </if>
+        </trim>
+    </select>
+
+    <select id="findByConditionAndCurrentDay" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from reward
+        where is_delete = 0
+        <trim suffixOverrides=",">
+            <if test="condition.userId != null">
+                and user_id = #{condition.userId,jdbcType=INTEGER}
+            </if>
+            <if test="condition.time != null">
+                and  date_format(time,'%Y-%m-%d') = date_format(now(),'%Y-%m-%d')
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=TINYINT}
+            </if>
+            <if test="condition.miniType != null">
+                and miniType = #{condition.miniType,jdbcType=TINYINT}
+            </if>
+            <if test="condition.prizeType != null">
+                and prize_type = #{condition.prizeType,jdbcType=TINYINT}
+            </if>
+        </trim>
+    </select>
+
+
+    <select id="findByUserId" resultType="com.mem.vo.business.base.model.vo.RewardVO">
+        SELECT t.des as codeDes,
+        r.reward_description as des,
+        t.url as url,
+        a.activity_title as activityName,
+        c.isChange as isChange,
+        c.`codeKey` as `key` ,
+        c.`password` as `password`,
+        r.miniType as miniType,
+        r.id as id,
+        r.`prize_name` as prizeName,
+        r.`time` as time,
+        r.`status` as status,
+        r.prize_type as prizeType,
+        r.contact_name as contactName,
+        r.contact_phone as contactPhone,
+        r.contact_province as contactProvince,
+        r.contact_address as contactAddress
+        FROM `reward` r LEFT JOIN `activity` a ON a.`id`=r.`activity_id`
+
+        LEFT JOIN `user` u ON u.`id` = r.`user_id`
+
+        LEFT join changecode c on c.id = r.keyId
+
+        LEFT JOIN codetype t on t.id = c.codeType
+
+        WHERE  r.user_id = #{id}  and r.prize_type<![CDATA[<>]]> 3
+        ORDER BY r.time
+    </select>
+
+    <select id="findByActivityId" resultType="com.mem.vo.business.base.model.vo.RewardVO" parameterType="java.lang.Integer">
+        SELECT t.des as codeDes,
+        r.reward_description as des,
+        t.url as url,
+        a.activity_title as activityName,
+        c.isChange as isChange,
+        c.`codeKey` as `key` ,
+        c.`password` as `password`,
+        r.miniType as miniType,
+        r.id as id,
+        r.`prize_name` as prizeName,
+        r.`time` as time,
+        r.`status` as status,
+        r.prize_type as prizeType,
+        r.contact_name as contactName,
+        r.contact_phone as contactPhone,
+        r.contact_province as contactProvince,
+        r.contact_address as contactAddress
+        FROM `reward` r LEFT JOIN `activity` a ON a.`id`=r.`activity_id`
+
+        LEFT JOIN `user` u ON u.`id` = r.`user_id`
+
+        LEFT join changecode c on c.id = r.keyId
+
+        LEFT JOIN codetype t on t.id = c.codeType
+
+        WHERE  r.`activity_id` = #{activityId}  and r.prize_type<![CDATA[<>]]> 3
+        ORDER BY r.time
+    </select>
 </mapper>

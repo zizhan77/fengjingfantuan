@@ -25,6 +25,8 @@
 		<result column="gender" property="gender" jdbcType="TINYINT"/>
 		<result column="birthday" property="birthday" jdbcType="DATE"/>
 		<result column="integral" property="integral" jdbcType="INTEGER"/>
+		<result column="integralflag" property="integralflag" jdbcType="INTEGER"/>
+		<result column="avatarurl" property="avatarurl" jdbcType="VARCHAR"/>
 	</resultMap>
 
 	<!-- user table all fields -->
@@ -46,7 +48,12 @@
 		is_authorize,
 		gender,
 		birthday,
-		integral
+		integral,
+		is_delete,
+		avatarurl,
+		integralflag,
+		overdata
+
 	</sql>
 	<!-- 查询条件 -->
 	<sql id="whereCondition">
@@ -137,6 +144,22 @@
 		</trim>
 	</sql>
 
+	<select id="getAdddessFlag" resultType="int" parameterType="long">
+		SELECT count(1) FROM user_address where
+ 		user_id =#{userId}
+	</select>
+
+	<select id="getUserActCount" resultType="int">
+		SELECT COUNT(DISTINCT activity_id) FROM activity_user WHERE user_id = #{code}
+	</select>
+	<select id="getUserWhoCount" resultType="int">
+				SELECT count(DISTINCT activity_id)
+		FROM integral
+		WHERE user_id =#{id} AND type =1
+	</select>
+	<update id="updateByIntegral" >
+		update user set integral=integral+#{num},update_time=NOW() where  id=#{userid}
+	</update>
 	<!-- 单个插入，只插入不为空的字段  -->
 	<insert id="insert" parameterType="com.mem.vo.business.base.model.po.User"  useGeneratedKeys="true"
 			keyProperty="id">
@@ -255,6 +278,31 @@
 		</trim>
 	</insert>
 
+	<select id="myRankingByUserCount" resultType="int">
+
+			SELECT
+			count(DISTINCT i.activity_id)
+			 FROM integral i
+			JOIN ranking r ON i.activity_id = r.id
+			WHERE i.user_id=#{id} AND i.type=1
+			AND r.isDelete=0
+	</select>
+	<select id="myRankingByUser" resultType="com.mem.vo.business.base.model.po.Ranking">
+
+
+		SELECT
+		DISTINCT i.activity_id AS id,
+		r.name ,
+		r.endTime
+		 FROM integral i
+		JOIN ranking r ON i.activity_id = r.id
+		WHERE i.user_id=#{id} AND i.type=1
+		AND r.isDelete=0
+		limit #{paging.start},#{paging.pageSize}
+
+	</select>
+
+
 	<!-- 修改记录，只修改只不为空的字段 -->
 	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.User" >
 		update user set
@@ -304,10 +352,69 @@
 			<if test="integral != null  ">
 				integral=#{integral,jdbcType=INTEGER},
 			</if>
+			<if test="avatarurl != null  and avatarurl != '' ">
+				avatarurl=#{avatarurl,jdbcType=VARCHAR},
+			</if>
+			<if test="overdata != null  ">
+				overdata=#{overdata,jdbcType=INTEGER},
+			</if>
 		</trim>
 		where id=#{id,jdbcType=BIGINT} and is_delete = 0
 	</update>
 
+	<insert id="insertByCodeAndActid" parameterType="com.mem.vo.business.base.model.vo.UserUpdatelottery">
+					INSERT INTO activity_user (
+				`user_id`,
+				`activity_id`,
+				`pass_qty`,
+				`lottery_qty`,
+				`create_time`,
+				`update_time`,
+				`is_delete`,
+				`is_share`
+			)
+			VALUES
+				(
+					#{usercode},
+					#{activityid},
+				0,#{lotteryqty},
+				NOW(),
+				NOW(),
+					0,
+					0
+				);
+
+	</insert>
+	<select id="selectByCodeAndActid" parameterType="com.mem.vo.business.base.model.vo.UserUpdatelottery" resultType="int">
+		select  count(1) from  activity_user where  user_id=#{usercode} and  activity_id = #{activityid}
+	</select>
+	<update id="updateByUserCodeForlottery" parameterType="com.mem.vo.business.base.model.vo.UserUpdatelottery">
+		update activity_user set update_time = NOW() ,lottery_qty =#{lotteryqty} where  user_id=#{usercode} and  activity_id = #{activityid}
+
+	</update>
+	<select id="getlotteryqtyByuserCode" resultType="int" parameterType="com.mem.vo.business.base.model.vo.UserUpdatelottery">
+		SELECT
+			i.lottery_qty
+		 FROM  activity_user i
+		WHERE i.user_id=#{usercode}
+		AND i.is_delete = 0
+		and i.activity_id = #{activityid}
+	</select>
+	<select id="userUpdatelottery" resultType="com.mem.vo.business.base.model.vo.UserUpdatelottery" parameterType="com.mem.vo.business.base.model.vo.UserUpdatelottery">
+		SELECT
+
+		a.id as activityid ,
+		a.activity_title as activitytitle
+		FROM  activity a
+		WHERE  a.is_delete =0 AND a.status=0
+		AND a.start_date &lt;=NOW() AND a.end_date >=NOW()
+		<if test="activitytitle!=null and activitytitle!=''" >
+			and  a.activity_title like '%${activity_title}%'
+		</if>
+	</select>
+	<update id="insertIntegralPageage" >
+		update  user  set  update_time = NOW() ,integral =integral+#{count},integralflag = #{flag} where  id = #{id}
+	</update>
 	<!-- 删除记录 -->
 	<update id="deleteById" parameterType="java.lang.Long">
 		update user set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
@@ -331,7 +438,11 @@
 		update user set
 		 phone_number =  #{phoneNumber,jdbcType=VARCHAR},
 		 is_authorize = 1,
+		 gender = #{gender},
 		 name=#{userName,jdbcType=VARCHAR}
+		 <if test="avatarurl != null and avatarurl!=''">
+			 ,avatarurl=#{avatarurl}
+		 </if>
 		where is_delete = 0
 		and source=#{sourceCode,jdbcType=VARCHAR}
 		and biz_code=#{bizCode,jdbcType=VARCHAR}

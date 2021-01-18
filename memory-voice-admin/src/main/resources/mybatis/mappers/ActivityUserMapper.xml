@@ -17,6 +17,7 @@
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
 		<result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
 		<result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+		<result column="is_share" property="isShare" jdbcType="TINYINT"/>
 	</resultMap>
 
 	<!-- activity_user table all fields -->
@@ -32,7 +33,8 @@
 		create_time,
 		create_user,
 		update_time,
-		update_user
+		update_user,
+		is_share
 	</sql>
 	<!-- 查询条件 -->
 	<sql id="whereCondition">
@@ -80,11 +82,112 @@
 			<if test="condition.updateUser != null and condition.updateUser != ''" >
 				and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
 			</if>
-
+			<if test="condition.isShare != null and condition.isShare != ''" >
+				and is_share =  #{condition.updateUser}
+			</if>
 
 		</trim>
 	</sql>
 
+	<select id="queryShareUserbyUserCount" resultType="int">
+
+
+		SELECT count(DISTINCT s.id)
+		FROM activity_share a
+		JOIN `user` u ON a.user_id = u.biz_code
+		JOIN `user` s ON a.target_id = s.biz_code
+		WHERE  u.id = #{userid}
+		<if test="id != null">
+			and 	a.activity_id = #{id}
+		</if>
+
+	</select>
+
+	<select id="queryShareUserbyUser" resultType="com.mem.vo.business.base.model.po.User">
+
+		SELECT DISTINCT s.id,s.`name` ,s.avatarurl,a.update_time as updateTime,a.create_time as createTime
+		FROM activity_share a
+		JOIN `user` u ON a.user_id = u.biz_code
+		JOIN `user` s ON a.target_id = s.biz_code
+		WHERE u.id = #{userid}
+		<if test="id != null">
+		and 	a.activity_id = #{id}
+		</if>
+		order by  a.create_time desc
+		limit #{paging.start},#{paging.pageSize}
+	</select>
+
+	<select id="queryRewardByActivityAndUserCount" resultType="int">
+			SELECT
+				count(1)
+			FROM
+			reward r
+		LEFT JOIN prize_d p ON r.prize_id= p.id
+		LEFT JOIN prize pr ON p.prize_id=pr.id
+		LEFT JOIN codetype c ON pr.codetype = c.id
+		LEFT JOIN sponsor sp
+		ON c.sponsorId = sp.id
+
+			WHERE
+				r.`status` != 2
+			AND r.is_delete = 0
+			AND r.activity_id = #{id} AND r.user_id = #{userid}
+
+	</select>
+
+	<select id="queryRewardByActivityAndUser" resultType="com.mem.vo.business.base.model.po.Prize">
+			SELECT
+					r.id ,
+					r.prize_name AS prizeName,
+					r.prize_type as prizeType,
+			sp.thumb_url AS spurl
+			FROM
+				reward r
+			LEFT JOIN prize_d p ON r.prize_id= p.id
+			LEFT JOIN prize pr ON p.prize_id=pr.id
+			LEFT JOIN codetype c ON pr.codetype = c.id
+			LEFT JOIN sponsor sp
+			ON c.sponsorId = sp.id
+
+			WHERE
+				r.`status` != 2
+			AND r.is_delete = 0
+			AND r.activity_id = #{id} AND r.user_id = #{userid}
+			ORDER BY
+				r.time DESC
+		limit #{paging.start},#{paging.pageSize}
+	</select>
+
+	<select id="queryRewardByActivityCount" resultType="int">
+	SELECT
+			count(1)
+			 FROM prize p
+			LEFT JOIN codetype c ON p.codetype = c.id
+			LEFT JOIN sponsor sp
+			ON c.sponsorId = sp.id
+
+		WHERE p.activity_id = #{id}
+				and  p.is_delete = 0 AND p.status=1
+	</select>
+
+	<select id="queryRewardByActivity" resultType="com.mem.vo.business.base.model.po.Prize">
+		SELECT
+				p.id ,
+				p.prize_name AS prizeName,
+				p.prize_type as prizeType,
+				sp.thumb_url AS spurl
+				 FROM prize p
+			LEFT JOIN codetype c ON p.codetype = c.id
+			LEFT JOIN sponsor sp
+			ON c.sponsorId = sp.id
+
+
+		WHERE p.activity_id = #{id}
+				and  p.is_delete = 0 AND p.status=1
+				ORDER BY p.prize_type
+
+		limit #{paging.start},#{paging.pageSize}
+	</select>
 	<!-- 单个插入，只插入不为空的字段  -->
 	<insert id="insert" parameterType="com.mem.vo.business.base.model.po.ActivityUser" >
 		insert into activity_user
@@ -123,6 +226,9 @@
 			<if test="isDelete != null  ">
 				is_delete,
 			</if>
+			<if test="isShare != null  ">
+				is_share,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="userId != null  and userId != '' ">
@@ -158,8 +264,53 @@
 			<if test="isDelete != null  ">
 				#{isDelete,jdbcType=TINYINT},
 			</if>
+			<if test="isShare != null  ">
+				#{isShare,jdbcType=TINYINT},
+			</if>
 		</trim>
 	</insert>
+
+	<select id="queryShareAddUserListCount" resultType="int">
+		select count(DISTINCT(acts.user_id)) from  `user` u
+	LEFT JOIN activity_share acts ON acts.user_id = u.biz_code
+	WHERE acts.is_delete = 0 and u.is_delete = 0
+		<if test="act.createtime!=null and act.createtime!=''">
+			AND acts.create_time >= #{act.createtime}
+
+		</if>
+		<if test="act.endtime!=null and act.endtime!=''">
+			AND acts.create_time &lt;=#{act.endtime}
+		</if>
+		<if test="act.phonenumber!=null and act.phonenumber!=''">
+			AND u.phone_number like '%${act.phonenumber}%'
+		</if>
+
+
+
+	</select>
+	<select id="queryShareAddUserList" resultType="com.mem.vo.business.base.model.po.ActivitysharePc" >
+		select u.id,u.biz_code,u.`name`,u.phone_number AS phonenumber , COUNT(acts.user_id) AS newnum from  `user` u
+		LEFT JOIN activity_share acts ON acts.user_id = u.biz_code
+		WHERE acts.is_delete = 0 and u.is_delete = 0
+
+		<if test="act.createtime!=null and act.createtime!=''">
+			AND acts.create_time >= #{act.createtime}
+
+		</if>
+		<if test="act.endtime!=null and act.endtime!=''">
+			AND acts.create_time &lt;=#{act.endtime}
+		</if>
+		<if test="act.phonenumber!=null and act.phonenumber!=''">
+			AND u.phone_number like '%${act.phonenumber}%'
+		</if>
+
+		GROUP BY acts.user_id
+		ORDER BY newnum DESC
+		limit #{pager.start},#{pager.pageSize}
+
+
+	</select>
+
 
 	<!-- 修改记录，只修改只不为空的字段 -->
 	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.ActivityUser" >
@@ -190,6 +341,9 @@
 			<if test="updateUser != null  and updateUser != '' ">
 				update_user=#{updateUser,jdbcType=VARCHAR},
 			</if>
+			<if test="isShare != null  ">
+				is_share=#{isShare,jdbcType=TINYINT},
+			</if>
 		</trim>
 		where id=#{id,jdbcType=INTEGER} and is_delete = 0
 	</update>
@@ -218,6 +372,9 @@
 			</if>
 			<if test="updateUser != null  and updateUser != '' ">
 				update_user=#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="isShare != null  ">
+				is_share=#{isShare,jdbcType=TINYINT},
 			</if>
 		</trim>
 		where user_id=#{userId,jdbcType=VARCHAR} and is_delete = 0
@@ -248,6 +405,11 @@
 	</update>
 
 	<update id="updateByUserIdAndActivityId" >
-		update activity_user set lottery_qty=#{qty} where user_id = #{id}  and is_delete = 0  and activity_id = #{acId}
+		update activity_user set pass_qty=#{qty}, update_time = #{updateTime}
+		<if test="l != null and  l != '' ">
+			,lottery_qty=#{l}+lottery_qty
+
+		</if>
+		where user_id = #{id}  and is_delete = 0  and activity_id = #{acId}
 	</update>
 </mapper>

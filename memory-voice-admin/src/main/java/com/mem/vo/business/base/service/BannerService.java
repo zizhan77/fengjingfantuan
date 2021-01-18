@@ -58,5 +58,5 @@ public interface BannerService {
      * @param page 分页信息
      * @param query 查询条件
      */
-    Page<Banner> findPageByCondition(Page page, BannerQuery query);
+    Page<Banner> findPageByCondition(Page<Banner> page, BannerQuery query);
 }

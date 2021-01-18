@@ -16,12 +16,17 @@
 			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
 			<result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
 			<result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="thumb_type" property="thumbtype" jdbcType="VARCHAR"/>
+		<result column="thumb_url" property="thumburl" jdbcType="VARCHAR"/>
+		<result column="isshow" property="isshow" jdbcType="INTEGER"/>
+		<result column="intro" property="intro" jdbcType="VARCHAR"/>
 		</resultMap>
        
 <!-- sponsor table all fields -->
 	<sql id="Base_Column_List" >
 		 id,	
-		name,	
+		name,
 		phone,	
 		password,	
 		contact_name,	
@@ -30,6 +35,12 @@
 		create_user,	
 		update_time,	
 		update_user
+		,is_delete,
+		url,
+		thumb_type,
+		thumb_url,
+		isshow,
+		intro
 	</sql>
 <!-- 查询条件 -->
 	<sql id="whereCondition">
@@ -76,7 +87,16 @@
 
 		</trim>
 	</sql>
-
+	<select id="getSponsorPrize" parameterType="long" resultType="string">
+		SELECT name FROM codetype where sponsorId=#{id}
+	</select>
+	<select id="findByConditionbyishow" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from sponsor
+		where is_delete = 0 and  isshow=1
+		order by update_time desc
+	</select>
     <!-- 单个插入，只插入不为空的字段  -->
     <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Sponsor" >
          insert into sponsor
@@ -111,6 +131,23 @@
 			<if test="isDelete != null  ">
 				is_delete,
 			</if>
+			<if test="thumburl != null  and thumburl != '' ">
+				thumb_url,
+			</if>
+			<if test="thumbtype != null  and thumbtype != '' ">
+				thumb_type,
+			</if>
+			<if test="url != null  and url != '' ">
+				url,
+			</if>
+			<if test="isshow != null  ">
+				isshow,
+			</if>
+			<if test="intro != null  ">
+				intro,
+			</if>
+
+
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="name != null  and name != '' ">
@@ -143,13 +180,44 @@
 			<if test="isDelete != null  ">
 				#{isDelete,jdbcType=TINYINT},
 			</if>
+			<if test="thumburl != null  and thumburl != '' ">
+				#{thumburl},
+			</if>
+			<if test="thumbtype != null  and thumbtype != '' ">
+				#{thumbtype},
+			</if>
+			<if test="url != null  and url != '' ">
+				#{url},
+			</if>
+			<if test="isshow != null  ">
+				#{isshow},
+			</if>
+			<if test="intro != null  ">
+				#{intro},
+			</if>
+
 		</trim>
     </insert>
 
+	<select id="getSponsorOne" resultType="com.mem.vo.business.base.model.po.Sponsor" parameterType="long">
+		select
+		<include refid="Base_Column_List"/>
+		 from sponsor where id= #{id}
+	</select>
 	 <!-- 修改记录，只修改只不为空的字段 -->
 	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.Sponsor" >
 		 update sponsor set 
 		<trim  suffixOverrides="," >
+			<if test="thumburl != null  and thumburl != '' ">
+				thumb_url=#{thumburl,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbtype != null  and thumbtype != '' ">
+				thumb_type=#{thumbtype,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null  and url != '' ">
+				url=#{url,jdbcType=VARCHAR},
+			</if>
+
 			<if test="name != null  and name != '' ">
 				name=#{name,jdbcType=VARCHAR},
 			</if>
@@ -170,6 +238,12 @@
 			</if>
 			<if test="updateUser != null  and updateUser != '' ">
 				update_user=#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="isshow != null  ">
+				isshow=#{isshow},
+			</if>
+			<if test="intro != null  ">
+				intro=#{intro},
 			</if>
 		</trim>
 		 where id=#{id,jdbcType=INTEGER} and is_delete = 0

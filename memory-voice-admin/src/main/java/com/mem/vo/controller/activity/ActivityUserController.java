@@ -2,19 +2,19 @@ package com.mem.vo.controller.activity;
 
 import com.mem.vo.business.base.model.po.ActivityUser;
 import com.mem.vo.business.base.model.po.ActivityUserQuery;
+import com.mem.vo.business.base.model.po.Prize;
+import com.mem.vo.business.base.model.po.User;
 import com.mem.vo.business.base.service.ActivityUserService;
 import com.mem.vo.business.biz.model.dto.CommonLoginContext;
 import com.mem.vo.business.biz.service.token.TokenService;
 import com.mem.vo.common.constant.BizCode;
+import com.mem.vo.common.dto.PageBean;
 import com.mem.vo.common.dto.ResponseDto;
 import com.mem.vo.common.exception.BizAssert;
 import com.mem.vo.common.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;

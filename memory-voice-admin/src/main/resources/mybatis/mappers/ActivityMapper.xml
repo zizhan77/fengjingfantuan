@@ -20,10 +20,15 @@
         <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
         <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
         <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
-        <result column="sponsor_id" property="sponsorId" jdbcType="INTEGER"/>
+        <result column="sponsor_id" property="sponsorId" jdbcType="VARCHAR"/>
         <result column="sponsor_name" property="sponsorName" jdbcType="VARCHAR"/>
         <result column="is_only" property="isOnly" jdbcType="TINYINT"/>
         <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR"/>
+        <result column="performanceId" property="performanceId" jdbcType="INTEGER"/>
+        <result column="bgUrl" property="bgUrl" jdbcType="VARCHAR"/>
+        <result column="of_ranking" property="ofranking" jdbcType="INTEGER"/>
+        <result column="crossimage" property="crossimage" jdbcType="VARCHAR"/>
+        <result column="provence" property="provence" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!-- activity table all fields -->
@@ -44,7 +49,12 @@
 		sponsor_id,
 		sponsor_name,
 		is_only,
-		thumbnail_url
+		thumbnail_url,
+		performanceId,
+		bgUrl,
+		crossimage,
+		of_ranking,
+		provence
 	</sql>
     <!-- 查询条件 -->
     <sql id="whereCondition">
@@ -103,8 +113,8 @@
                 and ts =  #{condition.ts,jdbcType=TIMESTAMP}
             </if>
 
-            <if test="condition.sponsorId != null" >
-                and sponsor_id =  #{condition.sponsorId,jdbcType=INTEGER}
+            <if test="condition.sponsorId != null and condition.sponsorId != '' " >
+                and sponsor_id =  #{condition.sponsorId,jdbcType=VARCHAR}
             </if>
 
             <if test="condition.sponsorName != null and condition.sponsorName != ''" >
@@ -117,6 +127,13 @@
             <if test="condition.thumbnailUrl != null and condition.thumbnailUrl != ''" >
                 and thumbnail_url =  #{condition.thumbnailUrl,jdbcType=VARCHAR}
             </if>
+            <if test="condition.performanceId != null and condition.performanceId != ''" >
+                and performanceId =  #{condition.performanceId}
+            </if>
+            <if test="condition.bgUrl != null and condition.bgUrl != ''" >
+                and bgUrl =  #{condition.bgUrl,jdbcType=VARCHAR}
+            </if>
+
         </trim>
         order by sort desc,create_time desc
     </sql>
@@ -176,13 +193,197 @@
             <if test="condition.thumbnailUrl != null and condition.thumbnailUrl != ''" >
                 and thumbnail_url =  #{condition.thumbnailUrl,jdbcType=VARCHAR}
             </if>
+            <if test="condition.performanceId != null and condition.performanceId != ''" >
+                and performanceId =  #{condition.performanceId}
+            </if>
+            <if test="condition.sponsorId != null and condition.sponsorId != '' " >
+                and sponsor_id =  #{condition.sponsorId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.bgUrl != null and condition.bgUrl != ''" >
+                and bgUrl =  #{condition.bgUrl,jdbcType=VARCHAR}
+            </if>
         </trim>
         order by sort desc,create_time desc
     </sql>
+
+    <select id="getRankSumPass" resultType="com.mem.vo.business.base.model.po.Activity" >
+        select count(DISTINCT user_id) AS rankprople,count(1) as ranknum from integral WHERE activity_id=#{a.ofranking} AND integral_qty &lt; 0
+    </select>
+    <select id="getActivitySumPass" resultType="com.mem.vo.business.base.model.po.Activity">
+        SELECT COUNT(1) as peoplenum,SUM(pass_qty) as numclick FROM activity_user WHERE activity_id=#{a.id}
+    </select>
+
+    <select id="getActivityUser" resultType="com.mem.vo.business.base.model.po.User">
+        SELECT SUM(i.integral_qty) c ,u.id,u.name,u.avatarurl
+        FROM integral i JOIN `user` u ON i.user_id=u.id
+         WHERE i.activity_id=#{i}
+        GROUP BY u.id
+        ORDER BY c
+        limit 3
+
+    </select>
+    <select id="getActivityEnd" resultType="int">
+        SELECT id
+        FROM ranking
+        WHERE endTime &lt; NOW()
+    </select>
+
+    <select id="querySort" resultType="int" parameterType="long">
+     	SELECT rownum as sort FROM	(SELECT id,count,(@rownum:=@rownum+1) AS rownum
+		FROM ranking ,(SELECT @rownum:=0) r
+		  where isDelete=0 AND `enable` =1
+        AND startTime &lt;= NOW() AND endTime >=NOW()
+		ORDER BY count*1 DESC )a
+      WHERE a.id=#{ofranking}
+    </select>
+
+    <select id="findSplistToid" parameterType="long" resultType="string">
+         SELECT
+            sponsor_id
+         FROM activity WHERE id=#{activityid}
+    </select>
+    <select id="queryDetailByPhone" resultType="com.mem.vo.business.base.model.vo.ActivityVO" parameterType="int">
+      SELECT
+                    a.id,
+                    a.activity_title as activityTitle,
+                    a.activity_intro as activityIntro,
+                    a.type,
+                    a.start_date as startDate,
+                    a.end_date as endDate,
+                    a.status,
+                    a.sort,
+                    a.activity_url as activityUrl,
+                    a.create_time as createTime,
+                    a.create_user as createUser,
+                    a.update_time as updateTime,
+                    a.update_user as updateUser,
+                    a.sponsor_id as sponsorId,
+                    a.sponsor_name as sponsorName,
+                    a.is_only as isOnly,
+                    a.thumbnail_url as thumbnailUrl,
+                    a.bgUrl,
+                    a.crossimage,
+                    a.of_ranking as ofranking,
+
+                    a.provence
+            FROM activity a
+
+            WHERE a.`status`=0 AND a.is_delete=0  and a.id=#{id}
+    </select>
+
+    <select id="queryActivityByUserCount" resultType="int">
+        SELECT count(1)
+        FROM activity_user u
+        JOIN activity a ON a.id = u.activity_id
+        JOIN user ua ON u.user_id = ua.biz_code
+        where
+        ua.id=#{id}
+            <if test="type==1">
+                AND NOW()  BETWEEN a.start_date AND a.end_date
+            </if>
+            <if test="type ==2">
+                AND NOW() NOT BETWEEN a.start_date AND a.end_date
+            </if>
+
+    </select>
+
+    <select id="queryActivityByUser" resultType="com.mem.vo.business.base.model.vo.ActivityVO">
+        SELECT
+        a.id,
+        a.activity_title as activityTitle,
+        a.activity_intro as activityIntro,
+        a.type,
+        a.start_date as startDate,
+        a.end_date as endDate,
+        a.status,
+        a.sort,
+        a.activity_url as activityUrl,
+        a.create_time as createTime,
+        a.create_user as createUser,
+        a.update_time as updateTime,
+        a.update_user as updateUser,
+        a.sponsor_id as sponsorId,
+        a.sponsor_name as sponsorName,
+        a.is_only as isOnly,
+        a.thumbnail_url as thumbnailUrl,
+        a.bgUrl,
+        a.crossimage,
+        a.of_ranking as ofranking,
+        a.provence
+        FROM activity_user u
+        JOIN activity a ON a.id = u.activity_id
+        JOIN user ua ON u.user_id = ua.biz_code
+        where
+        ua.id=#{id}
+        <if test="type==1">
+            AND NOW()  BETWEEN a.start_date AND a.end_date
+        </if>
+        <if test="type ==2">
+            AND NOW() NOT BETWEEN a.start_date AND a.end_date
+        </if>
+        order by a.start_date desc
+        limit #{paging.start},#{paging.pageSize}
+
+    </select>
+    <select id="findByPageToPhone" resultType="com.mem.vo.business.base.model.vo.ActivityVO">
+             SELECT
+                    a.id,
+                    a.activity_title as activityTitle,
+                    a.activity_intro as activityIntro,
+                    a.type,
+                    a.start_date as startDate,
+                    a.end_date as endDate,
+                    a.status,
+                    a.sort,
+                    a.activity_url as activityUrl,
+                    a.create_time as createTime,
+                    a.create_user as createUser,
+                    a.update_time as updateTime,
+                    a.update_user as updateUser,
+                    a.sponsor_id as sponsorId,
+                    a.sponsor_name as sponsorName,
+                    a.is_only as isOnly,
+                    a.thumbnail_url as thumbnailUrl,
+                    a.bgUrl,
+                    a.crossimage,
+                    a.of_ranking as ofranking,
+                    sp.id as spid,
+                    sp.`name` as spname,
+                    sp.url as spurl,
+                    sp.thumb_url as spthumburl,
+                    sp.thumb_type as spthumbtype,
+                    a.provence
+            FROM activity a
+            LEFT JOIN sponsor sp ON a.top_sp = sp.id
+            WHERE a.`status`=0 AND a.is_delete=0 AND sp.is_delete=0
+            and a.end_date > NOW()
+            ORDER BY a.sort DESC
+
+            limit #{paging.start},#{paging.pageSize}
+
+    </select>
+    <select id="findByPageToPhoneCount" resultType="int">
+        SELECT count(1) FROM activity a
+        LEFT JOIN sponsor sp ON a.top_sp = sp.id
+        WHERE a.`status`=0 AND a.is_delete=0 AND sp.is_delete=0  and a.end_date > NOW()
+    </select>
     <!-- 单个插入，只插入不为空的字段  -->
     <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Activity" >
         insert into activity
         <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="provence != null  and provence != '' ">
+                provence,
+            </if>
+            <if test="crossimage != null  and crossimage != '' ">
+                crossimage,
+            </if>
+            <if test="ofranking != null  ">
+                of_ranking,
+            </if>
+            <if test="topsp != null  ">
+                top_sp,
+            </if>
             <if test="activityTitle != null  and activityTitle != '' ">
                 activity_title,
             </if>
@@ -222,7 +423,7 @@
             <if test="isDelete != null  ">
                 is_delete,
             </if>
-            <if test="sponsorId != null  ">
+            <if test="sponsorId != null and sponsorId != '' " >
                 sponsor_id,
             </if>
             <if test="sponsorName != null  and sponsorName != '' ">
@@ -234,8 +435,26 @@
             <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
                 thumbnail_url,
             </if>
+            <if test="performanceId != null and performanceId != ''" >
+                performanceId,
+            </if>
+            <if test="bgUrl != null  and bgUrl != '' ">
+                bgUrl,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="provence != null  and provence != '' ">
+               #{provence,jdbcType=VARCHAR} ,
+            </if>
+            <if test="crossimage != null  and crossimage != '' ">
+                #{crossimage,jdbcType=VARCHAR},
+            </if>
+            <if test="ofranking != null  ">
+                #{ofranking},
+            </if>
+            <if test="topsp != null  ">
+               #{topsp},
+            </if>
             <if test="activityTitle != null  and activityTitle != '' ">
                 #{activityTitle,jdbcType=VARCHAR},
             </if>
@@ -275,8 +494,8 @@
             <if test="isDelete != null  ">
                 #{isDelete,jdbcType=TINYINT},
             </if>
-            <if test="sponsorId != null  ">
-                #{sponsorId,jdbcType=INTEGER},
+            <if test="sponsorId != null and sponsorId != '' " >
+                #{sponsorId},
             </if>
             <if test="sponsorName != null  and sponsorName != '' ">
                 #{sponsorName,jdbcType=VARCHAR},
@@ -287,6 +506,13 @@
             <if test="thumbnailUrl != null and thumbnailUrl != ''" >
                 #{thumbnailUrl,jdbcType=VARCHAR},
             </if>
+            <if test="performanceId != null and performanceId != ''" >
+                #{performanceId,jdbcType=TINYINT},
+            </if>
+            <if test="bgUrl != null  and bgUrl != '' ">
+                #{bgUrl,jdbcType=VARCHAR},
+            </if>
+
         </trim>
     </insert>
 
@@ -294,6 +520,18 @@
     <update id="updateById" parameterType="com.mem.vo.business.base.model.po.Activity" >
         update activity set
         <trim  suffixOverrides="," >
+            <if test="provence != null  and provence != '' ">
+                provence=#{provence,jdbcType=VARCHAR},
+            </if>
+            <if test="crossimage != null  and crossimage != '' ">
+                crossimage= #{crossimage,jdbcType=VARCHAR},
+            </if>
+            <if test="ofranking != null  ">
+                of_ranking= #{ofranking},
+            </if>
+            <if test="topsp != null  ">
+                top_sp=#{topsp},
+            </if>
             <if test="activityTitle != null  and activityTitle != '' ">
                 activity_title=#{activityTitle,jdbcType=VARCHAR},
             </if>
@@ -324,8 +562,8 @@
             <if test="updateUser != null  and updateUser != '' ">
                 update_user=#{updateUser,jdbcType=VARCHAR},
             </if>
-            <if test="sponsorId != null  ">
-                sponsor_id=#{sponsorId,jdbcType=INTEGER},
+            <if test="sponsorId != null and sponsorId != '' ">
+                sponsor_id=#{sponsorId},
             </if>
             <if test="sponsorName != null  and sponsorName != '' ">
                 sponsor_name=#{sponsorName,jdbcType=VARCHAR},
@@ -336,6 +574,13 @@
             <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
                 thumbnail_url=#{thumbnailUrl,jdbcType=VARCHAR},
             </if>
+            <if test="performanceId != null and performanceId != ''" >
+                performanceId =  #{performanceId},
+            </if>
+            <if test="bgUrl != null and bgUrl != ''" >
+                bgUrl =  #{bgUrl},
+            </if>
+
         </trim>
         where id=#{id,jdbcType=BIGINT} and is_delete = 0
     </update>
@@ -367,4 +612,230 @@
         from activity
         <include refid="whereConditionAvailable"/>
     </select>
+
+
+    <select id="findByPage" resultType="com.mem.vo.business.base.model.po.Activity"  parameterType="com.mem.vo.business.base.model.po.ActivityQuery">
+        select
+        a.id,
+        a.activity_title,
+        a.activity_intro,
+        a.type,
+        a.start_date,
+        a.end_date,
+        a.status,
+        a.sort,
+        a.activity_url,
+        a.create_time,
+        a.create_user,
+        a.update_time,
+        a.update_user,
+        a.sponsor_id,
+        a.sponsor_name,
+        a.is_only,
+        a.thumbnail_url,
+        a.performanceId,
+        a.bgUrl,
+        p.total_num as totalNum  ,p.gived_num as givedNum,
+        a.top_sp as topsp,
+        a.of_ranking as ofranking,
+        a.crossimage,
+        a.provence
+        from activity a LEFT JOIN (SELECT * from prize where prize_type = 1) p on   a.id  = p.activity_id
+        where a.is_delete = 0   and a.end_date <![CDATA[>=]]>NOW()
+        <trim  suffixOverrides="," >
+            <if test="condition.id != null" >
+                and a.id =  #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.activityTitle != null and condition.activityTitle != ''" >
+                and a.activity_title =  #{condition.activityTitle,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.activityIntro != null and condition.activityIntro != ''" >
+                and a.activity_intro =  #{condition.activityIntro,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.type != null" >
+                and a.type =  #{condition.type,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.startDate != null" >
+                and a.start_date =  #{condition.startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.endDate != null" >
+                and a.end_date =  #{condition.endDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.status != null" >
+                and a.status =  #{condition.status,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.sort != null" >
+                and a.sort =  #{condition.sort,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.activityUrl != null and condition.activityUrl != ''" >
+                and a.activity_url =  #{condition.activityUrl,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.createTime != null" >
+                and a.create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''" >
+                and a.create_user =  #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null" >
+                and a.update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''" >
+                and a.update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.ts != null" >
+                and a.ts =  #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="condition.sponsorId != null and condition.sponsorId != '' ">
+                and a.sponsor_id =  #{condition.sponsorId,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.sponsorName != null and condition.sponsorName != ''" >
+                and a.sponsor_name =  #{condition.sponsorName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.isOnly != null" >
+                and a.is_only =  #{condition.isOnly,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.thumbnailUrl != null and condition.thumbnailUrl != ''" >
+                and a.thumbnail_url =  #{condition.thumbnailUrl,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.performanceId != null and condition.performanceId != ''" >
+                and a.performanceId =  #{condition.performanceId}
+            </if>
+
+            <if test="condition.bgUrl != null and condition.bgUrl != '' ">
+                and a.bgUrl =  #{condition.bgUrl,jdbcType=INTEGER}
+            </if>
+            group by a.id,a.activity_title, a.activity_intro, a.type, a.start_date, a.end_date, a.status, a.sort, a.activity_url, a.create_time, a.create_user, a.update_time, a.update_user, a.sponsor_id, a.sponsor_name, a.is_only, a.thumbnail_url, a.performanceId, a.bgUrl, p.total_num ,p.gived_num, a.top_sp, a.of_ranking, a.crossimage, a.provence
+            order by a.start_date ,(a.end_date-NOW())
+        </trim>
+
+    </select>
+
+
+
+
+    <select id="pcFindByPage" resultType="com.mem.vo.business.base.model.po.Activity"  parameterType="com.mem.vo.business.base.model.po.ActivityQuery">
+        select
+        a.id,
+        a.activity_title,
+        a.activity_intro,
+        a.type,
+        a.start_date,
+        a.end_date,
+        a.status,
+        a.sort,
+        a.activity_url,
+        a.create_time,
+        a.create_user,
+        a.update_time,
+        a.update_user,
+        a.sponsor_id,
+        a.sponsor_name,
+        a.is_only,
+        a.thumbnail_url,
+        a.performanceId,
+        a.bgUrl,
+        p.total_num as totalNum  ,p.gived_num as givedNum,
+        a.top_sp as topsp,
+        a.of_ranking as ofranking,
+        a.crossimage,
+        a.provence,
+        r.`enable` AS rankstatus,
+        r.startTime AS rankstart,
+        r.endTime AS rankend
+        from activity a LEFT JOIN (SELECT * from prize where prize_type = 1) p on   a.id  = p.activity_id
+        left JOIN ranking r  ON a.of_ranking=r.id
+        where a.is_delete = 0
+        <trim  suffixOverrides="," >
+            <if test="condition.id != null" >
+                and a.id =  #{condition.id,jdbcType=BIGINT}
+            </if>
+
+            <if test="condition.activityTitle != null and condition.activityTitle != ''" >
+                and a.activity_title like "%${condition.activityTitle,jdbcType=VARCHAR}%"
+            </if>
+
+            <if test="condition.activityIntro != null and condition.activityIntro != ''" >
+                and a.activity_intro =  #{condition.activityIntro,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.type != null" >
+                and a.type =  #{condition.type,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.startDate != null" >
+                and a.start_date =  #{condition.startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.endDate != null" >
+                and a.end_date =  #{condition.endDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.status != null" >
+                and a.status =  #{condition.status,jdbcType=TINYINT}
+            </if>
+
+            <if test="condition.sort != null" >
+                and a.sort =  #{condition.sort,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.activityUrl != null and condition.activityUrl != ''" >
+                and a.activity_url =  #{condition.activityUrl,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.createTime != null" >
+                and a.create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.createUser != null and condition.createUser != ''" >
+                and a.create_user =  #{condition.createUser,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.updateTime != null" >
+                and a.update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateUser != null and condition.updateUser != ''" >
+                and a.update_user =  #{condition.updateUser,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="condition.ts != null" >
+                and a.ts =  #{condition.ts,jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="condition.sponsorId != null and condition.sponsorId != '' ">
+                and a.sponsor_id =  #{condition.sponsorId,jdbcType=INTEGER}
+            </if>
+
+            <if test="condition.sponsorName != null and condition.sponsorName != ''" >
+                and a.sponsor_name =  #{condition.sponsorName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="condition.isOnly != null" >
+                and a.is_only =  #{condition.isOnly,jdbcType=TINYINT}
+            </if>
+            <if test="condition.thumbnailUrl != null and condition.thumbnailUrl != ''" >
+                and a.thumbnail_url =  #{condition.thumbnailUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.performanceId != null and condition.performanceId != ''" >
+                and a.performanceId =  #{condition.performanceId}
+            </if>
+            <if test="condition.bgUrl != null and condition.bgUrl != '' ">
+                and a.bgUrl =  #{condition.bgUrl,jdbcType=INTEGER}
+            </if>
+            group by a.id
+            order by a.sort desc
+        </trim>
+    </select>
+
 </mapper>

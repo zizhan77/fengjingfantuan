@@ -78,10 +78,26 @@
 
 		</trim>
 	</sql>
+	<select id="integralRecordByUserCount" resultType="int">
+		SELECT
+		count(1)
+		FROM integral
+		WHERE user_id = #{id}
+		AND  DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(create_time)
+	</select>
 
-    <!-- 单个插入，只插入不为空的字段  -->
-    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Integral" >
-         insert into integral
+	<select id="integralRecordByUser" resultType="com.mem.vo.business.base.model.po.Integral">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM integral
+		WHERE user_id = #{id}
+		AND  DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(create_time)
+		order by create_time desc
+		limit #{paging.start},#{paging.pageSize}
+	</select>
+
+	<insert id="insert" parameterType="com.mem.vo.business.base.model.po.Integral" >
+		insert into integral
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="userId != null  ">
 				user_id,
@@ -147,6 +163,7 @@
 			</if>
 		</trim>
 	</insert>
+	<!-- 单个插入，只插入不为空的字段  -->
 
 	 <!-- 修改记录，只修改只不为空的字段 -->
 	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.Integral" >

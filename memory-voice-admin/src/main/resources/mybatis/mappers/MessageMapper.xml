@@ -89,12 +89,10 @@
 
   <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Message">
     insert into myMessage (id, sponsorId, articleId,
-      organizerId, status, create_time,
-      create_user, update_time, update_user,
+      organizerId, status,
       is_delete)
     values (#{id,jdbcType=INTEGER}, #{sponsorId,jdbcType=INTEGER}, #{articleId,jdbcType=VARCHAR},
-      #{organizerId,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-      #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR},
+      #{organizerId,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR},
       #{isDelete,jdbcType=TINYINT})
   </insert>
 
