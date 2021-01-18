@@ -38,7 +38,7 @@ public class ActivityUserController {
   public ResponseDto<PageBean<Prize>> queryRewardByUser(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestParam Integer activityId) {
     ResponseDto<PageBean<Prize>> responseDto = ResponseDto.successDto();
     try {
-      PageBean<Prize> page = this.activityUserService.queryRewardByActivity(token, pageNo, pageSize, activityId);
+      PageBean<Prize> page = activityUserService.queryRewardByActivity(token, pageNo, pageSize, activityId);
       responseDto.setData(page);
       return responseDto;
     } catch (Exception e) {
@@ -52,7 +52,7 @@ public class ActivityUserController {
   public ResponseDto<PageBean<Prize>> queryRewardByUser1(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestParam Integer activityId) {
     ResponseDto<PageBean<Prize>> responseDto = ResponseDto.successDto();
     try {
-      PageBean<Prize> page = this.activityUserService.queryRewardByActivityAndUser(token, pageNo, pageSize, activityId);
+      PageBean<Prize> page = activityUserService.queryRewardByActivityAndUser(token, pageNo, pageSize, activityId);
       responseDto.setData(page);
       return responseDto;
     } catch (Exception e) {

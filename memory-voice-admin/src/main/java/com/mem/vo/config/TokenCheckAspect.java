@@ -70,12 +70,12 @@ public class TokenCheckAspect {
                         if(SourceType.WX_MINI.getCode().equals(context.getSourceCode())){
                             Integer loginStatus = context.getStatus();
                             BizAssert.notNull(loginStatus,"登录状态为空");
-                            if(context.getStatus().equals(LoginStatus.LOGIN_NOT_AUTH.getCode())){
-                                ResponseDto responseDto = new ResponseDto();
-                                log.error("token 拦截出现小程序未绑定手机号异常，参数：{}", JsonUtil.toJson(context));
-                                responseDto.loginNotAuthorize();
-                                return responseDto;
-                            }
+//                            if(context.getStatus().equals(LoginStatus.LOGIN_NOT_AUTH.getCode())){
+//                                ResponseDto responseDto = new ResponseDto();
+//                                log.error("token 拦截出现小程序未绑定手机号异常，参数：{}", JsonUtil.toJson(context));
+//                                responseDto.loginNotAuthorize();
+//                                return responseDto;
+//                            }
                         }
                     }
 

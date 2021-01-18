@@ -170,7 +170,7 @@ public class RankingServiceImpl implements RankingService{
 
     @Override
     public RankingMoney getrankingMoney(String token) {
-        CommonLoginContext contextByken = this.tokenService.getContextByken(token);
+        CommonLoginContext contextByken = tokenService.getContextByken(token);
         RankingMoney rankingMoney = new RankingMoney();
         User user = userDao.findById(contextByken.getUserId());
         rankingMoney.setIntegral(user.getIntegral());
