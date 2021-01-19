@@ -11,8 +11,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum  SponsorEnum {
-    ON(0,"启用"),
-    OFF(1,"停用");
+    ON(1,"启用"),
+    OFF(2,"停用");
 
     private Integer code;
 

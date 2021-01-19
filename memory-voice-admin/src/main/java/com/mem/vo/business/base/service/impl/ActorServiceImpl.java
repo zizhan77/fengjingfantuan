@@ -34,8 +34,8 @@ public class ActorServiceImpl implements ActorServise {
         pager.setPageSize(pageSize);
         pager.setRows(Integer.valueOf(Commod));
         pager.setPageNo(page);
-        int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
-        pager.setStart(Integer.valueOf(first));
+        int first = (pager.getPageNo() - 1) * pager.getPageSize();
+        pager.setStart(first);
         List<Actor> list = actorDao.getActorList(actor, pager);
         pager.setLists(list);
         return pager;

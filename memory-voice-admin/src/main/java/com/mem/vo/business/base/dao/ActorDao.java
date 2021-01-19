@@ -8,9 +8,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface ActorDao {
-    List<Actor> getActorList(@Param("a") Actor paramActor, @Param("p") PageBean<Actor> paramPageBean);
+    List<Actor> getActorList(@Param("a") Actor actor, @Param("p") PageBean<Actor> pager);
 
-    Integer updateActor(Actor paramActor);
+    Integer updateActor(Actor actor);
 
     void deleteActortrip(Integer paramInteger);
 

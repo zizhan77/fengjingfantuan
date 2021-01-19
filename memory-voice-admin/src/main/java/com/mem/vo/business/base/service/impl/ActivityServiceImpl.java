@@ -96,7 +96,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public int deleteById(Long id) {
 //        return activityDao.deleteById(id);
-        Activity byId = this.activityDao.findById(id);
+        Activity byId = activityDao.findById(id);
         rankingDao.deleteById(byId.getOfranking());
         PrizeQuery prizeQuery = PrizeQuery.builder().activityId(id).build();
         List<Prize> prizeList = prizeDao.findByCondition(prizeQuery);
@@ -139,7 +139,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (activityQuery == null) {
             activityQuery = new ActivityQuery();
         }
-        List<Activity> byPage = this.activityDao.findByPage(activityQuery, page);
+        List<Activity> byPage = activityDao.findByPage(activityQuery, page);
         page.setData(byPage);
         return page;
     }
@@ -196,14 +196,14 @@ public class ActivityServiceImpl implements ActivityService {
         if (activityQuery == null) {
             activityQuery = new ActivityQuery();
         }
-        List<Activity> byPage = this.activityDao.pcFindByPage(activityQuery, page);
+        List<Activity> byPage = activityDao.pcFindByPage(activityQuery, page);
         for (Activity activity : byPage) {
-            Activity a = this.activityDao.getActivitySumPass(activity);
+            Activity a = activityDao.getActivitySumPass(activity);
             if (a != null) {
                 activity.setPeoplenum(a.getPeoplenum());
                 activity.setNumclick(a.getNumclick());
             }
-            Activity b = this.activityDao.getRankSumPass(activity);
+            Activity b = activityDao.getRankSumPass(activity);
             if (b != null) {
                 activity.setRankprople(b.getRankprople());
                 activity.setRanknum(b.getRanknum());

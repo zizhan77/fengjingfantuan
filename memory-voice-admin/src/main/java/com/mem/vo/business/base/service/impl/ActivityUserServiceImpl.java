@@ -53,9 +53,9 @@ public class ActivityUserServiceImpl implements ActivityUserService {
         ActivityUserQuery activityUserQuery = new ActivityUserQuery();
         activityUserQuery.setUserId(activityUser.getUserId());
         activityUserQuery.setActivityId(activityUser.getActivityId());
-        List<ActivityUser> byCondition = this.activityUserDao.findByCondition(activityUserQuery);
+        List<ActivityUser> byCondition = activityUserDao.findByCondition(activityUserQuery);
         if (byCondition.size() == 0) {
-            return this.activityUserDao.insert(activityUser);
+            return activityUserDao.insert(activityUser);
         }
         return 0;
     }
@@ -168,7 +168,7 @@ public class ActivityUserServiceImpl implements ActivityUserService {
 
     @Override
     public PageBean<Prize> queryRewardByActivityAndUser(String token, Integer pageNo, Integer pageSize, Integer activityId) {
-        CommonLoginContext commonLoginContext = this.tokenService.getContextByken(token);
+        CommonLoginContext commonLoginContext = tokenService.getContextByken(token);
         int Commod = activityUserDao.queryRewardByActivityAndUserCount(activityId, commonLoginContext.getUserId());
         PageBean<Prize> pager = new PageBean();
         pager.setPageSize(pageSize);

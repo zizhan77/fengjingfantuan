@@ -80,6 +80,9 @@ public class LoginController {
     @Resource
     private UserOperateService userOperateService;
 
+    @Resource
+    private RewardService rewardService;
+
     @PostMapping({"/minoPro/getUser"})
     public ResponseDto<List<String>> miniProGetTokenforUser(String jscode) {
         ResponseDto<List<String>> responseDto = ResponseDto.successDto();
@@ -116,10 +119,11 @@ public class LoginController {
     }
 
     @PostMapping("/minoPro/getToken")
-    public ResponseDto<String> miniProGetToken(String jscode) {
+    public ResponseDto<List<String>> miniProGetToken(String jscode) {
 
-        ResponseDto<String> responseDto = ResponseDto.successDto();
+        ResponseDto<List<String>> responseDto = ResponseDto.successDto();
         try {
+            User userInfo;
             BizAssert.hasText(jscode, BizCode.PARAM_NULL.getMessage());
 
             //登录验证
@@ -129,11 +133,11 @@ public class LoginController {
             UserQuery userQuery = new UserQuery();
             userQuery.setSource(SourceType.WX_MINI.getCode());
             userQuery.setBizCode(wxRpcContext.getOpenid());
-
+            List<String> list = new ArrayList<>();
             String token = "";
             //根据openid 分配 token
             List<User> users = userService.findByCondition(userQuery);
-            User userInfo;
+            String flag = "";
             if (CollectionUtils.isEmpty(users)) {
                 User user = new User();
                 user.setSource(SourceType.WX_MINI.getCode());
@@ -141,11 +145,24 @@ public class LoginController {
                 user.setBizCode(wxRpcContext.getOpenid());
                 user.setCreateUser("system");
                 user.setStatus(UserStatus.ENABLE.getCode());
+                Integer def = rewardService.getUserDefaultIntegral();
+                if (def != null) {
+                    user.setIntegral(def);
+                }
+                user.setIsAuthorize(0);
                 userService.insert(user);
+                flag = "1";
                 userInfo = user;
 
             } else {
-                userInfo = users.get(0);
+                BizAssert.notNull(users.get(0).getStatus(), "用户状态不存在");
+                BizAssert.notNull(users.get(0).getIsDelete(), "用户状态不存在");
+                if (users.get(0).getStatus().equals(EnableStatus.ON.getCode()) && users.get(0).getIsDelete().equals(0)) {
+                    userInfo = users.get(0);
+                    flag = "0";
+                } else {
+                    throw new BizException("此用户已经被锁定或者被删除");
+                }
             }
 
             if (userInfo.getIsAuthorize() == 1) {
@@ -164,9 +181,15 @@ public class LoginController {
 
                 token = wxLoginService.getToken(wxRpcContext, false, userInfo.getId());
             }
-
-
-            return responseDto.successData(token);
+            list.add(token);
+            if (users != null && users.size() > 0 && users.get(0) != null) {
+                Long id = users.get(0).getId();
+                if (id != null) {
+                    list.add(id + "");
+                }
+            }
+            list.add(flag);
+            return responseDto.successData(list);
 
         } catch (BizException e) {
 
@@ -335,7 +358,14 @@ public class LoginController {
         String validateStr = ValidateUtil.getValidateStr(pcLoginRequest);
         BizAssert.isBlank(validateStr, validateStr);
         Sponsor sponsor = sponsorLoginService.checkPasswd(pcLoginRequest);
+        BizAssert.notNull(sponsor, "用户状态不存在");
+        BizAssert.notNull(sponsor.getStatus(), "用户状态不存在");
+        BizAssert.isTrue(EnableStatus.ON.getCode().equals(sponsor.getStatus()), "用户被冻结，请联系运营");
+        if (!sponsor.getIsDelete().equals(Integer.valueOf(0))) {
+            throw new BizException("用户已经被删除");
+        }
         String token = sponsorLoginService.getToken(pcLoginRequest, sponsor);
+        System.out.println("contro" + token);
         return responseDto.successData(token);
     }
 

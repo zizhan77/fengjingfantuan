@@ -72,7 +72,7 @@ public interface ActivityDao {
      */
     List<Activity> findByConditionAvailable(@Param("condition") ActivityQuery query);
 
-    List<Activity> findByPage(@Param("condition") ActivityQuery paramActivityQuery, @Param("page") Page paramPage);
+    List<Activity> findByPage(@Param("condition") ActivityQuery activityQuery, @Param("page") Page page);
 
     List<Activity> pcFindByPage(@Param("condition") ActivityQuery paramActivityQuery, @Param("page") Page paramPage);
 

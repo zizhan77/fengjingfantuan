@@ -125,8 +125,6 @@ public class ActivityController {
         //权限验证
         ResponseDto<Page<ActivityVO>> responseDto = ResponseDto.successDto();
         List<Sponsor> sponsors = new ArrayList<>();
-
-
         try {
             Page<Activity> byPage = activityService.findByPage(activityQuery, page);
             List<ActivityVO> activityVOS = new ArrayList<>();

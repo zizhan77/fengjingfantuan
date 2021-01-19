@@ -13,7 +13,7 @@ public interface ActivityRuleUrlDao {
     int updateById(@Param("id") Integer id, @Param("url") String url);
 
     @Insert({"insert into activityRuleUrl (url) VALUES (#{url}) "})
-    int insert(@Param("url") String paramString);
+    int insert(@Param("url") String url);
 
     @Select({"select * from  activityRuleUrl"})
     List<ActivityRuleUrl> query();
