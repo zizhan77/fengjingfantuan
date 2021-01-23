@@ -1,8 +1,6 @@
 package com.mem.vo.controller.prize;
 
-import com.mem.vo.business.base.model.po.Prize;
-import com.mem.vo.business.base.model.po.PrizeD;
-import com.mem.vo.business.base.model.po.PrizeQuery;
+import com.mem.vo.business.base.model.po.*;
 import com.mem.vo.business.base.service.ChangeCodeService;
 import com.mem.vo.business.base.service.CodeTypeService;
 import com.mem.vo.business.base.service.PrizeService;
@@ -80,11 +78,15 @@ public class PrizeController {
             BizAssert.notNull(activityId, BizCode.PARAM_NULL.getMessage());
             Integer prizeType = prize.getPrizeType();
             BizAssert.notNull(prizeType, BizCode.PARAM_NULL.getMessage());
+            BizAssert.notNull(prize.getLevel(), BizCode.PARAM_NULL.getMessage());
             //是否存在该类奖品
+//            PrizeQuery query = PrizeQuery.builder()
+//                    .activityId(activityId)
+//                    .prizeType(prizeType)
+//                    .build();
             PrizeQuery query = PrizeQuery.builder()
                     .activityId(activityId)
-                    .prizeType(prizeType)
-                    .build();
+                    .level(prize.getLevel()).build();
             List<Prize> prizeList = prizeService.findByCondition(query);
             if (CollectionUtils.isNotEmpty(prizeList)) {
                 throw new BizException("已经存在相同类型的奖品！");
@@ -126,6 +128,13 @@ public class PrizeController {
     public ResponseDto<PrizeD> lottery(@RequestHeader("token") String token, Long activityId) {
         //权限验证
         ResponseDto<PrizeD> responseDto = ResponseDto.successDto();
+        PrizeD prizeD = prizeService.slotMachine(token, activityId);
+        if (prizeD.getKeyId() != null && !"".equals(prizeD.getKeyId())) {
+            ChangeCode changeCode = ChangeCodeService.selectById(prizeD.getKeyId());
+            prizeD.setChangeCode(changeCode);
+            CodeType codeType = codeTypeService.selectById(prizeD.getCodeType());
+            prizeD.setCodeTypeBean(codeType);
+        }
         return responseDto.successData(prizeService.slotMachine(token, activityId));
     }
 

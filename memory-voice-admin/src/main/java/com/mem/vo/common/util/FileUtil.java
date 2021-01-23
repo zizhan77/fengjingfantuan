@@ -109,30 +109,69 @@ public class FileUtil {
      */
     public String uploadMultipartFile(MultipartFile file, String key, boolean override) {
         //把文件转化为字节数组
-        InputStream is;
+//        InputStream is;
+        Date date = new Date();
+        long time = date.getTime();
+        key = key + time;
         try {
-            is = file.getInputStream();
+//            is = file.getInputStream();
+//            byte[] uploadBytes = IOUtils.toByteArray(is);
+//            Auth auth = getAuth();
+//            String upToken;
+//            if (override) {
+//                upToken = auth.uploadToken(bucket, key);//覆盖上传凭证
+//            } else {
+//                upToken = auth.uploadToken(bucket);
+//            }
+//            //默认上传接口回复对象
+//            DefaultPutRet putRet;
+//            //进行上传操作，传入文件的字节数组，文件名，上传空间，得到回复对象
+//            Response response = uploadManager.put(uploadBytes, key, upToken);
+//            putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+//            log.info("文件{},上传成功", putRet.key);
+//            String fileUrl = getFileUrl(key);
+//
+//            InternetResources internetResources = new InternetResources();
+//            internetResources.setName(file.getOriginalFilename());
+//            internetResources.setUrl(fileUrl);
+//            //资源类型
+//            int type;
+//            String originalFilename = file.getOriginalFilename();
+//            Objects.requireNonNull(originalFilename);
+//            if (originalFilename.endsWith(".mp3")) {
+//                type = 0;
+//            } else if (originalFilename.endsWith(".mp4")) {
+//                type = 1;
+//            } else {
+//                type = 2;
+//            }
+//            internetResources.setType(type);
+//            internetResourcesDao.insert(internetResources);
+//            return fileUrl;
+            String upToken;
+            int type;
+            InputStream is = file.getInputStream();
             byte[] uploadBytes = IOUtils.toByteArray(is);
             Auth auth = getAuth();
-            String upToken;
+
             if (override) {
-                upToken = auth.uploadToken(bucket, key);//覆盖上传凭证
+                upToken = auth.uploadToken(bucket, key);
             } else {
                 upToken = auth.uploadToken(bucket);
             }
-            //默认上传接口回复对象
-            DefaultPutRet putRet;
-            //进行上传操作，传入文件的字节数组，文件名，上传空间，得到回复对象
+
+
+
             Response response = uploadManager.put(uploadBytes, key, upToken);
-            putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+            DefaultPutRet putRet = (new Gson()).fromJson(response.bodyString(), DefaultPutRet.class);
             log.info("文件{},上传成功", putRet.key);
             String fileUrl = getFileUrl(key);
 
             InternetResources internetResources = new InternetResources();
             internetResources.setName(file.getOriginalFilename());
             internetResources.setUrl(fileUrl);
-            //资源类型
-            int type;
+
+
             String originalFilename = file.getOriginalFilename();
             Objects.requireNonNull(originalFilename);
             if (originalFilename.endsWith(".mp3")) {
@@ -142,7 +181,7 @@ public class FileUtil {
             } else {
                 type = 2;
             }
-            internetResources.setType(type);
+            internetResources.setType(Integer.valueOf(type));
             internetResourcesDao.insert(internetResources);
             return fileUrl;
         } catch (IOException e) {

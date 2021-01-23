@@ -2,48 +2,21 @@ package com.mem.vo.business.base.model.po;
 
 import lombok.Data;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-
 @Data
-public class Article implements Serializable {
+public class ArticlePo {
     private Integer id;
-
     private Integer sponsorid;
-
     private String content;
-
     private String showTime;
-
     private Integer artistid;
-
     private Integer cityid;
-
     private String placeid;
-
+    private String placeName;
     private String price;
-
     private String showTime2;
-
     private Integer organizerid;
-
     private String classid;
-
     private String stopTime;
-
     private String status;
-
-    private Date createTime;
-
-    private String createUser;
-
-    private Date updateTime;
-
-    private String updateUser;
-
     private String isDelete;
-
-    private static final long serialVersionUID = 1L;
-
 }

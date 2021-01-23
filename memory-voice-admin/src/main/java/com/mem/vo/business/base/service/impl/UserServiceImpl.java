@@ -122,8 +122,8 @@ public class UserServiceImpl implements UserService {
         BizAssert.notNull(agePos, BizCode.PARAM_NULL.getMessage());
         HashMap<String, String> map = new HashMap<>();
         for (AgePo agePo : agePos) {
-            String count = this.userDao.findAge(agePo);
-            map.put(agePo.getStartTime() + "+ agePo.getEndTime() + ", count);
+            String count = userDao.findAge(agePo);
+            map.put(agePo.getStartTime() + "到" + "+ agePo.getEndTime() + " + "岁", count);
         }
         return map;
     }

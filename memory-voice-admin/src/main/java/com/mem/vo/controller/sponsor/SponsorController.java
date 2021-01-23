@@ -90,15 +90,15 @@ public class SponsorController {
     public ResponseDto<Integer> addSave(@RequestHeader("token") String token, Sponsor sponsor) {
         //权限验证
         ResponseDto<Integer> responseDto = ResponseDto.successDto();
-            BizAssert.notNull(sponsor, BizCode.PARAM_NULL.getMessage());
-            BizAssert.notNull(sponsor.getPhone(),BizCode.PARAM_NULL.getMessage());
-            SponsorQuery query = new SponsorQuery();
-            query.setPhone(sponsor.getPhone());
-            List<Sponsor> sponsorList = sponsorService.findByCondition(query);
-            if (CollectionUtils.isNotEmpty(sponsorList)) {
-                throw new BizException("此电话号码已被注册！");
-            }
-            return responseDto.successData(sponsorService.insert(sponsor));
+        BizAssert.notNull(sponsor, BizCode.PARAM_NULL.getMessage());
+        BizAssert.notNull(sponsor.getPhone(), BizCode.PARAM_NULL.getMessage());
+        SponsorQuery query = new SponsorQuery();
+        query.setPhone(sponsor.getPhone());
+        List<Sponsor> sponsorList = sponsorService.findByCondition(query);
+        if (CollectionUtils.isNotEmpty(sponsorList)) {
+            throw new BizException("此电话号码已被注册！");
+        }
+        return responseDto.successData(sponsorService.insert(sponsor));
 
     }
 
@@ -172,7 +172,7 @@ public class SponsorController {
     public ResponseDto<MtaBean> gender() {
         ResponseDto<MtaBean> responseDto = ResponseDto.successDto();
         try {
-            MtaBean data = this.userService.findGender();
+            MtaBean data = userService.findGender();
             return responseDto.successData(data);
         } catch (BizException e) {
             log.error("查询性别统计业务信息异常, 原因:{}", e.getMessage());

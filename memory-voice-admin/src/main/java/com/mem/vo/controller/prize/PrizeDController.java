@@ -203,7 +203,7 @@ public class PrizeDController {
             if (CollectionUtils.isEmpty(prizeD.getIntegralProbList())) {
                 throw new BizException("传入积分信息为空");
             }
-            int count = this.prizeDService.deleteByPrizeId(prizeD.getPrizeId());
+            int count = prizeDService.deleteByPrizeId(prizeD.getPrizeId());
             for (IntegralVO integralVO : prizeD.getIntegralProbList()) {
                 prizeD.setIntegralQty(integralVO.getIntegralNum());
                 prizeD.setIntegralProb(integralVO.getProb());
@@ -245,7 +245,7 @@ public class PrizeDController {
                 for (int i = 0; i < prizeNum.intValue(); i++) {
                     prizeDService.insert(prizeD);
                 }
-                int j = this.codeTypeService.desCount(codeTypeId, prizeNum.intValue());
+                int j = codeTypeService.desCount(codeTypeId, prizeNum.intValue());
                 if (j == 0) {
                     throw new BizException("修改此优惠券库存失败");
                 }
@@ -257,7 +257,16 @@ public class PrizeDController {
         PrizeQuery prizeQuery1 = BeanCopyUtil.copyProperties(prize, prizeQuery.getClass());
         List<Prize> byCondition = prizeService.findByCondition(prizeQuery1);
         if (byCondition.isEmpty()) {
-            Prize prize1 = Prize.builder().activityId(prizeD.getActivityId()).id(prizeD.getPrizeId()).prizeType(prizeD.getPrizeType()).prizeName(prizeD.getPrizeName()).prizeIntro(prizeD.getPrizeIntro()).totalNum(prizeD.getPrizeNum()).codeType(prizeD.getCodeType()).prob(prizeD.getProb()).level(prizeD.getLevel()).build();
+            Prize prize1 = Prize.builder()
+                    .activityId(prizeD.getActivityId())
+                    .id(prizeD.getPrizeId())
+                    .prizeType(prizeD.getPrizeType())
+                    .prizeName(prizeD.getPrizeName())
+                    .prizeIntro(prizeD.getPrizeIntro())
+                    .totalNum(prizeD.getPrizeNum())
+                    .codeType(prizeD.getCodeType())
+                    .prob(prizeD.getProb())
+                    .level(prizeD.getLevel()).build();
             if (prizeD.getMiniType() != null && !"".equals(prizeD.getMiniType())) {
                 prize1.setMiniType(prizeD.getMiniType());
             }
@@ -270,7 +279,16 @@ public class PrizeDController {
             }
         }
         if (b) {
-            Prize prize1 = Prize.builder().activityId(prizeD.getActivityId()).id(prizeD.getPrizeId()).prizeType(prizeD.getPrizeType()).prizeName(prizeD.getPrizeName()).prizeIntro(prizeD.getPrizeIntro()).totalNum(prizeD.getPrizeNum()).codeType(prizeD.getCodeType()).prob(prizeD.getProb()).level(prizeD.getLevel()).build();
+            Prize prize1 = Prize.builder()
+                    .activityId(prizeD.getActivityId())
+                    .id(prizeD.getPrizeId())
+                    .prizeType(prizeD.getPrizeType())
+                    .prizeName(prizeD.getPrizeName())
+                    .prizeIntro(prizeD.getPrizeIntro())
+                    .totalNum(prizeD.getPrizeNum())
+                    .codeType(prizeD.getCodeType())
+                    .prob(prizeD.getProb())
+                    .level(prizeD.getLevel()).build();
             if (prizeD.getMiniType() != null && !"".equals(prizeD.getMiniType())) {
                 prize1.setMiniType(prizeD.getMiniType());
             }
@@ -284,9 +302,10 @@ public class PrizeDController {
     public ResponseDto<PrizeD> queryList(@RequestHeader("token") String token, PrizeDQuery query) {
         //权限验证
         ResponseDto<PrizeD> responseDto = ResponseDto.successDto();
-        List<PrizeD> prizeDList = prizeDService.findByCondition(query);
+//        List<PrizeD> prizeDList = prizeDService.findByCondition(query);
+        List<PrizeD> prizeDList = prizeDService.findByLevelAndActivityIdAndType(query);
         PrizeD res = new PrizeD();
-        if (CollectionUtils.isEmpty(prizeDList) || query.getPrizeType().equals(PrizeEnum.MATERIAL.getCode())) {
+        if (CollectionUtils.isEmpty(prizeDList) || query.getPrizeType().equals(PrizeEnum.MATERIAL.getCode()) || query.getPrizeType().equals(PrizeEnum.coupon.getCode())) {
             PrizeQuery prizeQuery = PrizeQuery
                     .builder()
                     .prizeType(query.getPrizeType())
@@ -302,6 +321,9 @@ public class PrizeDController {
             res.setPrizeType(prize.getPrizeType());
             res.setActivityId(prize.getActivityId());
             res.setPrizeNum(prize.getTotalNum());
+            res.setLevel(prize.getLevel());
+            res.setCodeType(prize.getCodeType());
+            res.setPrizeIntro(prize.getPrizeIntro());
             return responseDto.successData(res);
         }
         res = prizeDList.get(0);
@@ -320,10 +342,14 @@ public class PrizeDController {
             for (PrizeD prizeD : prizeDList) {
                 EticketVO eticketVO = new EticketVO();
                 eticketVO.setName(prizeD.getName());
+                eticketVO.setNums(prizeD.getPrizedCount());
+                eticketVO.setCount(prizeD.getTicketUnit() + "");
                 eticketVOList.add(eticketVO);
             }
             res.setEticketList(eticketVOList);
         }
+        Prize prize = prizeService.findById(Long.valueOf(res.getPrizeId().intValue()));
+        res.setSendNum(prize.getDailyTicketLimit());
         return responseDto.successData(res);
     }
 
@@ -345,7 +371,7 @@ public class PrizeDController {
         ResponseDto<Integer> responseDto = ResponseDto.successDto();
         BizAssert.notNull(prizedId, BizCode.PARAM_NULL.getMessage());
         try {
-            return responseDto.successData(this.prizeDService.giveUp(prizedId));
+            return responseDto.successData(prizeDService.giveUp(prizedId));
         } catch (BizException e) {
             log.error("放弃奖品异常，原因:{}", e.getMessage());
             return responseDto.failData(e.getMessage());

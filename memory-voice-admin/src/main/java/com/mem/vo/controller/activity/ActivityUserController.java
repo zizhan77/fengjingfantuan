@@ -35,46 +35,46 @@ public class ActivityUserController {
     private TokenService tokenService;
 
     @PostMapping({"/phone/queryRewardByUser/1"})
-  public ResponseDto<PageBean<Prize>> queryRewardByUser(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestParam Integer activityId) {
-    ResponseDto<PageBean<Prize>> responseDto = ResponseDto.successDto();
-    try {
-      PageBean<Prize> page = activityUserService.queryRewardByActivity(token, pageNo, pageSize, activityId);
-      responseDto.setData(page);
-      return responseDto;
-    } catch (Exception e) {
-      log.error("老虎机下面的三个接口其中之一有问题", e.getMessage());
-      responseDto.setCode(Integer.valueOf(1));
-      return responseDto;
+    public ResponseDto<PageBean<Prize>> queryRewardByUser(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestParam Integer activityId) {
+        ResponseDto<PageBean<Prize>> responseDto = ResponseDto.successDto();
+        try {
+            PageBean<Prize> page = activityUserService.queryRewardByActivity(token, pageNo, pageSize, activityId);
+            responseDto.setData(page);
+            return responseDto;
+        } catch (Exception e) {
+            log.error("老虎机下面的三个接口其中之一有问题", e.getMessage());
+            responseDto.setCode(Integer.valueOf(1));
+            return responseDto;
+        }
     }
-  }
 
-  @PostMapping({"/phone/queryRewardByUser/2"})
-  public ResponseDto<PageBean<Prize>> queryRewardByUser1(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestParam Integer activityId) {
-    ResponseDto<PageBean<Prize>> responseDto = ResponseDto.successDto();
-    try {
-      PageBean<Prize> page = activityUserService.queryRewardByActivityAndUser(token, pageNo, pageSize, activityId);
-      responseDto.setData(page);
-      return responseDto;
-    } catch (Exception e) {
-      log.error("老虎机下面的三个接口其中之一有问题", e.getMessage());
-      responseDto.setCode(Integer.valueOf(1));
-      return responseDto;
+    @PostMapping({"/phone/queryRewardByUser/2"})
+    public ResponseDto<PageBean<Prize>> queryRewardByUser1(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestParam Integer activityId) {
+        ResponseDto<PageBean<Prize>> responseDto = ResponseDto.successDto();
+        try {
+            PageBean<Prize> page = activityUserService.queryRewardByActivityAndUser(token, pageNo, pageSize, activityId);
+            responseDto.setData(page);
+            return responseDto;
+        } catch (Exception e) {
+            log.error("老虎机下面的三个接口其中之一有问题", e.getMessage());
+            responseDto.setCode(Integer.valueOf(1));
+            return responseDto;
+        }
     }
-  }
 
-  @PostMapping({"/phone/queryRewardByUser/3"})
-  public ResponseDto<PageBean<User>> queryRewardByUser2(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, Integer activityId) {
-    ResponseDto<PageBean<User>> responseDto = ResponseDto.successDto();
-    try {
-      PageBean<User> page = this.activityUserService.queryShareUserbyUser(token, pageNo, pageSize, activityId);
-      responseDto.setData(page);
-      return responseDto;
-    } catch (Exception e) {
-      log.error("老虎机下面的三个接口其中之一有问题", e.getMessage());
-      responseDto.setCode(Integer.valueOf(1));
-      return responseDto;
+    @PostMapping({"/phone/queryRewardByUser/3"})
+    public ResponseDto<PageBean<User>> queryRewardByUser2(@RequestHeader("token") String token, @RequestParam Integer pageNo, @RequestParam Integer pageSize, Integer activityId) {
+        ResponseDto<PageBean<User>> responseDto = ResponseDto.successDto();
+        try {
+            PageBean<User> page = activityUserService.queryShareUserbyUser(token, pageNo, pageSize, activityId);
+            responseDto.setData(page);
+            return responseDto;
+        } catch (Exception e) {
+            log.error("老虎机下面的三个接口其中之一有问题", e.getMessage());
+            responseDto.setCode(Integer.valueOf(1));
+            return responseDto;
+        }
     }
-  }
 
 //    @PostMapping("/queryByToken")
 //    public ResponseDto<Integer> queryAllActivity(@RequestHeader("token") String token, ActivityUserQuery query) {
@@ -126,6 +126,9 @@ public class ActivityUserController {
         ResponseDto<Integer> responseDto = ResponseDto.successDto();
         try {
             BizAssert.notNull(activityUser, BizCode.PARAM_NULL.getMessage());
+            CommonLoginContext contextByken = tokenService.getContextByken(token);
+            String bizCode = contextByken.getBizCode();
+            activityUser.setUserId(bizCode);
             return responseDto.successData(activityUserService.insert(activityUser));
         } catch (BizException e) {
             log.error("插入活动信息异常，原因：{}", e.getMessage());

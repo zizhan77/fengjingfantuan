@@ -102,7 +102,7 @@ public class  SponsorServiceImpl implements SponsorService {
             if (response.getStatusLine().getStatusCode() == 200) {
                 String content = EntityUtils.toString(response.getEntity(), "UTF-8");
                 System.out.println(content);
-                MtaBeans myBean = (MtaBeans)JSON.parseObject(content, MtaBeans.class);
+                MtaBeans myBean = JSON.parseObject(content, MtaBeans.class);
                 return myBean.getData();
             }
             System.out.println("失败");
@@ -163,10 +163,10 @@ public class  SponsorServiceImpl implements SponsorService {
     public List<Sponsor> queryAllSponorByPhone(Long spid, Long activityid) {
         List<Sponsor> list = new ArrayList<>();
         if (spid != null) {
-            Sponsor byId = this.sponsorDao.findById(spid);
+            Sponsor byId = sponsorDao.findById(spid);
             list.add(byId);
         } else if (activityid != null) {
-            String splists = this.activityDao.findSplistToid(activityid);
+            String splists = activityDao.findSplistToid(activityid);
             if (splists != null && splists != "") {
                 String[] split = splists.split("~");
                 for (String s : split) {
@@ -181,7 +181,7 @@ public class  SponsorServiceImpl implements SponsorService {
                 }
             }
         } else {
-            list = this.sponsorDao.findByConditionbyishow();
+            list = sponsorDao.findByConditionbyishow();
         }
         return list;
     }
@@ -189,7 +189,7 @@ public class  SponsorServiceImpl implements SponsorService {
     @Override
     public List<String> querySponorPictureByactid(Long activityid) {
         List<String> list = new ArrayList<>();
-        String splists = this.activityDao.findSplistToid(activityid);
+        String splists = activityDao.findSplistToid(activityid);
         if (splists != null && splists != "") {
             String[] split = splists.split("~");
             for (String s : split) {
@@ -208,8 +208,8 @@ public class  SponsorServiceImpl implements SponsorService {
 
     @Override
     public Sponsor getSponsorOne(Long id) {
-        Sponsor sponsorOne = this.sponsorDao.getSponsorOne(id);
-        List<String> a = this.sponsorDao.getSponsorPrize(id);
+        Sponsor sponsorOne = sponsorDao.getSponsorOne(id);
+        List<String> a = sponsorDao.getSponsorPrize(id);
         if (a != null) {
             sponsorOne.setPrize(a);
         }

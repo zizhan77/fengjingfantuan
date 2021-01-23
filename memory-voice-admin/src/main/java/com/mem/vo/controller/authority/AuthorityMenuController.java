@@ -43,10 +43,12 @@ public class AuthorityMenuController {
             List<AuthorityMenu> list = authorityMenuService.findByCondition(query);
             List<AuthorityMenuVo> voList = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(list)) {
-                voList = list.stream().map(item -> {
-                    AuthorityMenuVo vo = BeanCopyUtil.copyProperties(item, AuthorityMenuVo.class);
-                    return vo;
-                }).collect(Collectors.toList());
+//                voList = list.stream().map(item -> {
+//                    AuthorityMenuVo vo = BeanCopyUtil.copyProperties(item, AuthorityMenuVo.class);
+//                    return vo;
+//                }).collect(Collectors.toList());
+                voList =  list.stream().map(item ->  BeanCopyUtil.copyProperties(item, AuthorityMenuVo.class)).collect(Collectors.toList());
+
             }
 
             return responseDto.successData(voList);

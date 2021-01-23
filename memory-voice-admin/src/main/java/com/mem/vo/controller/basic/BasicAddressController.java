@@ -59,10 +59,12 @@ public class BasicAddressController {
             Page<BasicAddress> resPage = basicAddressService.findPageByCondition(page, query);
             List<BasicAddress> basicAddresses = resPage.getData();
             if (CollectionUtils.isNotEmpty(basicAddresses)) {
-                List<BasicAddressVo> voList = basicAddresses.stream().map(item -> {
-                    BasicAddressVo vo = BeanCopyUtil.copyProperties(item, BasicAddressVo.class);
-                    return vo;
-                }).collect(Collectors.toList());
+//                List<BasicAddressVo> voList = basicAddresses.stream().map(item -> {
+//                    BasicAddressVo vo = BeanCopyUtil.copyProperties(item, BasicAddressVo.class);
+//                    return vo;
+//                }).collect(Collectors.toList());
+                List<BasicAddressVo> voList = basicAddresses.stream().map(item ->
+                        BeanCopyUtil.copyProperties(item, BasicAddressVo.class)).collect(Collectors.toList());
 
                 jsonObject.put("total",resPage.getTotal());
                 jsonObject.put("list",voList);
@@ -125,7 +127,6 @@ public class BasicAddressController {
             BasicAddressQuery query = new BasicAddressQuery();
             query.setLevel(1);
             List<BasicAddress> addressList = basicAddressService.findByCondition(query);
-
             List<BasicAddressNode> nodes = getBasicAddressNodes(addressList);
 
             nodes.forEach(item -> {
@@ -164,12 +165,14 @@ public class BasicAddressController {
     }
 
     private List<BasicAddressNode> getBasicAddressNodes(List<BasicAddress> addressList) {
-        return addressList.stream().map(item -> {
-
-            BasicAddressNode node = BeanCopyUtil.copyProperties(item, BasicAddressNode.class);
-            return node;
-
-        }).collect(Collectors.toList());
+//        return addressList.stream().map(item -> {
+//
+//            BasicAddressNode node = BeanCopyUtil.copyProperties(item, BasicAddressNode.class);
+//            return node;
+//
+//        }).collect(Collectors.toList());
+        return  addressList.stream().map(item ->
+                BeanCopyUtil.copyProperties(item, BasicAddressNode.class)).collect(Collectors.toList());
     }
 
 

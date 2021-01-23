@@ -103,10 +103,8 @@ public class OrderController {
     private UserAddressService userAddressService;
     @Resource
     private WxOrderRequest wxOrderRequest;
-
     @Resource
     private UserOperateService userOperateService;
-
     @Resource
     private UserService userService;
 
@@ -181,15 +179,22 @@ public class OrderController {
             BizAssert.notNull(order.getWaybillCode(), BizCode.PARAM_NULL.getMessage());
             Order o = orderService.findById(order.getId());
             Performance p = performanceService.findById(o.getPerformanceId());
-            if (p.getTicketDeliverType().equals(TicketDeliverType.Express.getCode())) {
-                if (o.getStatus() == OrderStatusEnum.WAITSEND.getCode()
-                        || o.getStatus() == OrderStatusEnum.SENDOUT.getCode()) {
-                    //如果为电子码，存个json压压惊
-                    o.setWaybillCode(order.getWaybillCode());
-                    o.setStatus(OrderStatusEnum.SENDOUT.getCode());
-                }
-            } else {
-                //电子票直接就是已完成状态
+//            if (p.getTicketDeliverType().equals(TicketDeliverType.Express.getCode())) {
+//                if (o.getStatus() == OrderStatusEnum.WAITSEND.getCode()
+//                        || o.getStatus() == OrderStatusEnum.SENDOUT.getCode()) {
+//                    //如果为电子码，存个json压压惊
+//                    o.setWaybillCode(order.getWaybillCode());
+//                    o.setStatus(OrderStatusEnum.SENDOUT.getCode());
+//                }
+//            } else {
+//                //电子票直接就是已完成状态
+//            }
+            if (p.getTicketDeliverType().equals(TicketDeliverType.Express.getCode()) && (
+                    o.getStatus().equals(OrderStatusEnum.WAITSEND.getCode())
+                            || o.getStatus().equals(OrderStatusEnum.SENDOUT.getCode()))) {
+
+                o.setWaybillCode(order.getWaybillCode());
+                o.setStatus(OrderStatusEnum.SENDOUT.getCode());
             }
             orderService.updateById(o);
             return responseDto.successData("保存订单信息成功");
@@ -283,9 +288,11 @@ public class OrderController {
             for (SeatsIdsNumVo vo : seatsIdsNumVoList) {
                 if (anRelationMap.get(vo.getAreaId()) == null) {
                     anRelationMap.put(vo.getAreaId(), 1);
-                } else {
-                    anRelationMap.put(vo.getAreaId(), anRelationMap.get(vo.getAreaId()) + 1);
+                    continue;
                 }
+//                else {
+                    anRelationMap.put(vo.getAreaId(), anRelationMap.get(vo.getAreaId()) + 1);
+//                }
             }
         }
         if (ticketStoreList.size() <= 0) {
@@ -306,9 +313,10 @@ public class OrderController {
                     String newGear = atRelationMap.get(vo.getAreaId());
                     if (newGear.equals(curGear)) {
                         continue;
-                    } else {
-                        curGear = newGear;
                     }
+//                    else {
+                        curGear = newGear;
+//                    }
                     for (TicketStore ticketStore : ticketStoreList) {
                         if (curGear.equals(ticketStore.getTicketGearId() + "")) {
                             if (ticketStore.getSaleNum() + anRelationMap.get(vo.getAreaId()) > ticketStore.getStoreNum()) {

@@ -50,8 +50,7 @@ public class BindPhoneController {
         ResponseDto<Boolean> responseDto = ResponseDto.successDto();
         try {
             CommonLoginContext context =  tokenService.getContextByken(token);
-            BizAssert
-                .hasText(decodeWxUserInfoDto.getEncryptedData(), "encryptedData" + BizCode.PARAM_NULL.getMessage());
+            BizAssert.hasText(decodeWxUserInfoDto.getEncryptedData(), "encryptedData" + BizCode.PARAM_NULL.getMessage());
             BizAssert.hasText(decodeWxUserInfoDto.getIv(), "iv" + BizCode.PARAM_NULL.getMessage());
             BizAssert.hasText(context.getSessionKey(), "session_key" + BizCode.PARAM_NULL.getMessage());
             CommonLoginContext commonLoginContext = tokenService.getContextByken(token);

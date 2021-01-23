@@ -70,9 +70,9 @@ public class TokenServiceImpl implements TokenService {
         BizAssert.notNull(commonLoginContext.getUserId(),"用户id为空");
 
         if (commonLoginContext.getSourceCode().equals(SourceType.SPONSOR.getCode())) {
-            Sponsor sponsor = this.sponsorService.findById(commonLoginContext.getUserId());
+            Sponsor sponsor = sponsorService.findById(commonLoginContext.getUserId());
             BizAssert.notNull(sponsor, "查询用户信息为空");
-                    commonLoginContext.setSponsor(sponsor);
+            commonLoginContext.setSponsor(sponsor);
             return commonLoginContext;
         }
 
@@ -153,23 +153,45 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String getSponsorToken(CommonLoginContext loginContext) {
-        //然后创建新的 token
-        UUID token = UUID.randomUUID();
-        boolean b1 = redisUtils.setnx(RedisPrefix.SPONSOR_TOKEN.getCode() + token.toString(), JsonUtil.toJson(loginContext),
-                RedisConstant.EXPIRED_TIME_15D);
-        boolean b2 = redisUtils.setnx(RedisPrefix.SPONSOR.getCode() + loginContext.getUserId(), token.toString(),
-                RedisConstant.EXPIRED_TIME_15D);
-        if (b1 && b2) {
-            return token.toString();
-        }
-        String preToken =  redisUtils.get(RedisPrefix.SPONSOR.getCode() + loginContext.getUserId());
+//        //然后创建新的 token
+//        UUID token = UUID.randomUUID();
+//        boolean b1 = redisUtils.setnx(RedisPrefix.SPONSOR_TOKEN.getCode() + token.toString(), JsonUtil.toJson(loginContext),
+//                RedisConstant.EXPIRED_TIME_15D);
+//        boolean b2 = redisUtils.setnx(RedisPrefix.SPONSOR.getCode() + loginContext.getUserId(), token.toString(),
+//                RedisConstant.EXPIRED_TIME_15D);
+//        if (b1 && b2) {
+//            return token.toString();
+//        }
+//        String preToken =  redisUtils.get(RedisPrefix.SPONSOR.getCode() + loginContext.getUserId());
+//        if (StringUtils.isNotBlank(preToken)) {
+//            return preToken;
+//        }
+//        redisUtils.setex(RedisPrefix.SPONSOR_TOKEN.getCode() + token.toString(), JsonUtil.toJson(loginContext),
+//                RedisConstant.EXPIRED_TIME_15D);
+//        redisUtils.setex(RedisPrefix.SPONSOR.getCode() + loginContext.getUserId(), token.toString(),
+//                RedisConstant.EXPIRED_TIME_15D);
+//        return token.toString();
+        String preToken = redisUtils.get(RedisPrefix.SPONSOR.getCode() + loginContext.getUserId());
         if (StringUtils.isNotBlank(preToken)) {
-            return preToken;
+            redisUtils.del(RedisPrefix.SPONSOR.getCode() + loginContext.getUserId());
+            redisUtils.del(RedisPrefix.TOKEN.getCode() + preToken);
         }
-        redisUtils.setex(RedisPrefix.SPONSOR_TOKEN.getCode() + token.toString(), JsonUtil.toJson(loginContext),
-                RedisConstant.EXPIRED_TIME_15D);
-        redisUtils.setex(RedisPrefix.SPONSOR.getCode() + loginContext.getUserId(), token.toString(),
-                RedisConstant.EXPIRED_TIME_15D);
+        UUID token = UUID.randomUUID();
+        redisUtils.setex(RedisPrefix.SPONSOR.getCode() + loginContext.getUserId(), token.toString(), RedisConstant.EXPIRED_TIME_15D);
+        redisUtils.setex(RedisPrefix.TOKEN.getCode() + token.toString(), JsonUtil.toJson(loginContext), RedisConstant.EXPIRED_TIME_15D);
+        return token.toString();
+
+    }
+
+    public String getOrganizerToken(CommonLoginContext commonLoginContext) {
+        String preToken = redisUtils.get(RedisPrefix.ORAGNIZER.getCode() + commonLoginContext.getUserId());
+        if (StringUtils.isNotBlank(preToken)) {
+            redisUtils.del(RedisPrefix.ORAGNIZER.getCode() + commonLoginContext.getUserId());
+            redisUtils.del(RedisPrefix.TOKEN.getCode() + preToken);
+        }
+        UUID token = UUID.randomUUID();
+        redisUtils.setex(RedisPrefix.ORAGNIZER.getCode() + commonLoginContext.getUserId(), token.toString(), 1296000);
+        redisUtils.setex(RedisPrefix.TOKEN.getCode() + token.toString(), JsonUtil.toJson(commonLoginContext), 1296000);
         return token.toString();
     }
 }

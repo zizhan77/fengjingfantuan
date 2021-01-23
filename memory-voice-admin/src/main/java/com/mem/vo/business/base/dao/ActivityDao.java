@@ -72,29 +72,29 @@ public interface ActivityDao {
      */
     List<Activity> findByConditionAvailable(@Param("condition") ActivityQuery query);
 
-    List<Activity> findByPage(@Param("condition") ActivityQuery activityQuery, @Param("page") Page page);
+    List<Activity> findByPage(@Param("condition") ActivityQuery query, @Param("page") Page page);
 
-    List<Activity> pcFindByPage(@Param("condition") ActivityQuery paramActivityQuery, @Param("page") Page paramPage);
+    List<Activity> pcFindByPage(@Param("condition") ActivityQuery query, @Param("page") Page page);
 
     int findByPageToPhoneCount();
 
-    List<ActivityVO> findByPageToPhone(@Param("paging") PageBean<ActivityVO> paramPageBean);
+    List<ActivityVO> findByPageToPhone(@Param("paging") PageBean<ActivityVO> paging);
 
-    ActivityVO queryDetailByPhone(Integer paramInteger);
+    ActivityVO queryDetailByPhone(Integer id);
 
     Integer querySort(Long paramLong);
 
     String findSplistToid(Long paramLong);
 
-    int queryActivityByUserCount(@Param("type") Integer paramInteger, @Param("id") Long paramLong);
+    int queryActivityByUserCount(@Param("type") Integer type, @Param("id") Long id);
 
-    List<ActivityVO> queryActivityByUser(@Param("paging") PageBean<ActivityVO> paramPageBean, @Param("type") Integer paramInteger, @Param("id") Long paramLong);
+    List<ActivityVO> queryActivityByUser(@Param("paging") PageBean<ActivityVO> paging, @Param("type") Integer type, @Param("id") Long id);
 
     List<Integer> getActivityEnd();
 
-    List<User> getActivityUser(@Param("i") Integer paramInteger);
+    List<User> getActivityUser(@Param("i") Integer i);
 
-    Activity getActivitySumPass(@Param("a") Activity paramActivity);
+    Activity getActivitySumPass(@Param("a") Activity a);
 
-    Activity getRankSumPass(@Param("a") Activity paramActivity);
+    Activity getRankSumPass(@Param("a") Activity a);
 }

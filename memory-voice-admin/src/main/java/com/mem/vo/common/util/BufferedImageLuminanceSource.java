@@ -103,6 +103,6 @@ public class BufferedImageLuminanceSource extends LuminanceSource {
         g.dispose();
         int width = getWidth();
         return new BufferedImageLuminanceSource(rotatedImage, top,
-                sourceWidth - (left + width), getHeight(), width);
+                sourceWidth - left + width, getHeight(), width);
     }
 }

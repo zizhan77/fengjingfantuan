@@ -19,4 +19,6 @@ public class ResourceSuffixConstant {
         put(2, ".png");
     }};
 
+
+
 }

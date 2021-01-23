@@ -54,7 +54,8 @@ public class SmsServiceImpl implements SmsService {
         request.putQueryParameter(SmsEnum.SIGN_NAME.getCode(), aliyuncsConfig.getSignName());
         //生成随机数
         Random ne = new Random();
-        int x = ne.nextInt(9999 - 1000 + 1) + 1000;
+        int x = ne.nextInt(9000) + 1000;
+//        int x = ne.nextInt(9999 - 1000 + 1) + 1000;
         //入参必须是<String, String>格式
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put(SmsEnum.FIELD_CODE.getCode(), String.valueOf(x));

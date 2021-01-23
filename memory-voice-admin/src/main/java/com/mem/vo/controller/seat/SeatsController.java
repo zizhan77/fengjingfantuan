@@ -293,9 +293,8 @@ public class SeatsController {
                 throw new BizException(BizCode.PARAM_NULL.getMessage());
             }
             List<ShowSeats> poList = showSeatsVOS.stream().map(item ->
-            {
-                return BeanCopyUtil.copyProperties(item, ShowSeats.class);
-            }).collect(Collectors.toList());
+                    BeanCopyUtil.copyProperties(item, ShowSeats.class)
+            ).collect(Collectors.toList());
             ShowSeatsQuery showSeatsQuery = new ShowSeatsQuery();
             showSeatsQuery.setShowId(showSeatsVOS.get(0).getShowId());
             showSeatsQuery.setStatus(SeatStatus.SELLOUT.getCode());

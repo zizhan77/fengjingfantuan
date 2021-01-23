@@ -80,7 +80,7 @@ public class ActivityServiceImpl implements ActivityService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Integer add = Integer.valueOf(rankingDao.insert(rank));
+        Integer add = rankingDao.insert(rank);
         if (add.intValue() == 0) {
             throw new BizException("添加失败");
         }

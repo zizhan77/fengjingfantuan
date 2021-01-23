@@ -10,10 +10,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mem.vo.business.base.model.po.*;
 import com.mem.vo.business.base.model.vo.PlaceArtistVO;
-import com.mem.vo.business.base.service.BasicAddressService;
-import com.mem.vo.business.base.service.BasicArtistService;
-import com.mem.vo.business.base.service.BasicPlaceService;
-import com.mem.vo.business.base.service.OrganizerPlaceService;
+import com.mem.vo.business.base.service.*;
 import com.mem.vo.business.biz.model.vo.BasicCommonVo;
 import com.mem.vo.business.biz.model.vo.performance.BasicPlaceRequest;
 import com.mem.vo.business.biz.model.vo.performance.BasicPlaceVo;
@@ -45,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class BasicPlaceController {
     @Resource
-    private OrganizerPlaceService organizerPlaceService;
+    private PlaceArtistService placeArtistService;
 
     @Resource
     private BasicPlaceService basicPlaceService;
@@ -122,9 +119,17 @@ public class BasicPlaceController {
                     if (StringUtils.isNotBlank(commonVo.getThreeAddress())) {
                         commonVo.setThreeAddressName(basicAddressService.findNameByCode(commonVo.getThreeAddress()));
                     }
-                    System.out.println(commonVo.getArtistId());
-                    if (commonVo.getArtistId()!=null) {
-                        commonVo.setArtistNmae(basicArtistService.findById(commonVo.getArtistId().longValue()).getArtistName());
+                    List<String> artistList = placeArtistService.findByPlaceId(item.getId());
+                    System.out.println(1);
+//                    System.out.println(commonVo.getArtistId());
+//                    if (commonVo.getArtistId()!=null) {
+//                        commonVo.setArtistNmae(basicArtistService.findById(commonVo.getArtistId().longValue()).getArtistName());
+//                    }
+                    if (!artistList.isEmpty()) {
+                        List<PlaceArtistVO> list = basicArtistService.findByIdList(artistList);
+                        System.out.println(2);
+                        commonVo.setArtistList(list);
+                        System.out.println(3);
                     }
                     resList.add(commonVo);
                 });
@@ -153,6 +158,9 @@ public class BasicPlaceController {
     @PostMapping("/place/addOrUpdatePlace")
     public ResponseDto<Boolean> addPlace(String str, Integer optionType, String list) {
         ResponseDto<Boolean> responseDto = ResponseDto.successDto();
+        System.out.println(str);
+        System.out.println(optionType);
+        System.out.println(list);
 
         try {
             if (str == null && "".equals(str)) {
@@ -197,6 +205,9 @@ public class BasicPlaceController {
             List<BasicPlace> list = basicPlaceService.findByCondition(query);
             BizAssert.notEmpty(list, BizCode.BIZ_1013.getMessage());
             BasicPlaceVo vo = getBasicPlaceVo(list.get(0));
+            List<String> artistIdList = placeArtistService.findByPlaceId(list.get(0).getId());
+            List<PlaceArtistVO> artistList = basicArtistService.findByIdList(artistIdList);
+            vo.setArtistList(artistList);
             return responseDto.successData(vo);
 
         } catch (BizException e) {
@@ -223,9 +234,9 @@ public class BasicPlaceController {
             List<BasicPlace> list = basicPlaceService.findByCondition(query);
             BizAssert.notEmpty(list, BizCode.BIZ_1013.getMessage());
 
-            List<BasicPlaceVo> basicPlaceVos = list.stream().map(item -> {
-                return getBasicPlaceVo(item);
-            }).collect(Collectors.toList());
+            List<BasicPlaceVo> basicPlaceVos = list.stream().map(item ->
+                getBasicPlaceVo(item)
+            ).collect(Collectors.toList());
 
             return responseDto.successData(basicPlaceVos);
 

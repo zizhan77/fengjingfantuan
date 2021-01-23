@@ -63,7 +63,7 @@ public interface PrizeDao {
 
     int rollBackStoreById(Integer paramInteger);
 
-    ActivityVO gettotalandgived(Long paramLong);
+    ActivityVO gettotalandgived(Long id);
 
-    int insertforprize(Prize paramPrize);
+    int insertforprize(Prize prize);
 }

@@ -77,7 +77,7 @@ public class BannerController {
             bannerQuery.setEnable(1);
             bannerQuery.setAllPlace(0);
             List<Banner> banners = bannerService.findByCondition(bannerQuery);
-            if(CollectionUtils.isEmpty(banners)){
+            if (CollectionUtils.isEmpty(banners)) {
                 bannerQuery.setAllPlace(1);
                 bannerQuery.setOneAddress(null);
                 bannerQuery.setTwoAddress(null);
@@ -111,7 +111,7 @@ public class BannerController {
 
     @PostMapping("/queryOpeningPage")
     @CommonExHandler(key = "查询开屏页轮播图")
-    public ResponseDto<Page<Banner>> queryOpeningPage(Page page, BannerQuery query) {
+    public ResponseDto<Page<Banner>> queryOpeningPageByphone(Page page, BannerQuery query) {
 
         ResponseDto<Page<Banner>> responseDto = new ResponseDto<>();
         try {
@@ -134,7 +134,7 @@ public class BannerController {
     @PostMapping("/queryOpeningPage/forwx")
     @CommonExHandler(key = "查询开屏页轮播图（微信小程序端）")
     public ResponseDto<JSONObject> queryOpeningPage(@RequestHeader("token") String token, Page page,
-        BannerQuery query) {
+                                                    BannerQuery query) {
 
         JSONObject jsonObject = new JSONObject();
         ResponseDto<JSONObject> responseDto = new ResponseDto<>();
@@ -147,20 +147,20 @@ public class BannerController {
                 assembleAddress(banner);
             }
         }
-        jsonObject.put("total",banners.getTotal());
-        jsonObject.put("data",banners.getData());
+        jsonObject.put("total", banners.getTotal());
+        jsonObject.put("data", banners.getData());
 
         CommonLoginContext context = tokenService.getContextByken(token);
-        UserOperateQuery userOperateQuery  = new UserOperateQuery();
+        UserOperateQuery userOperateQuery = new UserOperateQuery();
         userOperateQuery.setUserId(context.getUserId());
         userOperateQuery.setStartDate(DateUtil.getToday());
         userOperateQuery.setType(UserOperateEnum.LOGIN.getCode());
-        List<UserOperate> operateList= userOperateService.findByCondition(userOperateQuery);
-        if(CollectionUtils.isNotEmpty(operateList)){
-            jsonObject.put("show",2);
+        List<UserOperate> operateList = userOperateService.findByCondition(userOperateQuery);
+        if (CollectionUtils.isNotEmpty(operateList)) {
+            jsonObject.put("show", 2);
 
-        }else{
-            jsonObject.put("show",1);
+        } else {
+            jsonObject.put("show", 1);
 
         }
         return responseDto.successData(jsonObject);
@@ -180,11 +180,11 @@ public class BannerController {
     public ResponseDto<Boolean> addOrUpdate(@RequestHeader("token") String token, BannerVo bannerVo,
                                             Integer optType) {
         ResponseDto<Boolean> responseDto = ResponseDto.successDto();
-        Banner banner = BeanCopyUtil.copyProperties(bannerVo,Banner.class);
+        Banner banner = BeanCopyUtil.copyProperties(bannerVo, Banner.class);
         if (VmOptionType.INSERT.getCode().equals(optType)) {
             bannerService.insert(banner);
         } else {
-            BizAssert.notNull(banner.getId(),"id为空");
+            BizAssert.notNull(banner.getId(), "id为空");
             bannerService.updateById(banner);
         }
         return responseDto.successData(true);
@@ -212,6 +212,4 @@ public class BannerController {
             banner.setTwoAddressName(basicAddressService.findNameByCode(banner.getTwoAddress()));
         }
     }
-
-
 }

@@ -69,7 +69,7 @@ public class ExcelUtil {
             }
         }
     }
-    
+
     /**
      * 根据文件后缀名类型获取对应的工作簿对象
      * @param inputStream 读取文件的输入流
@@ -145,36 +145,60 @@ public class ExcelUtil {
             Sheet sheet = workbook.getSheetAt(sheetNum);
 
             // 校验sheet是否合法
-            if (sheet == null) {
-                continue;
-            }
+//            if (sheet == null) {
+//                continue;
+//            }
+//
+//            // 获取第一行数据
+//            int firstRowNum = sheet.getFirstRowNum();
+//            Row firstRow = sheet.getRow(firstRowNum);
+//            if (null == firstRow) {
+//                log.error("解析Excel失败，在第一行没有读取到任何数据！");
+//            }
+//
+//            // 解析每一行的数据，构造数据对象
+//            int rowStart = firstRowNum + 1;
+//            int rowEnd = sheet.getPhysicalNumberOfRows();
+//            for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+//                Row row = sheet.getRow(rowNum);
+//
+//                if (null == row) {
+//                    continue;
+//                }
+//
+//                ExcelDataVO resultData = convertRowToData(row);
+//                if (null == resultData) {
+//                    log.error("第 " + row.getRowNum() + "行数据不合法，已忽略！");
+//                    continue;
+//                }
+//                resultDataList.add(resultData);
+//            }
+            if (sheet != null) {
 
-            // 获取第一行数据
-            int firstRowNum = sheet.getFirstRowNum();
-            Row firstRow = sheet.getRow(firstRowNum);
-            if (null == firstRow) {
-                log.error("解析Excel失败，在第一行没有读取到任何数据！");
-            }
-
-            // 解析每一行的数据，构造数据对象
-            int rowStart = firstRowNum + 1;
-            int rowEnd = sheet.getPhysicalNumberOfRows();
-            for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
-                Row row = sheet.getRow(rowNum);
-
-                if (null == row) {
-                    continue;
+                int firstRowNum = sheet.getFirstRowNum();
+                Row firstRow = sheet.getRow(firstRowNum);
+                if (null == firstRow) {
+                    log.error("解析Excel失败，在第一行没有读取到任何数据！");
                 }
 
-                ExcelDataVO resultData = convertRowToData(row);
-                if (null == resultData) {
-                    log.error("第 " + row.getRowNum() + "行数据不合法，已忽略！");
-                    continue;
+
+                int rowStart = firstRowNum;
+                int rowEnd = sheet.getPhysicalNumberOfRows();
+                for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+                    Row row = sheet.getRow(rowNum);
+
+                    if (null != row) {
+                        ExcelDataVO resultData = convertRowToData(row);
+                        if (null == resultData){
+                            log.error("第 " + row.getRowNum() + "行数据不合法，已忽略！");
+                        } else{
+
+                            resultDataList.add(resultData);
+                        }
+                    }
                 }
-                resultDataList.add(resultData);
             }
         }
-
         return resultDataList;
     }
 

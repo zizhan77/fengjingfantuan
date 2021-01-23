@@ -133,7 +133,7 @@ public class BasicPlaceServiceImpl implements BasicPlaceService {
         String key = AppEnum.KEY.getCode();
         key = key.replace('-', '+').replace('_', '/');
         StringBuffer s = new StringBuffer(key);
-        s.append("&").append("app_id=500687204");
+        s.append("&").append("app_id=" + AppEnum.App_id.getCode());
         s.append("&").append("end_time="+endTime);
         s.append("&").append("start_time="+startTime);
         s.append("&").append("timestamp=" + time);

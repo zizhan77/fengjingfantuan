@@ -29,7 +29,7 @@ public class ActivityCountServiceImpl implements ActivityCountService{
     @Override
     public void a() {
         for (int i = 0; i < 4000; i++) {
-            this.activitycountMapper.updateabcd();
+            activitycountMapper.updateabcd();
         }
     }
 
@@ -37,23 +37,23 @@ public class ActivityCountServiceImpl implements ActivityCountService{
     public String add(String token, String activityId) {
         BizAssert.notNull(token, BizCode.PARAM_NULL.getMessage());
         BizAssert.notNull(activityId, BizCode.PARAM_NULL.getMessage());
-        CommonLoginContext contextByken = this.tokenService.getContextByken(token);
+        CommonLoginContext contextByken = tokenService.getContextByken(token);
         Long userId = contextByken.getUserId();
         Activitycount activitycount = new Activitycount();
         activitycount.setActivityId(activityId);
         activitycount.setUserId(userId.toString());
         String nowStr = DateUtil.getNowStr();
         activitycount.setDate(nowStr);
-        List<Activitycount> list = this.activitycountMapper.selectBy(activitycount);
+        List<Activitycount> list = activitycountMapper.selectBy(activitycount);
         if (!list.isEmpty()) {
-            int a = this.activitycountMapper.update(activitycount);
+            int a = activitycountMapper.update(activitycount);
             if (a == 0) {
                 throw new BizException("增加统计失败次数");
             }
             return a + "";
         }
         activitycount.setCount("1");
-        int b = this.activitycountMapper.insert(activitycount);
+        int b = activitycountMapper.insert(activitycount);
         if (b == 0) {
             throw new BizException("正价统计记录失败");
         }
@@ -63,14 +63,14 @@ public class ActivityCountServiceImpl implements ActivityCountService{
     @Override
     public List<ActivitycountVO> query(String date, Activitycount activitycount) {
         BizAssert.notNull(date, BizCode.PARAM_NULL.getMessage());
-        List<ActivitycountVO> list = this.activitycountMapper.query(date, activitycount);
+        List<ActivitycountVO> list = activitycountMapper.query(date, activitycount);
         return list;
     }
 
     @Override
     public Page<ActivitycountVO> queryByName(Page<ActivitycountVO> page, String activityName) {
         BizAssert.notNull(activityName, BizCode.PARAM_NULL.getMessage());
-        List<ActivitycountVO> list = this.activitycountMapper.queryByName(page, activityName);
+        List<ActivitycountVO> list = activitycountMapper.queryByName(page, activityName);
         page.setData(list);
         return page;
     }

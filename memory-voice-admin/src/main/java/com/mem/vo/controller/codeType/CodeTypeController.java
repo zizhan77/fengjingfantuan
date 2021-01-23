@@ -40,7 +40,7 @@ public class CodeTypeController {
         ResponseDto<List<CodeType>> responseDto = ResponseDto.successDto();
         try {
             if (ids == null || "".equals(ids)) {
-                throw new BizException("");
+                throw new BizException("参数为空");
             }
             return responseDto.successData(codeTypeService.queryBySponsorId(ids));
         } catch (BizException e) {
@@ -57,7 +57,7 @@ public class CodeTypeController {
         ResponseDto<CodeType> responseDto = ResponseDto.successDto();
         try {
             if (id == null || "".equals(id)) {
-                throw new BizException("");
+                throw new BizException("参数为空");
             }
             return responseDto.successData(codeTypeService.queryById(Integer.valueOf(Integer.parseInt(id))));
         } catch (BizException e) {

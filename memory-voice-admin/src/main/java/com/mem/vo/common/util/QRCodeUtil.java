@@ -43,10 +43,15 @@ public class QRCodeUtil {
         int height = bitMatrix.getHeight();
         BufferedImage image = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                image.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000
+//                        : 0xFFFFFFFF);
+//            }
+//        }
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                image.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000
-                        : 0xFFFFFFFF);
+                image.setRGB(x, y, bitMatrix.get(x, y) ? -16777216 : -1);
             }
         }
         if (imgPath == null || "".equals(imgPath)) {
@@ -65,8 +70,9 @@ public class QRCodeUtil {
         resMatrix.clear();
         for (int i = 0; i < resWidth; i++) {
             for (int j = 0; j < resHeight; j++) {
-                if (matrix.get(i + rec[0], j + rec[1]))
+                if (matrix.get(i + rec[0], j + rec[1])) {
                     resMatrix.set(i, j);
+                }
             }
         }
         return resMatrix;

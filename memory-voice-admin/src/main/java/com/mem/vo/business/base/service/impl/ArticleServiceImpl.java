@@ -39,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (contextByken.getSourceCode().equals(SourceType.ORGENIZER.getCode())) {
             //主办方登录，就只查主办方的
             //contextByken.getUserId()
-            article.setOrganizerid(contextByken.getUserId().intValue());
+            article.setOrganizerid(Integer.valueOf(contextByken.getUserId().intValue()));
         }
         List<ArticleVO> list = articleMapper.selectBy(page, article);
         BizAssert.notEmpty(list, BizCode.BIZ_1102.getMessage());

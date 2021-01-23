@@ -109,22 +109,22 @@ public class WxLoginServiceImpl implements WxLoginService {
             response.setAccess_token(token);
             response.setAppId(wxLoginRequest.getJsAppid());
             return response;
-        }else{
-            String apiUrl =
-                    MessageFormat.format("https://api.weixin.qq.com/cgi-bin/token?appid={0}&secret={1}&grant_type={2}",
-                            wxLoginRequest.getJsAppid(), wxLoginRequest.getJsAppSecret(), "client_credential");
-            String resJson = HttpClientUtils.get(apiUrl);
-            log.info("调用wx接口获取AccessToken 的结果为：{}",resJson);
-            BizAssert.hasText(resJson, BizCode.FIELD_CHECK_ERROR.getMessage());
-            response = JsonUtil.fromJson(resJson, WxJsTokenResponse.class);
-            if(response.getAccess_token() != null){
-                redisUtils.setnx("access_token",response.getAccess_token(),response.getExpires_in());
-                response.setAppId(wxLoginRequest.getJsAppid());
-            }else{
-                throw new BizException(BizCode.FIELD_CHECK_ERROR.getMessage());
-            }
-            return response;
         }
+        String apiUrl =
+                MessageFormat.format("https://api.weixin.qq.com/cgi-bin/token?appid={0}&secret={1}&grant_type={2}",
+                        wxLoginRequest.getJsAppid(), wxLoginRequest.getJsAppSecret(), "client_credential");
+        String resJson = HttpClientUtils.get(apiUrl);
+        log.info("调用wx接口获取AccessToken 的结果为：{}", resJson);
+        BizAssert.hasText(resJson, BizCode.FIELD_CHECK_ERROR.getMessage());
+        response = JsonUtil.fromJson(resJson, WxJsTokenResponse.class);
+        if (response.getAccess_token() != null) {
+            redisUtils.setnx("access_token", response.getAccess_token(), response.getExpires_in());
+            response.setAppId(wxLoginRequest.getJsAppid());
+        } else {
+            throw new BizException(BizCode.FIELD_CHECK_ERROR.getMessage());
+        }
+        return response;
+
 
     }
 

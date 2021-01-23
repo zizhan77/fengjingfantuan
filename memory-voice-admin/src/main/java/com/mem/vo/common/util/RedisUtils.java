@@ -43,9 +43,8 @@ public class RedisUtils {
         if(StringUtils.isNotBlank(password)){
             return new JedisPool(jedisPoolConfig(), host,port,timeout,password);
 
-        }else{
-            return new JedisPool(jedisPoolConfig(), host,port);
         }
+        return new JedisPool(jedisPoolConfig(), host,port);
     }
 
     @PostConstruct
@@ -63,8 +62,9 @@ public class RedisUtils {
     }
 
     private void checkKey(String key) {
-        if (StringUtils.isEmpty(key))
+        if (StringUtils.isEmpty(key)) {
             throw new IllegalArgumentException(key);
+        }
     }
 
     public boolean set(String key, String value) {
@@ -116,8 +116,9 @@ public class RedisUtils {
             expires = checkParam(key, expires);
             if (field != null && field.size() > 0) {
                 jedis = getConnection();
-                if (jedis.hmset(key, field).equalsIgnoreCase("ok"))
-                    return jedis.expire(key, expires).longValue() == 1;
+                if (jedis.hmset(key, field).equalsIgnoreCase("ok")) {
+                    return (jedis.expire(key, expires).longValue() == 1);
+                }
             }
         } catch (Exception e) {
             logger.error("hmset redis error:", e);
@@ -133,8 +134,9 @@ public class RedisUtils {
             expires = checkParam(key, expires);
             jedis = getConnection();
             Long len = jedis.lpush(key, list.toArray(new String[list.size()]));
-            if (len == list.size())
+            if (len == list.size()) {
                 return jedis.expire(key, expires).longValue() == 1;
+            }
         } catch (Exception e) {
             logger.error("lpush redis error:", e);
         } finally {

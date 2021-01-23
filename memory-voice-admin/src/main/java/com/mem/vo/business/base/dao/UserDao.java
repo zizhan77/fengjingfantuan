@@ -70,10 +70,10 @@ public interface UserDao {
     int updateBySourceAndBizCode(@Param("phoneNumber")String phoneNumber,@Param("sourceCode")String sourceCode,@Param("bizCode")String bizCode,@Param("userName") String userName,@Param("gender") Integer gender, @Param("avatarurl") String avatarurl);
 
 
-    @Select({"SELECT CASE gender  WHEN 1 THEN '  WHEN 2 THEN '  WHEN 0 THEN ' END AS gender,COUNT(1) AS COUNT FROM USER  WHERE`source_name` = 'AND `is_delete` = 0  GROUP BY `gender` "})
+    @Select({"SELECT CASE gender  WHEN 1 THEN '男'  WHEN 2 THEN '女'  WHEN 0 THEN '待完善' END AS gender,COUNT(1) AS COUNT FROM user WHERE `source_name` = '微信小程序' AND `is_delete` = 0  GROUP BY `gender` "})
     List<MtaData> findGender();
 
-    @Select({"SELECT COUNT(1) FROM USER WHERE YEAR(CURDATE())-YEAR(`birthday`)  >= #{startTime}  AND YEAR(CURDATE())-YEAR(`birthday`)<= #{endTime}"})
+    @Select({"SELECT COUNT(1) FROM user WHERE YEAR(CURDATE())-YEAR(`birthday`)  >= #{startTime}  AND YEAR(CURDATE())-YEAR(`birthday`)<= #{endTime}"})
     String findAge(AgePo paramAgePo);
 
     @Update({"UPDATE user set integral = integral + #{code} where biz_code = #{userId}"})

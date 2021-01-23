@@ -76,8 +76,6 @@ public class AuthorityRoleController {
             if (CollectionUtils.isNotEmpty(list)) {
                 voList = list.stream().map(item -> {
                     AuthorityRoleVo vo = BeanCopyUtil.copyProperties(item, AuthorityRoleVo.class);
-
-
                     AuthorityRoleMenuRelQuery relQuery = new AuthorityRoleMenuRelQuery();
                     relQuery.setRoleId(item.getId());
                     List<AuthorityMenu> menuList = new ArrayList<AuthorityMenu>();

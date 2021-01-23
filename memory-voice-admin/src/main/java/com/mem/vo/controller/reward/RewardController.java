@@ -101,7 +101,7 @@ public class RewardController {
     @PostMapping({"/pc/downLoadExcel"})
     public String downLoadExcel(RewardQueryDto dto) {
         try {
-            this.rewardService.downLoadExcel(dto);
+            rewardService.downLoadExcel(dto);
         } catch (BizException e) {
             log.error("prized.downLoadExcel异常, 原因:{}", e.getMessage());
         } catch (Exception e) {
@@ -114,7 +114,7 @@ public class RewardController {
     public ResponseDto<PageBean<RewardVO>> queryListBy(@RequestHeader("token") String token, RewardQueryDto dto) {
         ResponseDto<PageBean<RewardVO>> responseDto = ResponseDto.successDto();
         try {
-            PageBean<RewardVO> page = this.rewardService.queryListBy(dto);
+            PageBean<RewardVO> page = rewardService.queryListBy(dto);
             return responseDto.successData(page);
         } catch (BizException e) {
             log.error("prized.queryListByCondition异常, 原因:{}", e.getMessage());

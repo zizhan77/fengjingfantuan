@@ -105,16 +105,19 @@ public class MyController {
         User user1 = userService.findById(userId);
         int row = userService.updateById(user);
         //只有完善才增加积分
-        if (row > 0 && user1 != null && StringUtils.isBlank(user1.getPhoneNumber()) && user1.getBirthday() == null && user1.getGender().equals(0)) {
-            //增加100积分
-            Reward reward = Reward.builder()
-                    .prizeType(PrizeEnum.INTEGRAL.getCode())
-                    .userId(Math.toIntExact(userId))
-                    .integralNum(PrizeEnum.DEFAULT_PRIZE.getCode())
-                    .activityId(ActivityEnum.ACTIVITY_USER_INFO.getCode())
-                    .prizeName(ActivityEnum.ACTIVITY_USER_INFO.getName() + "获得100积分")
-                    .build();
-            rewardService.insert(reward);
+        if (user1 != null && user1.getOverdata().toString().equals("0")) {
+            if (row > 0 && user1 != null && user1.getBirthday() != null && user1.getGender() != null && user.getIsaddress() != null && user.getIsaddress().toString().equals("1")) {
+//            if (row > 0 && user1 != null && StringUtils.isBlank(user1.getPhoneNumber()) && user1.getBirthday() == null && user1.getGender().equals(0)){
+                //增加100积分
+                Reward reward = Reward.builder()
+                        .prizeType(PrizeEnum.INTEGRAL.getCode())
+                        .userId(Math.toIntExact(userId))
+                        .integralNum(PrizeEnum.DEFAULT_PRIZE.getCode())
+                        .activityId(ActivityEnum.ACTIVITY_USER_INFO.getCode())
+                        .prizeName(ActivityEnum.ACTIVITY_USER_INFO.getName() + "获得100积分")
+                        .build();
+                rewardService.insert(reward);
+            }
         }
         return responseDto.successData(userService.updateById(user));
     }

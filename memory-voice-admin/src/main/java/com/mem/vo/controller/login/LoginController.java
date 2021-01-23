@@ -30,6 +30,7 @@ import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author litongwei
@@ -41,6 +42,10 @@ import java.util.List;
 @RequestMapping("/login")
 @Slf4j
 public class LoginController {
+
+    @Autowired
+    private SponsorService sponsorService;
+
     @Autowired
     private OrganizerService organizerService;
 
@@ -100,12 +105,12 @@ public class LoginController {
             if (CollectionUtils.isEmpty(users)) {
                 list.add("1");
             } else {
-                BizAssert.notNull(((User)users.get(0)).getStatus(), "用户状态不存在");
-                        BizAssert.notNull(((User)users.get(0)).getIsDelete(), "用户状态不存在");
-                if (((User)users.get(0)).getStatus().equals(EnableStatus.ON.getCode()) && ((User)users.get(0)).getIsDelete().equals(Integer.valueOf(0))) {
+                BizAssert.notNull(users.get(0).getStatus(), "用户状态不存在");
+                BizAssert.notNull(users.get(0).getIsDelete(), "用户状态不存在");
+                if (users.get(0).getStatus().equals(EnableStatus.ON.getCode()) && users.get(0).getIsDelete().equals(Integer.valueOf(0))) {
                     User userInfo = users.get(0);
                     list.add("0");
-                    token = this.wxLoginService.getToken(wxRpcContext, false, userInfo.getId());
+                    token = wxLoginService.getToken(wxRpcContext, false, userInfo.getId());
                     list.add(token);
                 } else {
                     throw new BizException("此用户已经被锁定或者被删除");
@@ -240,24 +245,49 @@ public class LoginController {
             CommonLoginContext context = tokenService.getContextByken(token);
             BizAssert.notNull(context, "查询token信息为空");
             BizAssert.notNull(context.getUserId(), "token 保存  userid 为空");
-            User user = userService.findById(Long.valueOf(context.getUserId()));
-            jsonObject.put("user", user);
+//            User user = userService.findById(Long.valueOf(context.getUserId()));
+//            jsonObject.put("user", user);
+//
+//            AuthorityRole role = authorityRoleService.findById(Long.valueOf(user.getRole()));
+//            jsonObject.put("role", role);
+//
+//            AuthorityRoleMenuRelQuery query = new AuthorityRoleMenuRelQuery();
+//            query.setRoleId(Long.valueOf(user.getRole()));
+//            List<AuthorityRoleMenuRel> relList = authorityRoleMenuRelService.findByCondition(query);
+//            List<AuthorityMenu> menuList = new ArrayList<>();
+            if (context.getUser() != null) {
+                User user = userService.findById(Long.valueOf(context.getUserId()));
+                jsonObject.put("user", user);
 
-            AuthorityRole role = authorityRoleService.findById(Long.valueOf(user.getRole()));
-            jsonObject.put("role", role);
+                AuthorityRole role = authorityRoleService.findById(Long.valueOf(user.getRole()));
+                jsonObject.put("role", role);
 
-            AuthorityRoleMenuRelQuery query = new AuthorityRoleMenuRelQuery();
-            query.setRoleId(Long.valueOf(user.getRole()));
-            List<AuthorityRoleMenuRel> relList = authorityRoleMenuRelService.findByCondition(query);
-            List<AuthorityMenu> menuList = new ArrayList<>();
-            if (CollectionUtils.isNotEmpty(relList)) {
-                for (AuthorityRoleMenuRel authorityRoleMenuRel : relList) {
+                AuthorityRoleMenuRelQuery query = new AuthorityRoleMenuRelQuery();
+                query.setRoleId(Long.valueOf(user.getRole()));
 
-                    AuthorityMenu menu = authorityMenuService.findById(Long.valueOf(authorityRoleMenuRel.getMenuId()));
-                    menuList.add(menu);
+                List<AuthorityRoleMenuRel> relList = authorityRoleMenuRelService.findByCondition(query);
+                List<AuthorityMenu> menuList = new ArrayList<>();
+
+                if (CollectionUtils.isNotEmpty(relList)) {
+                    for (AuthorityRoleMenuRel authorityRoleMenuRel : relList) {
+
+                        AuthorityMenu menu = authorityMenuService.findById(Long.valueOf(authorityRoleMenuRel.getMenuId()));
+                        menuList.add(menu);
+                    }
                 }
+                jsonObject.put("menuList", menuList);
+
             }
-            jsonObject.put("menuList", menuList);
+
+            if (context.getOrganizer() != null) {
+                Organizer byId = organizerService.findById(context.getUserId());
+                jsonObject.put("user", byId);
+            }
+
+            if (context.getSponsor() != null) {
+                Sponsor byId = sponsorService.findById(context.getUserId());
+                jsonObject.put("user", byId);
+            }
 
             return responseDto.successData(jsonObject);
 
@@ -285,6 +315,7 @@ public class LoginController {
         BizAssert.notEmpty(userList, "请联系管理员！当前用户不是赞助商兑换端用户，或者未在我方小程序注册！");
         BizAssert.notNull(userList.get(0).getStatus(), "用户状态不存在");
         BizAssert.isTrue(EnableStatus.ON.getCode().equals(userList.get(0).getStatus()), "用户被冻结，请联系运营");
+        BizAssert.notNull(userList.get(0).getIsDelete(), "用户不存在");
         return responseDto.successData(smsService.sendSms(StringUtils.trim(phoneNumber)));
     }
 
@@ -379,6 +410,10 @@ public class LoginController {
             String validateStr = ValidateUtil.getValidateStr(organizerLoginRequest);
             BizAssert.isBlank(validateStr, validateStr);
             Organizer organizer = organizerLoginService.checkPasswd(organizerLoginRequest);
+            BizAssert.notNull(organizer, "用户状态不存在");
+            BizAssert.notNull(Integer.valueOf(organizer.getStatus()), "用户状态不存在");
+            BizAssert.isTrue(EnableStatus.ON.getCode().equals(Integer.valueOf(organizer.getStatus())), "用户被冻结，请联系运营");
+            BizAssert.isTrue((organizer.getIsDelete() == 0), "用户已被删除");
             String token = organizerLoginService.getToken(organizerLoginRequest, organizer);
             return responseDto.successData(token);
 
