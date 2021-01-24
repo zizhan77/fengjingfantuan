@@ -19,22 +19,22 @@ public class ActivityRuleUrlServiceImpl implements ActivityRuleUrlService {
     @Override
     public ActivityRuleUrl updateById(ActivityRuleUrl activity) {
         if (activity.getId() != null && !"".equals(activity.getId())) {
-            int j = this.activityRuleUrlDao.updateById(activity.getId(), activity.getUrl());
+            int j = activityRuleUrlDao.updateById(activity.getId(), activity.getUrl());
             if (j == 0) {
-                throw new BizException("");
+                throw new BizException("修改活动规则图片异常");
             }
             return activity;
         }
         int i = this.activityRuleUrlDao.insert(activity.getUrl());
         if (i == 0) {
-            throw new BizException("");
+            throw new BizException("增加活动规则图片异常");
         }
         return activity;
     }
 
     @Override
     public List<ActivityRuleUrl> query() {
-        List<ActivityRuleUrl> list = this.activityRuleUrlDao.query();
+        List<ActivityRuleUrl> list = activityRuleUrlDao.query();
         BizAssert.notEmpty(list, BizCode.BIZ_1102.getMessage());
         return list;
     }

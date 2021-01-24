@@ -85,8 +85,8 @@ public class RankingServiceImpl implements RankingService{
 
     @Override
     public Integer add(String token, String id, String count) {
-        CommonLoginContext contextByken = this.tokenService.getContextByken(token);
-        User user = this.userService.findById(Long.valueOf(contextByken.getUserId().longValue()));
+        CommonLoginContext contextByken = tokenService.getContextByken(token);
+        User user = userService.findById(Long.valueOf(contextByken.getUserId().longValue()));
         System.out.println("投之前的饭团"+ user.getIntegral());
         Integer integral = user.getIntegral();
         if (integral.intValue() < Integer.parseInt(count)) {
@@ -96,7 +96,12 @@ public class RankingServiceImpl implements RankingService{
         if (i1 == 0) {
             throw new BizException("排行榜增加饭团操作失败");
         }
-        Integral in = Integral.builder().activityId(Integer.valueOf(Integer.parseInt(id))).integralQty(Integer.valueOf(0 - Integer.parseInt(count))).type(IntegralEnum.TYPE_USE.getCode()).userId(Integer.valueOf(contextByken.getUserId().intValue())).activityName("投饭团").build();
+        Integral in = Integral.builder()
+                .activityId(Integer.valueOf(Integer.parseInt(id)))
+                .integralQty(Integer.valueOf(0 - Integer.parseInt(count)))
+                .type(IntegralEnum.TYPE_USE.getCode())
+                .userId(Integer.valueOf(contextByken.getUserId().intValue()))
+                .activityName("投饭团").build();
         int insert = this.integralService.insert(in);
         if (insert == 0) {
             throw new BizException("饭团操作记录写入失败");
@@ -144,9 +149,9 @@ public class RankingServiceImpl implements RankingService{
 
     @Override
     public Ranking queryRankingDetail(Long id) {
-        Ranking r = this.rankingDao.queryRankingDetail(id);
+        Ranking r = rankingDao.queryRankingDetail(id);
         if (r != null) {
-            Integer sort = this.activityDao.querySort(r.getId());
+            Integer sort = activityDao.querySort(r.getId());
             if (sort != null) {
                 r.setSort(sort);
             }
@@ -156,14 +161,14 @@ public class RankingServiceImpl implements RankingService{
 
     @Override
     public PageBean<User> queryUserByRanking(Integer pageNo, Integer pageSize, Long id) {
-        int Commod = this.rankingDao.queryUserByRankingCount(id);
+        int Commod = rankingDao.queryUserByRankingCount(id);
         PageBean<User> pager = new PageBean();
         pager.setPageSize(pageSize);
         pager.setRows(Integer.valueOf(Commod));
         pager.setPageNo(pageNo);
         int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
         pager.setStart(Integer.valueOf(first));
-        List<User> list = this.rankingDao.queryUserByRanking(pager, id);
+        List<User> list = rankingDao.queryUserByRanking(pager, id);
         pager.setLists(list);
         return pager;
     }
@@ -197,12 +202,12 @@ public class RankingServiceImpl implements RankingService{
 
     @Override
     public User getrankingMoneytouser(String token, Long id) {
-        CommonLoginContext contextByken = this.tokenService.getContextByken(token);
-        User byId = this.userService.findById(contextByken.getUserId());
-        Integer count = this.rankingDao.getCountByActivityintegrey(contextByken.getUserId(), id);
+        CommonLoginContext contextByken = tokenService.getContextByken(token);
+        User byId = userService.findById(contextByken.getUserId());
+        Integer count = rankingDao.getCountByActivityintegrey(contextByken.getUserId(), id);
         if (count != null) {
             byId.setRankintegral(count);
-            Integer sort = this.rankingDao.getCountByActivityintegreySort(contextByken.getUserId(), id);
+            Integer sort = rankingDao.getCountByActivityintegreySort(contextByken.getUserId(), id);
             byId.setSort(Integer.valueOf((sort == null) ? 0 : sort.intValue()));
         } else {
             byId.setRankintegral(Integer.valueOf(0));
@@ -224,7 +229,12 @@ public class RankingServiceImpl implements RankingService{
         if (i1 == 0) {
             throw new BizException("排行榜增加饭团失败");
         }
-        Integral in = Integral.builder().activityId(Integer.valueOf(Integer.parseInt(id))).integralQty(Integer.valueOf(0 - Integer.parseInt(count))).type(IntegralEnum.TYPE_USE.getCode()).userId(Integer.valueOf(contextByken.getUserId().intValue())).activityName("投饭团").build();
+        Integral in = Integral.builder()
+                .activityId(Integer.valueOf(Integer.parseInt(id)))
+                .integralQty(Integer.valueOf(0 - Integer.parseInt(count)))
+                .type(IntegralEnum.TYPE_USE.getCode())
+                .userId(Integer.valueOf(contextByken.getUserId().intValue()))
+                .activityName("投饭团").build();
         int insert = this.integralService.insert(in);
         if (insert == 0) {
             throw new BizException("饭团操作记录写入失败");

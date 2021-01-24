@@ -15,7 +15,6 @@ public class OrganizerLoginRequest {
      * 用户名
      */
     @NotBlank(message = "用户名为空")
-
     String phone;
 
     /**

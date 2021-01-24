@@ -179,7 +179,7 @@ public class PrizeServiceImpl implements PrizeService {
         }
         activityUserService.updateLotteryQtyReduceById(activityUsers.get(0).getId().longValue());
         PrizeQuery query = PrizeQuery.builder().activityId(activityId).build();
-        List<Prize> prizeList = this.prizeDao.findByCondition(query);
+        List<Prize> prizeList = prizeDao.findByCondition(query);
         prizeList.sort(Comparator.comparingInt(Prize::getPrizeType));
         if (CollectionUtils.isEmpty(prizeList)) {
             return defaultPrize(commonLoginContext.getUser(), activityId);
@@ -193,12 +193,12 @@ public class PrizeServiceImpl implements PrizeService {
         List<Reward> currentMonthList = rewardService.findByConditionAndDate(rewardQuery);
         List<Reward> currentDayTicketList = Lists.newArrayList();
         for (Reward reward : currentMonthList) {
-            PrizeD prizeD = this.prizeDService.findById(Long.valueOf((reward.getPrizeId() == null) ? 0L : reward.getPrizeId().intValue()));
+            PrizeD prizeD = prizeDService.findById(Long.valueOf((reward.getPrizeId() == null) ? 0L : reward.getPrizeId().intValue()));
             if (Objects.isNull(prizeD) || Objects.isNull(prizeD.getPrizeId())) {
                 continue;
             }
             if (PrizeEnum.coupon.getCode().equals(reward.getPrizeType())) {
-                Prize p = this.prizeService.findById(Long.valueOf(prizeD.getPrizeId().intValue()));
+                Prize p = prizeService.findById(Long.valueOf(prizeD.getPrizeId().intValue()));
                 if (Objects.nonNull(p) && Objects.nonNull(p.getCodeType()) && prize.getCodeType().equals(p.getCodeType()) && reward.getUserId().equals(Integer.valueOf(commonLoginContext.getUserId().intValue()))) {
                     return defaultPrize(commonLoginContext.getUser(), activityId);
                 }
@@ -322,11 +322,12 @@ public class PrizeServiceImpl implements PrizeService {
                 Calendar ca = Calendar.getInstance();
                 ca.set(5, ca.getActualMaximum(5));
                 String last = format.format(ca.getTime());
-                List<Reward> usergetTicket = this.rewardDao.getUserForTickrt(commonLoginContext.getUserId(), first, last, PrizeEnum.TICKET.getCode());
-                if (usergetTicket != null && usergetTicket.size() > 0)
+                List<Reward> usergetTicket = rewardDao.getUserForTickrt(commonLoginContext.getUserId(), first, last, PrizeEnum.TICKET.getCode());
+                if (usergetTicket != null && usergetTicket.size() > 0) {
                     return defaultPrize(commonLoginContext.getUser(), activityId);
+                }
                 prizeD.setIsChange(PrizeEnum.YES_CHANGE.getCode());
-                this.prizeDService.updateById(prizeD);
+                prizeDService.updateById(prizeD);
                 prizeD.setMiniType(prize.getMiniType());
                 prizeD.setStatus(Integer.valueOf(0));
                 currentRewardId = insertReward(activityId, commonLoginContext, prizeD);
@@ -339,21 +340,22 @@ public class PrizeServiceImpl implements PrizeService {
                 Calendar ca = Calendar.getInstance();
                 ca.set(5, ca.getActualMaximum(5));
                 String last = format.format(ca.getTime());
-                List<Reward> usergetTicket = this.rewardDao.getUserForTickrt(commonLoginContext.getUserId(), first, last, PrizeEnum.MATERIAL.getCode());
-                if (usergetTicket != null && usergetTicket.size() > 0)
+                List<Reward> usergetTicket = rewardDao.getUserForTickrt(commonLoginContext.getUserId(), first, last, PrizeEnum.MATERIAL.getCode());
+                if (usergetTicket != null && usergetTicket.size() > 0) {
                     return defaultPrize(commonLoginContext.getUser(), activityId);
+                }
                 prizeD.setIsChange(PrizeEnum.YES_CHANGE.getCode());
-                this.prizeDService.updateById(prizeD);
+                prizeDService.updateById(prizeD);
                 prizeD.setMiniType(prize.getMiniType());
-                prizeD.setStatus(Integer.valueOf(0));
+                prizeD.setStatus(0);
                 currentRewardId = insertReward(activityId, commonLoginContext, prizeD);
             } else {
                 prizeD.setIsChange(PrizeEnum.YES_CHANGE.getCode());
-                this.prizeDService.updateById(prizeD);
+                prizeDService.updateById(prizeD);
                 prizeD.setMiniType(prize.getMiniType());
                 currentRewardId = insertReward(activityId, commonLoginContext, prizeD);
             }
-            Prize byId1 = this.prizeService.findById(Long.valueOf(prizeD.getPrizeId().longValue()));
+            Prize byId1 = prizeService.findById(Long.valueOf(prizeD.getPrizeId().longValue()));
             decreasePrizeNum(byId1);
             System.out.println("中的奖品"+ prizeD);
                     prizeD.setPrizeId(currentRewardId);
@@ -365,8 +367,12 @@ public class PrizeServiceImpl implements PrizeService {
     @Override
     public int rollBackStoreById(Integer prizeId) {
         Prize prize = findById(Long.valueOf(prizeId.longValue()));
-        Prize updatePrize = Prize.builder().id(prize.getId()).givedNum(Integer.valueOf(prize.getGivedNum().intValue() - 1)).totalNum(Integer.valueOf(prize.getTotalNum().intValue() + 1)).build();
-        int i = this.prizeDao.updateById(updatePrize);
+        Prize updatePrize = Prize.builder()
+                .id(prize.getId())
+                .givedNum(Integer.valueOf(prize.getGivedNum().intValue() - 1))
+                .totalNum(Integer.valueOf(prize.getTotalNum().intValue() + 1))
+                .build();
+        int i = prizeDao.updateById(updatePrize);
         return i;
     }
 
@@ -389,20 +395,20 @@ public class PrizeServiceImpl implements PrizeService {
         for (int i = 1; i <= 20; i++) {
             boolean flag = true;
             for (Prize prize : byCondition) {
-                if (i == prize.getLevel().intValue())
+                if (i == prize.getLevel().intValue()) {
                     flag = false;
+                }
             }
-            if (flag &&
-                    list.size() > x) {
+            if (flag && list.size() > x) {
                 Prize po = new Prize();
-                po.setPrizeName(((CodeType)list.get(x)).getName());
+                po.setPrizeName(list.get(x).getName());
                 po.setProb(divide);
-                po.setPrizeType(Integer.valueOf(4));
-                po.setLevel(Integer.valueOf(i));
-                po.setPrizeIntro(((CodeType)list.get(x)).getDes());
+                po.setPrizeType(4);
+                po.setLevel(i);
+                po.setPrizeIntro(list.get(x).getDes());
                 po.setActivityId(activityId);
-                po.setTotalNum(Integer.valueOf(100));
-                po.setCodeType(((CodeType)list.get(x)).getId());
+                po.setTotalNum(100);
+                po.setCodeType(list.get(x).getId());
                 int id = prizeDao.insertforprize(po);
                 PrizeD prizeD = new PrizeD();
                 prizeD.setPrizeId(po.getId());
@@ -444,12 +450,20 @@ public class PrizeServiceImpl implements PrizeService {
      * @param integralPrizeD
      */
     private void integralProcess(CommonLoginContext commonLoginContext, PrizeD integralPrizeD) {
+//        Reward reward = Reward.builder()
+//                .prizeId(integralPrizeD.getId())
+//                .userId(commonLoginContext.getUserId().intValue())
+//                .activityId(Math.toIntExact(integralPrizeD.getActivityId()))
+//                .prizeType(PrizeEnum.INTEGRAL.getCode())
+//                .prizeName(integralPrizeD.getName())
+//                .integralNum(integralPrizeD.getIntegralQty())
+//                .build();
         Reward reward = Reward.builder()
                 .prizeId(integralPrizeD.getId())
-                .userId(commonLoginContext.getUserId().intValue())
-                .activityId(Math.toIntExact(integralPrizeD.getActivityId()))
+                .userId(Integer.valueOf(commonLoginContext.getUserId().intValue()))
+                .activityId(Integer.valueOf(Math.toIntExact(integralPrizeD.getActivityId().longValue())))
                 .prizeType(PrizeEnum.INTEGRAL.getCode())
-                .prizeName(integralPrizeD.getName())
+                .prizeName(integralPrizeD.getIntegralQty() + "个饭团")
                 .integralNum(integralPrizeD.getIntegralQty())
                 .build();
         rewardService.insert(reward);
@@ -460,14 +474,21 @@ public class PrizeServiceImpl implements PrizeService {
      * @return 默认奖
      */
     private PrizeD defaultPrize(User user, Long activityId) {
+//        Reward reward = Reward.builder()
+//                .prizeId(0)
+//                .userId(Math.toIntExact(user.getId()))
+//                .activityId(Math.toIntExact(activityId))
+//                .prizeType(PrizeEnum.INTEGRAL.getCode())
+//                .prizeName("积分")
+//                .integralNum(PrizeEnum.DEFAULT_PRIZE.getCode())
+//                .build();
         Reward reward = Reward.builder()
-                .prizeId(0)
-                .userId(Math.toIntExact(user.getId()))
-                .activityId(Math.toIntExact(activityId))
+                .prizeId(Integer.valueOf(0))
+                .userId(Integer.valueOf(Math.toIntExact(user.getId().longValue())))
+                .activityId(Integer.valueOf(Math.toIntExact(activityId.longValue())))
                 .prizeType(PrizeEnum.INTEGRAL.getCode())
-                .prizeName("积分")
-                .integralNum(PrizeEnum.DEFAULT_PRIZE.getCode())
-                .build();
+                .prizeName(PrizeEnum.DEFAULT_PRIZE.getCode() + "个饭团")
+                .integralNum(PrizeEnum.DEFAULT_PRIZE.getCode()).build();
         rewardService.insert(reward);
         return PrizeD.builder().integralQty(PrizeEnum.DEFAULT_PRIZE.getCode()).prizeType(PrizeEnum.INTEGRAL.getCode()).name("积分奖励").build();
     }
@@ -486,11 +507,30 @@ public class PrizeServiceImpl implements PrizeService {
     }
 
     private Integer insertReward(Long activityId, CommonLoginContext commonLoginContext, PrizeD prizeD2) {
-        Reward reward = Reward.builder().prizeId(prizeD2.getId()).userId(Integer.valueOf(commonLoginContext.getUserId().intValue())).prizeType(prizeD2.getPrizeType()).prizeName(prizeD2.getPrizeName()).activityId(Integer.valueOf(Math.toIntExact(activityId.longValue()))).miniType(prizeD2.getMiniType()).keyId(prizeD2.getKeyId()).rewardDescription(prizeD2.getPrizeIntro()).prizedId(prizeD2.getId()).build();
+//        Reward reward = Reward.builder()
+//                .prizeId(prizeD2.getId())
+//                .userId(Integer.valueOf(commonLoginContext.getUserId().intValue()))
+//                .prizeType(prizeD2.getPrizeType())
+//                .prizeName(prizeD2.getPrizeName())
+//                .activityId(Integer.valueOf(Math.toIntExact(activityId.longValue())))
+//                .miniType(prizeD2.getMiniType())
+//                .keyId(prizeD2.getKeyId())
+//                .rewardDescription(prizeD2.getPrizeIntro())
+//                .prizedId(prizeD2.getId()).build();
+        Reward reward = Reward.builder()
+                .prizeId(prizeD2.getId())
+                .userId(Integer.valueOf(commonLoginContext.getUserId().intValue()))
+                .prizeType(prizeD2.getPrizeType())
+                .prizeName(prizeD2.getPrizeName())
+                .activityId(Integer.valueOf(Math.toIntExact(activityId.longValue())))
+                .miniType(prizeD2.getMiniType()).keyId(prizeD2.getKeyId())
+                .rewardDescription(prizeD2.getPrizeIntro())
+                .prizedId(prizeD2.getId())
+                .build();
         if (prizeD2.getStatus() != null) {
             reward.setStatus(prizeD2.getStatus());
         }
-        this.rewardService.insert(reward);
+        rewardService.insert(reward);
         return reward.getId();
     }
 }

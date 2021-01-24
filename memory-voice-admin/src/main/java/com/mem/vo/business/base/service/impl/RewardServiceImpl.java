@@ -80,13 +80,18 @@ public class RewardServiceImpl implements RewardService {
             if (prizeD.getActivityId().equals(ActivityEnum.ACTIVITY_USER_INFO.getCode())) {
                 activityName = ActivityEnum.ACTIVITY_USER_INFO.getName();
             } else {
-                Activity activity = this.activityService.findById(Long.valueOf(prizeD.getActivityId().intValue()));
+                Activity activity = activityService.findById(Long.valueOf(prizeD.getActivityId().intValue()));
                 activityName = (activity == null) ? "" : activity.getActivityTitle();
             }
-            Integral integralQuery = Integral.builder().userId(prizeD.getUserId()).integralQty(prizeD.getIntegralNum()).activityId(prizeD.getActivityId()).activityName(activityName).type(Integer.valueOf(0)).build();
-            this.integralService.insert(integralQuery);
+            Integral integralQuery = Integral.builder()
+                    .userId(prizeD.getUserId())
+                    .integralQty(prizeD.getIntegralNum())
+                    .activityId(prizeD.getActivityId())
+                    .activityName(activityName)
+                    .type(Integer.valueOf(0)).build();
+            integralService.insert(integralQuery);
         }
-        return this.rewardDao.insert(prizeD);
+        return rewardDao.insert(prizeD);
     }
 
     @Override
@@ -161,14 +166,14 @@ public class RewardServiceImpl implements RewardService {
 
     @Override
     public PageBean<RewardVO> queryListBy(RewardQueryDto dto) {
-        int Commod = this.rewardDao.queryListByCount(dto);
+        int Commod = rewardDao.queryListByCount(dto);
         PageBean<RewardVO> pager = new PageBean();
         pager.setPageSize(Integer.valueOf((dto.getPageSize() == null) ? 15 : dto.getPageSize().intValue()));
         pager.setRows(Integer.valueOf(Commod));
         pager.setPageNo(Integer.valueOf((dto.getPage() == null) ? 1 : dto.getPage().intValue()));
         int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
         pager.setStart(Integer.valueOf(first));
-        List<RewardVO> list = this.rewardDao.queryListBy(pager, dto);
+        List<RewardVO> list = rewardDao.queryListBy(pager, dto);
         pager.setLists(list);
         return pager;
     }
@@ -180,7 +185,7 @@ public class RewardServiceImpl implements RewardService {
         try {
             pager.setStart(Integer.valueOf(0));
             pager.setPageSize(Integer.valueOf(500));
-            List<RewardVO> list = this.rewardDao.queryListBy(pager, dto);
+            List<RewardVO> list = rewardDao.queryListBy(pager, dto);
             String[] strArray = {
                     "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",
                     "1", "1", "1", "1", "1", "1", "1" };
@@ -224,7 +229,7 @@ public class RewardServiceImpl implements RewardService {
 
     @Override
     public PageBean<RewardVO> queryListByUser(Long userId, Integer flag, Integer pageNo, Integer pageSize) throws Exception {
-        int Commod = this.rewardDao.queryListByUserCount(userId, flag);
+        int Commod = rewardDao.queryListByUserCount(userId, flag);
         PageBean<RewardVO> pager = new PageBean();
         pager.setPageSize(Integer.valueOf((pageSize == null) ? 15 : pageSize.intValue()));
         pager.setRows(Integer.valueOf(Commod));
@@ -233,7 +238,7 @@ public class RewardServiceImpl implements RewardService {
         pager.setStart(Integer.valueOf(first));
         List<RewardVO> list = new ArrayList<>();
         if (flag.toString().equals("1") || flag.toString().equals("2")) {
-            list = this.rewardDao.queryListByUser(pager, userId, flag);
+            list = rewardDao.queryListByUser(pager, userId, flag);
             for (RewardVO r : list) {
                 if (r.getStatus().equals("0")) {
                     String nowStrFile = DateUtil.getNowStrLong();
@@ -248,7 +253,7 @@ public class RewardServiceImpl implements RewardService {
                 }
             }
         } else {
-            list = this.rewardDao.queryYouhuiquan(pager, userId, flag);
+            list = rewardDao.queryYouhuiquan(pager, userId, flag);
         }
         pager.setLists(list);
         return pager;
@@ -278,7 +283,7 @@ public class RewardServiceImpl implements RewardService {
     }
 
     public IntegralRoleClass getSignInIntegralRole() {
-        List<IntegralRoleClass> list = this.rewardDao.integralRoleList(Integer.valueOf(2));
+        List<IntegralRoleClass> list = rewardDao.integralRoleList(Integer.valueOf(2));
         return list.get(0);
     }
 

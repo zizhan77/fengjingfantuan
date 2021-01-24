@@ -104,23 +104,23 @@ public class  PrizeDServiceImpl implements PrizeDService {
     @Override
     @Transactional
     public Integer giveUp(String prizedId) {
-        PrizeD prized = this.prizeDDao.findById(Long.valueOf(prizedId));
-        int i = this.rewardService.updateByPrizedId(prized.getId(), RewardEnum.STATUS_GIVEUP.getCode());
+        PrizeD prized = prizeDDao.findById(Long.valueOf(prizedId));
+        int i = rewardService.updateByPrizedId(prized.getId(), RewardEnum.STATUS_GIVEUP.getCode());
         if (i == 0) {
             throw new BizException("放弃奖品，修改中奖记录失败");
         }
         if (prized.getPrizeType().equals(PrizeEnum.coupon.getCode())) {
             Integer keyId = prized.getKeyId();
-            this.changeCodeService.updateById(keyId, IsDeleteEnum.YES.getCode());
+            changeCodeService.updateById(keyId, IsDeleteEnum.YES.getCode());
             prized.setKeyId(Integer.valueOf(-1));
         }
         prized.setIsChange(PrizeEnum.NO_CHANGE.getCode());
-        int i1 = this.prizeDDao.updateById(prized);
+        int i1 = prizeDDao.updateById(prized);
         if (i1 == 0) {
             throw new BizException("放弃奖品，修改奖品详情失败");
         }
         Integer prizeId = prized.getPrizeId();
-        int i2 = this.prizeService.rollBackStoreById(prizeId);
+        int i2 = prizeService.rollBackStoreById(prizeId);
         if (i2 == 0) {
             throw new BizException("放弃奖品，修改奖品库存失败");
         }

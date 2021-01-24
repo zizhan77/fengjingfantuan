@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
         HashMap<String, String> map = new HashMap<>();
         for (AgePo agePo : agePos) {
             String count = userDao.findAge(agePo);
-            map.put(agePo.getStartTime() + "到" + "+ agePo.getEndTime() + " + "岁", count);
+            map.put(agePo.getStartTime() + "到" + agePo.getEndTime() + "岁", count);
         }
         return map;
     }
@@ -156,11 +156,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User queryUserIdAndActvitity(Long userId) {
-        User user = this.userDao.findById(userId);
-        Integer count = this.userDao.getAdddessFlag(userId);
+        User user = userDao.findById(userId);
+        Integer count = userDao.getAdddessFlag(userId);
         user.setAddress(Integer.valueOf((count == null) ? 0 : count.intValue()));
-        Integer whocount = this.userDao.getUserWhoCount(userId);
-        Integer actcount = this.userDao.getUserActCount(user.getBizCode());
+        Integer whocount = userDao.getUserWhoCount(userId);
+        Integer actcount = userDao.getUserActCount(user.getBizCode());
         if (user != null) {
             user.setWhocount(Integer.valueOf((whocount == null) ? 0 : whocount.intValue()));
             user.setActcount(Integer.valueOf((actcount == null) ? 0 : actcount.intValue()));
@@ -184,18 +184,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageBean myRankingByUser(String token, Integer pageNo, Integer pageSize) {
-        CommonLoginContext contextByken = this.tokenService.getContextByken(token);
-        int Commod = this.userDao.myRankingByUserCount(contextByken.getUserId());
+        CommonLoginContext contextByken = tokenService.getContextByken(token);
+        int Commod = userDao.myRankingByUserCount(contextByken.getUserId());
         PageBean<Ranking> pager = new PageBean();
         pager.setPageSize(pageSize);
         pager.setRows(Integer.valueOf(Commod));
         pager.setPageNo(pageNo);
         int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
         pager.setStart(Integer.valueOf(first));
-        List<Ranking> list = this.userDao.myRankingByUser(pager, contextByken.getUserId());
+        List<Ranking> list = userDao.myRankingByUser(pager, contextByken.getUserId());
         int count = 0;
         for (Ranking r : list) {
-            String s = this.redisUtils.get(RedisPrefix.RANKING_USER + r.getId().toString());
+            String s = redisUtils.get(RedisPrefix.RANKING_USER + r.getId().toString());
             if (s != null && s.length() > 0) {
                 String[] split = s.split(",");
                 for (String string : split) {
@@ -213,14 +213,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer addintegral1(Long userId) {
-        User user = this.userDao.findById(userId);
+        User user = userDao.findById(userId);
         if (user != null && user.getIntegralflag().intValue() == 0) {
-            Integer count = this.rewardDao.getUserIntegralFlagCount();
+            Integer count = rewardDao.getUserIntegralFlagCount();
             if (count.intValue() > 0) {
-                Integer insertuser = this.userDao.insertIntegralPageage(count, 1, user.getId());
+                Integer insertuser = userDao.insertIntegralPageage(count, 1, user.getId());
                 if (insertuser != null && insertuser.intValue() > 0) {
-                    Integral in = Integral.builder().activityName("首次注册礼包").integralQty(Integer.valueOf(user.getIntegral().intValue() + count.intValue())).type(IntegralEnum.TYPE_GET.getCode()).userId(Integer.valueOf(user.getId().intValue())).build();
-                    int insert = this.integralDao.insert(in);
+                    Integral in = Integral.builder()
+                            .activityName("首次注册礼包")
+                            .integralQty(Integer.valueOf(user.getIntegral().intValue() + count.intValue()))
+                            .type(IntegralEnum.TYPE_GET.getCode())
+                            .userId(Integer.valueOf(user.getId().intValue()))
+                            .build();
+                    int insert = integralDao.insert(in);
                     if (insert == 0) {
                         throw new BizException("饭团操作记录写入失败");
                     }
@@ -237,10 +242,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserUpdatelottery> userUpdatelottery(UserUpdatelottery user) {
-        List<UserUpdatelottery> list = this.userDao.userUpdatelottery(user);
+        List<UserUpdatelottery> list = userDao.userUpdatelottery(user);
         for (UserUpdatelottery u : list) {
             u.setUsercode(user.getUsercode());
-            Integer count = this.userDao.getlotteryqtyByuserCode(u);
+            Integer count = userDao.getlotteryqtyByuserCode(u);
             if (count != null) {
                 u.setLotteryqty(count);
                 continue;
@@ -252,7 +257,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateByUserCodeForlottery(UserUpdatelottery user) {
-        Integer count = this.userDao.selectByCodeAndActid(user);
+        Integer count = userDao.selectByCodeAndActid(user);
         if (count != null && count.intValue() > 0) {
             this.userDao.updateByUserCodeForlottery(user);
         } else {

@@ -22,12 +22,12 @@ public class CodeTypeServiceImpl implements CodeTypeService {
     @Override
     public CodeType edit(CodeType codeType) {
         if (codeType.getId() != null && !"".equals(codeType.getId())) {
-            int i = this.codeTypeDao.update(codeType);
+            int i = codeTypeDao.update(codeType);
             if (i == 0) {
                 throw new BizException("修改失败");
             }
         } else {
-            int i = this.codeTypeDao.insert(codeType);
+            int i = codeTypeDao.insert(codeType);
             if (i == 0) {
                 throw new BizException("增加失败");
             }
@@ -47,7 +47,7 @@ public class CodeTypeServiceImpl implements CodeTypeService {
         for (String s : split) {
             strings.add(s);
         }
-        List<CodeType> codeTypes = this.codeTypeDao.queryBySponsorId(strings);
+        List<CodeType> codeTypes = codeTypeDao.queryBySponsorId(strings);
         BizAssert.notEmpty(codeTypes, BizCode.BIZ_1102.getMessage());
         return codeTypes;
     }

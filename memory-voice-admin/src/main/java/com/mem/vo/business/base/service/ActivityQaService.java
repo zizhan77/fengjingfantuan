@@ -44,9 +44,12 @@ public interface ActivityQaService {
     /**
     * 根据条件查询网络资源表
     * @param  query 查询网络资源表条件
+     * @param page
     * @return 返回查询的集合
     */
-    List<ActivityQa> findByCondition(ActivityQaQuery query);
+    Page<ActivityQa> findByCondition(ActivityQaQuery query, Page page);
+//    List<ActivityQa> findByCondition(ActivityQaQuery query);
+
 
     /**
     * 根据条件查询网络资源表

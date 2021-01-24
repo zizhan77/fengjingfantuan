@@ -110,8 +110,9 @@ public class SignInUserServiceImpl implements SignInUserService {
         String format1 = format.format(new Date());
         if (userSignClass != null) {
             if (userSignClass.getSignendtime() != null) {
-                if (userSignClass.getSignendtime().equals(format1))
+                if (userSignClass.getSignendtime().equals(format1)) {
                     return Integer.valueOf(1);
+                }
                 if (userSignClass.getSignendtime().equals(time)) {
                     Integer length = userSignClass.getLength();
                     userSignClass.setLength(Integer.valueOf(length.intValue() + 1));
@@ -149,8 +150,9 @@ public class SignInUserServiceImpl implements SignInUserService {
         String format1 = format.format(new Date());
         if (userSignClass != null) {
             if (userSignClass.getSignendtime() != null) {
-                if (userSignClass.getSignendtime().equals(format1))
+                if (userSignClass.getSignendtime().equals(format1)) {
                     return Integer.valueOf(1);
+                }
                 if (userSignClass.getSignendtime().equals(time)) {
                     Integer length = userSignClass.getLength();
                     userSignClass.setLength(Integer.valueOf(length.intValue() + 1));
@@ -179,8 +181,8 @@ public class SignInUserServiceImpl implements SignInUserService {
     }
 
     public Integer addUserSign(UserSignClass userSignClass) {
-        int flag = this.signInUserDao.addUserSign(userSignClass);
-        List<IntegralRoleClass> list = this.rewardDao.integralRoleList(Integer.valueOf(2));
+        int flag = signInUserDao.addUserSign(userSignClass);
+        List<IntegralRoleClass> list = rewardDao.integralRoleList(Integer.valueOf(2));
         IntegralRoleClass integralRoleClass = new IntegralRoleClass();
         if (list != null && list.size() > 0) {
             integralRoleClass = list.get(0);
@@ -189,10 +191,10 @@ public class SignInUserServiceImpl implements SignInUserService {
             integralRoleClass.setOtherjson("3,100-7,300");
         }
         int count = integralRoleClass.getAddcount().intValue();
-        Integer insertuser = this.userDao.insertIntegralPageage(Integer.valueOf(count), 1, userSignClass.getUserid());
+        Integer insertuser = userDao.insertIntegralPageage(Integer.valueOf(count), 1, userSignClass.getUserid());
         if (insertuser != null && insertuser.intValue() > 0) {
             Integral in = Integral.builder().activityName("签到记录").integralQty(Integer.valueOf(count)).type(IntegralEnum.TYPE_GET.getCode()).userId(Integer.valueOf(userSignClass.getUserid().intValue())).build();
-            int insert = this.integralDao.insert(in);
+            int insert = integralDao.insert(in);
             if (insert == 0) {
                 throw new BizException("饭团操作记录写入失败");
             }
@@ -201,8 +203,8 @@ public class SignInUserServiceImpl implements SignInUserService {
     }
 
     public Integer updateUserSign(UserSignClass userSignClass) {
-        int flag = this.signInUserDao.updateUserSign(userSignClass);
-        List<IntegralRoleClass> list = this.rewardDao.integralRoleList(Integer.valueOf(2));
+        int flag = signInUserDao.updateUserSign(userSignClass);
+        List<IntegralRoleClass> list = rewardDao.integralRoleList(Integer.valueOf(2));
         IntegralRoleClass integralRoleClass = new IntegralRoleClass();
         if (list != null && list.size() > 0) {
             integralRoleClass = list.get(0);
@@ -228,10 +230,15 @@ public class SignInUserServiceImpl implements SignInUserService {
                 }
             }
         }
-        Integer insertuser = this.userDao.insertIntegralPageage(Integer.valueOf(count), 1, userSignClass.getUserid());
+        Integer insertuser = userDao.insertIntegralPageage(Integer.valueOf(count), 1, userSignClass.getUserid());
         if (insertuser != null && insertuser.intValue() > 0) {
-            Integral in = Integral.builder().activityName("签到记录").integralQty(Integer.valueOf(count)).type(IntegralEnum.TYPE_GET.getCode()).userId(Integer.valueOf(userSignClass.getUserid().intValue())).build();
-            int insert = this.integralDao.insert(in);
+            Integral in = Integral.builder()
+                    .activityName("签到记录")
+                    .integralQty(Integer.valueOf(count))
+                    .type(IntegralEnum.TYPE_GET.getCode())
+                    .userId(Integer.valueOf(userSignClass.getUserid().intValue()))
+                    .build();
+            int insert = integralDao.insert(in);
             if (insert == 0) {
                 throw new BizException("饭团操作记录写入失败");
             }

@@ -71,6 +71,8 @@ public class BasicPlaceVo {
      */
     private BigDecimal latitude;
 
+    private String phone;
+
     /**
      * 创建时间
      */
@@ -80,7 +82,7 @@ public class BasicPlaceVo {
 
     private String lowcount;
 
-    private String phone;
+
     private String introduce;
     private BigDecimal lowprice;
 

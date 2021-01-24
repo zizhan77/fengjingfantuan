@@ -60,13 +60,13 @@ public class ChangeCodeServiceImpl implements ChangeCodeService {
             changeCode.setPassword(excelDataVO.getBarcode());
             changeCodes.add(changeCode);
         }
-        int row = this.changeCodeDao.inserts(changeCodes);
+        int row = changeCodeDao.inserts(changeCodes);
         if (row == 0) {
-            throw new BizException("");
+            throw new BizException("批量导入优惠券兑换码失败");
         }
-        int s = this.codeTypeDao.updateById(row, codeTypeId);
+        int s = codeTypeDao.updateById(row, codeTypeId);
         if (s == 0) {
-            throw new BizException("");
+            throw new BizException("批量导入优惠券兑换码更新优惠券库存失败");
         }
         return row;
     }

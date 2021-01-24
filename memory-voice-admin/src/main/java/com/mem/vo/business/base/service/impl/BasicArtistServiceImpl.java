@@ -78,6 +78,6 @@ public class BasicArtistServiceImpl implements BasicArtistService {
     @Override
     public List<PlaceArtistVO> findByIdList(List<String> artistList) {
         BizAssert.notEmpty(artistList, BizCode.PARAM_NULL.getMessage());
-        return this.basicArtistDao.findByIdList(artistList);
+        return basicArtistDao.findByIdList(artistList);
     }
 }

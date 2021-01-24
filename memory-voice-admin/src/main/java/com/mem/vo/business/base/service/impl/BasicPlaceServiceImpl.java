@@ -53,8 +53,8 @@ public class BasicPlaceServiceImpl implements BasicPlaceService {
     @Override
     public int insert(BasicPlaceVo basicPlaceVo) {
         BizAssert.notNull(basicPlaceVo, BizCode.PARAM_NULL.getMessage());
-        BasicPlace basicPlace = (BasicPlace) BeanCopyUtil.copyProperties(basicPlaceVo, BasicPlace.class);
-        int insert = this.basicPlaceDao.insert(basicPlace);
+        BasicPlace basicPlace = BeanCopyUtil.copyProperties(basicPlaceVo, BasicPlace.class);
+        int insert = basicPlaceDao.insert(basicPlace);
         System.out.println("主键"+ basicPlace.getId());
         if (!basicPlaceVo.getArtistList().isEmpty()) {
             List<String> list = new ArrayList<>();
@@ -126,7 +126,6 @@ public class BasicPlaceServiceImpl implements BasicPlaceService {
 //    }
 
     @Override
-
     public MtaBean findHistory(String startTime,String endTime) throws Exception {
         String dateTime = System.currentTimeMillis() + "";
         String time = dateTime.substring(0, dateTime.length() - 3);

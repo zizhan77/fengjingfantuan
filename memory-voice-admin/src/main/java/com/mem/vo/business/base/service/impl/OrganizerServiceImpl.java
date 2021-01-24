@@ -41,13 +41,13 @@ public class OrganizerServiceImpl implements OrganizerService {
         BizAssert.notNull(organizer, BizCode.PARAM_NULL.getMessage());
         if (organizer.getId() == null || "".equals(organizer.getId())) {
             organizer.setIsDelete(0);
-            int insert = this.organizerDao.insert(organizer);
+            int insert = organizerDao.insert(organizer);
             if (insert == 0) {
                 throw new BizException("添加主办方失败");
             }
             return organizer;
         }
-        int i = this.organizerDao.update(organizer);
+        int i = organizerDao.update(organizer);
         if (i == 0) {
             throw new BizException("修改主办方失败");
         }

@@ -39,40 +39,41 @@ public class TicketStoreRecordServiceImpl implements TicketStoreRecordService {
     @Override
     @Async
     public void  createTimerForTicketRecord(String orderNumber){
-        new Timer("" + orderNumber).schedule(new TimerTask() {
-            @Override
-            @Transactional(rollbackFor=Exception.class)
-            public void run() {
-                try{
-                    OrderQuery query = new OrderQuery();
-                    query.setOrderNumber(Thread.currentThread().getName());
-                    List<Order> res = orderDao.findByCondition(query);
-                    if(res.size() > 0 && res.get(0).getStatus() > 0){
-                        log.info("支付完成，预占状态解除");
-                    }else{
-                        TicketStoreRecordQuery tq = new TicketStoreRecordQuery();
-                        //orderId实际为orderNumber
-                        tq.setOrderId(Long.parseLong(Thread.currentThread().getName()));
-                        List<TicketStoreRecord> resList = ticketStoreRecordDao.findByCondition(tq);
-                        for (TicketStoreRecord t:resList){
-                            //更新为支付失败状态
-                            t.setPayStatus(1);
-                            ticketStoreRecordDao.updateById(t);
-                        }
-                        OrderQuery oq = new OrderQuery();
-                        oq.setOrderNumber(Thread.currentThread().getName());
-                        List<Order> ordersList = orderDao.findByCondition(oq);
-                        for (Order o:ordersList){
-                            //更新为支付失败状态
-                            o.setStatus(-1);
-                            orderDao.updateById(o);
-                        }
-                    }
-                }catch (Exception e){
-                    createTimerForTicketRecord(Thread.currentThread().getName());
-                }
-            }
-        }, 1000*60*15);
+        (new Timer("" + orderNumber)).schedule((TimerTask) new Object(), 900000L);
+//        new Timer("" + orderNumber).schedule(new TimerTask() {
+//            @Override
+//            @Transactional(rollbackFor=Exception.class)
+//            public void run() {
+//                try{
+//                    OrderQuery query = new OrderQuery();
+//                    query.setOrderNumber(Thread.currentThread().getName());
+//                    List<Order> res = orderDao.findByCondition(query);
+//                    if(res.size() > 0 && res.get(0).getStatus() > 0){
+//                        log.info("支付完成，预占状态解除");
+//                    }else{
+//                        TicketStoreRecordQuery tq = new TicketStoreRecordQuery();
+//                        //orderId实际为orderNumber
+//                        tq.setOrderId(Long.parseLong(Thread.currentThread().getName()));
+//                        List<TicketStoreRecord> resList = ticketStoreRecordDao.findByCondition(tq);
+//                        for (TicketStoreRecord t:resList){
+//                            //更新为支付失败状态
+//                            t.setPayStatus(1);
+//                            ticketStoreRecordDao.updateById(t);
+//                        }
+//                        OrderQuery oq = new OrderQuery();
+//                        oq.setOrderNumber(Thread.currentThread().getName());
+//                        List<Order> ordersList = orderDao.findByCondition(oq);
+//                        for (Order o:ordersList){
+//                            //更新为支付失败状态
+//                            o.setStatus(-1);
+//                            orderDao.updateById(o);
+//                        }
+//                    }
+//                }catch (Exception e){
+//                    createTimerForTicketRecord(Thread.currentThread().getName());
+//                }
+//            }
+//        }, 1000*60*15);
     }
 
     @Override

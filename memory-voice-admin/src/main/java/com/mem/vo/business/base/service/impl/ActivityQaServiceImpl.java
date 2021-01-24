@@ -59,9 +59,16 @@ public class  ActivityQaServiceImpl implements ActivityQaService {
     }
 
     @Override
-    public List<ActivityQa> findByCondition(ActivityQaQuery query){
-        return activityQaDao.findByCondition(query);
+    public Page<ActivityQa> findByCondition(ActivityQaQuery query, Page page) {
+        List<ActivityQa> a = this.activityQaDao.findByCondition(page, query);
+        page.setData(a);
+        return page;
     }
+
+//    @Override
+//    public List<ActivityQa> findByCondition(ActivityQaQuery query){
+//        return activityQaDao.findByCondition(query);
+//    }
 
     @Override
     public void findPageByCondition(Page page, ActivityQaQuery query){
@@ -91,7 +98,7 @@ public class  ActivityQaServiceImpl implements ActivityQaService {
         for (String s : split) {
             activityQaQuery1.setSponsorId(Integer.valueOf(Integer.parseInt(s)));
             activityQaQuery1.setStatus(StatusEnum.ON.getCode());
-            List<ActivityQa> byCondition = this.activityQaDao.findByCondition(activityQaQuery1);
+            List<ActivityQa> byCondition = activityQaDao.findByCondition(activityQaQuery1);
             if (byCondition.size() != 0) {
                 for (ActivityQa activityQa1 : byCondition) {
                     objects1.add(activityQa1);
@@ -100,7 +107,7 @@ public class  ActivityQaServiceImpl implements ActivityQaService {
         }
         if (objects1.size() == 0) {
             activityQaQuery1.setSponsorId(DefaultEnum.JIYIZHISHENG.getCode());
-            List<ActivityQa> byCondition = this.activityQaDao.findByCondition(activityQaQuery1);
+            List<ActivityQa> byCondition = activityQaDao.findByCondition(activityQaQuery1);
             for (ActivityQa activityQa1 : byCondition) {
                 objects1.add(activityQa1);
             }

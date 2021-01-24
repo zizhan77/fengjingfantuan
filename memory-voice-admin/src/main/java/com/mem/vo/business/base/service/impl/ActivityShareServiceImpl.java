@@ -150,7 +150,7 @@ public class ActivityShareServiceImpl implements ActivityShareService {
                 insertIntealByUserid(shareId, activityId);
                 ActivityUser activityUser = activityUserList.get(0);
                 activityUser.setLotteryQty(Integer.valueOf(activityUser.getLotteryQty().intValue() + 1));
-                this.activityUserDao.updateById(activityUser);
+                activityUserDao.updateById(activityUser);
                 result = activityUser.getLotteryQty().intValue();
             } else {
                 insertIntealByUserid(shareId, activityId);
@@ -197,9 +197,9 @@ public class ActivityShareServiceImpl implements ActivityShareService {
 
     @Override
     public ActivityShare showShareInUser(String token) {
-        CommonLoginContext contextByken = this.tokenService.getContextByken(token);
-        ActivityShare activityShare = this.activityShareDao.showShareInUser(contextByken.getUserId());
-        IntegralRoleClass signlaxin = this.rewardService.getSignlaxin();
+        CommonLoginContext contextByken = tokenService.getContextByken(token);
+        ActivityShare activityShare = activityShareDao.showShareInUser(contextByken.getUserId());
+        IntegralRoleClass signlaxin = rewardService.getSignlaxin();
         Integer count = activityShare.getCount();
         activityShare.setCount(Integer.valueOf((count == null) ? 0 : count.intValue()));
         Integer sum = Integer.valueOf(activityShare.getCount().intValue() * signlaxin.getAddcount().intValue());
@@ -272,10 +272,11 @@ public class ActivityShareServiceImpl implements ActivityShareService {
 
     @Override
     public User getUserShareForuser(Long userId) {
-        User byId = this.userService.findById(userId);
-        String time = this.activityShareDao.getUserShareForuser(userId);
-        if (time != null && time != "" && byId != null)
+        User byId = userService.findById(userId);
+        String time = activityShareDao.getUserShareForuser(userId);
+        if (time != null && time != "" && byId != null) {
             byId.setTime(time);
+        }
         return byId;
     }
 

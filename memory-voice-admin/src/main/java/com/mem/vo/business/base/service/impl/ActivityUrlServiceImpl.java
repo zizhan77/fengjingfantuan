@@ -26,24 +26,24 @@ public class ActivityUrlServiceImpl implements ActivityUrlService {
 
     @Override
     public List<ActivityUrl> query(ActivityUrl activityUrl) {
-        return this.activityUrlDao.query(activityUrl);
+        return activityUrlDao.query(activityUrl);
     }
 
     @Override
     public List<ActivityUrl> queryPage(ActivityUrl activityUrl, Page page) {
-        return this.activityUrlDao.queryPage(activityUrl, page);
+        return activityUrlDao.queryPage(activityUrl, page);
     }
 
     @Override
     public ActivityUrl edit(ActivityUrl activityUrl) {
         if (activityUrl.getId() != null && !"".equals(activityUrl.getId())) {
-            int j = this.activityUrlDao.update(activityUrl);
+            int j = activityUrlDao.update(activityUrl);
             if (j == 0) {
                 throw new BizException("修改失败");
             }
             return activityUrl;
         }
-        int i = this.activityUrlDao.insert(activityUrl);
+        int i = activityUrlDao.insert(activityUrl);
         if (i == 0) {
             throw new BizException("增加失败");
         }
@@ -52,7 +52,7 @@ public class ActivityUrlServiceImpl implements ActivityUrlService {
 
     @Override
     public ActivityUrl queryOne(String id) {
-        Activity byId = this.activityService.findById(Long.valueOf(id));
+        Activity byId = activityService.findById(Long.valueOf(id));
         String sponsorId = byId.getSponsorId();
         String[] split = sponsorId.split("~");
         List<Activity> objects = new ArrayList<>();
@@ -62,7 +62,7 @@ public class ActivityUrlServiceImpl implements ActivityUrlService {
         for (String s : split) {
             activityUrl.setSponsorId(s);
             activityUrl.setStatus(StatusEnum.ON.getCode() + "");
-            List<ActivityUrl> query = this.activityUrlDao.query(activityUrl);
+            List<ActivityUrl> query = activityUrlDao.query(activityUrl);
             if (query.size() != 0) {
                 for (ActivityUrl activityQa : query) {
                     objects1.add(activityQa);
@@ -71,7 +71,7 @@ public class ActivityUrlServiceImpl implements ActivityUrlService {
         }
         if (objects1.size() == 0) {
             activityUrl.setSponsorId(DefaultEnum.JIYIZHISHENG.getCode() + "");
-            List<ActivityUrl> query = this.activityUrlDao.query(activityUrl);
+            List<ActivityUrl> query = activityUrlDao.query(activityUrl);
             for (ActivityUrl activityQa : query) {
                 objects1.add(activityQa);
             }

@@ -88,16 +88,16 @@ public class ActorServiceImpl implements ActorServise {
 
     @Override
     public PageBean<Actor> getPhoneActorList(Integer page, Integer pageSize) {
-        int Commod = this.actorDao.getPhoneActorListCount();
+        int Commod = actorDao.getPhoneActorListCount();
         PageBean<Actor> pager = new PageBean();
         pager.setPageSize(pageSize);
         pager.setRows(Integer.valueOf(Commod));
         pager.setPageNo(page);
         int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
         pager.setStart(Integer.valueOf(first));
-        List<Actor> list = this.actorDao.getPhoneActorList(pager);
+        List<Actor> list = actorDao.getPhoneActorList(pager);
         for (Actor actor : list) {
-            List<String> trip = this.actorDao.getActorTripNextOne(actor.getId());
+            List<String> trip = actorDao.getActorTripNextOne(actor.getId());
             if (trip != null && trip.size() > 0) {
                 actor.setNexttrip(trip.get(0));
                 continue;
@@ -119,11 +119,11 @@ public class ActorServiceImpl implements ActorServise {
         pager.setPageNo(page);
         int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
         pager.setStart(Integer.valueOf(first));
-        List<ActorTirp> list = this.actorDao.getPhoneActorTripList(monthFirstStr, monthLastStr, actorid, pager);
+        List<ActorTirp> list = actorDao.getPhoneActorTripList(monthFirstStr, monthLastStr, actorid, pager);
         Integer flag = null;
         for (ActorTirp actorTirp : list) {
             if (actorTirp.getActivityid() != null) {
-                Activity byId = this.actorDao.findByActivityId(actorTirp.getActivityid());
+                Activity byId = actorDao.findByActivityId(actorTirp.getActivityid());
                 if (byId != null) {
                     actorTirp.setActivityflag(Integer.valueOf(1));
                 } else {
@@ -175,7 +175,7 @@ public class ActorServiceImpl implements ActorServise {
     @Override
     public Integer clickSponsor(String token, Long id) {
         if (token != null && token != "") {
-            CommonLoginContext contextByken = this.tokenService.getContextByken(token);
+            CommonLoginContext contextByken = tokenService.getContextByken(token);
             int i = actorDao.getCilckForall(contextByken.getUserId(), 1);
             if (i < 0) {
                 int j = actorDao.clickSponsor(id, 0, 1);
@@ -186,6 +186,6 @@ public class ActorServiceImpl implements ActorServise {
         } else {
             int i = actorDao.clickSponsor(id, 0, 1);
         }
-        return 2;
+        return 1;
     }
 }

@@ -193,6 +193,18 @@ public class PerformanceServiceImpl implements PerformanceService {
             //查询场次详情，并返回
             performanceVo.setShowList(showList);
         }
+
+        if (StringUtils.isNotBlank(performanceVo.getSponsorId())) {
+            String sponsorId = performance.getSponsorId();
+            String[] split = sponsorId.split("~");
+            List<Sponsor> list = new ArrayList<>();
+            for (String s : split) {
+                Sponsor byId = sponsorService.findById(Long.valueOf(s));
+                list.add(byId);
+            }
+            performanceVo.setSponsors(list);
+        }
+
         Date  firstShowTime =showTimeList.get(0);
         BizAssert.notNull(firstShowTime,"获取第一场演出时间为空");
         performanceVo.setSaleEndTimeStamp(firstShowTime.getTime());
