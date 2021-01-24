@@ -27,7 +27,7 @@ public class MessageQuery {
     private int isDelete;
 
     private Integer total;
-    private Integer limit ;
+    private Integer limit;
     private Integer page;
 
 

@@ -61,9 +61,9 @@ public interface BannerDao {
      */
     List<Banner> findByCondition(@Param("page") Page page, @Param("condition") BannerQuery query);
 
-    List<Integer> getOnLineFlag(@Param("nowtime") String paramString1, @Param("nexttime") String paramString2);
+    List<Integer> getOnLineFlag(@Param("nowtime") String nowtime, @Param("nexttime") String nexttime);
 
-    void updatelineFlag(@Param("list") List<Integer> paramList, @Param("flag") int paramInt);
+    void updatelineFlag(@Param("list") List<Integer> list, @Param("flag") int flag);
 
-    List<Integer> getOffLineFlag(@Param("nowtime") String paramString1, @Param("nexttime") String paramString2);
+    List<Integer> getOffLineFlag(@Param("nowtime") String nowtime, @Param("nexttime") String nexttime);
 }

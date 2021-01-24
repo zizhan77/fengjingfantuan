@@ -4,13 +4,13 @@ import com.mem.vo.business.base.model.po.UserSignClass;
 import org.springframework.data.repository.query.Param;
 
 public interface SignInUserDao {
-    Integer getUserAllIntegral(@Param("id") Long paramLong);
+    Integer getUserAllIntegral(@Param("id") Long id);
 
-    UserSignClass getsignShow(@Param("id") Long paramLong);
+    UserSignClass getsignShow(@Param("id") Long id);
 
-    int addUserSign(UserSignClass paramUserSignClass);
+    int addUserSign(UserSignClass userSignClass);
 
-    int updateUserSign(UserSignClass paramUserSignClass);
+    int updateUserSign(UserSignClass userSignClass);
 
-    Integer getUserTodayIntegral(@Param("userid") Long paramLong);
+    Integer getUserTodayIntegral(@Param("userid") Long userid);
 }

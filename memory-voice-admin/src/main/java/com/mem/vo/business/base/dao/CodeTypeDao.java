@@ -14,7 +14,7 @@ public interface CodeTypeDao {
     @Select({"select * from codetype where id = #{id}"})
     CodeType selectById(@Param("id") Integer id);
 
-    List<CodeType> queryBySponsorId(@Param("list") List<String> paramList);
+    List<CodeType> queryBySponsorId(@Param("list") List<String> list);
 
     @Update({"update codetype set count = #{count} where id=#{id}"})
     int updateById(@Param("count") int count, @Param("id") String id);

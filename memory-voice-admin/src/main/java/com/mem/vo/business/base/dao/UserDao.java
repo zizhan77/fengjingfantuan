@@ -84,25 +84,25 @@ public interface UserDao {
 
     void updateByIntegral(@Param("num") Integer num, @Param("userid") Long userid);
 
-    Integer getUserWhoCount(@Param("id") Long paramLong);
+    Integer getUserWhoCount(@Param("id") Long id);
 
-    Integer getUserActCount(@Param("code") String paramString);
+    Integer getUserActCount(@Param("code") String code);
 
     Integer insertIntegralPageage(@Param("count") Integer count, @Param("flag") int flag, @Param("id") Long id);
 
-    int myRankingByUserCount(@Param("id") Long paramLong);
+    int myRankingByUserCount(@Param("id") Long id);
 
-    List<Ranking> myRankingByUser(@Param("paging") PageBean<Ranking> paramPageBean, @Param("id") Long paramLong);
+    List<Ranking> myRankingByUser(@Param("paging") PageBean<Ranking> paging, @Param("id") Long id);
 
     Integer getAdddessFlag(Long paramLong);
 
-    List<UserUpdatelottery> userUpdatelottery(UserUpdatelottery paramUserUpdatelottery);
+    List<UserUpdatelottery> userUpdatelottery(UserUpdatelottery userUpdatelottery);
 
-    Integer getlotteryqtyByuserCode(UserUpdatelottery paramUserUpdatelottery);
+    Integer getlotteryqtyByuserCode(UserUpdatelottery userUpdatelottery);
 
-    Integer selectByCodeAndActid(UserUpdatelottery paramUserUpdatelottery);
+    Integer selectByCodeAndActid(UserUpdatelottery userUpdatelottery);
 
-    void updateByUserCodeForlottery(UserUpdatelottery paramUserUpdatelottery);
+    void updateByUserCodeForlottery(UserUpdatelottery userUpdatelottery);
 
-    void insertByCodeAndActid(UserUpdatelottery paramUserUpdatelottery);
+    void insertByCodeAndActid(UserUpdatelottery userUpdatelottery);
 }

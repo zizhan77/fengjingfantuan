@@ -7,15 +7,15 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface ActivitycountMapper {
-    int insert(Activitycount paramActivitycount);
+    int insert(Activitycount activitycount);
 
-    int update(Activitycount paramActivitycount);
+    int update(Activitycount activitycount);
 
-    List<Activitycount> selectBy(Activitycount paramActivitycount);
+    List<Activitycount> selectBy(Activitycount activitycount);
 
-    List<ActivitycountVO> query(String paramString, Activitycount paramActivitycount);
+    List<ActivitycountVO> query(String paramString, Activitycount activitycount);
 
-    List<ActivitycountVO> queryByName(@Param("page") Page paramPage, String paramString);
+    List<ActivitycountVO> queryByName(@Param("page") Page page, String paramString);
 
     List<ActivitycountVO> getabcd();
 

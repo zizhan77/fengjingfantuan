@@ -73,23 +73,23 @@ public interface RewardDao {
     @Update({"update reward set status = #{status} where prize_id = #{id}"})
     int updateByPrizedId(@Param("id") Integer id, @Param("status") Integer status);
 
-    List<RewardVO> findByActivityId(@Param("activityId") Integer paramInteger);
+    List<RewardVO> findByActivityId(@Param("activityId") Integer activityId);
 
-    List<Reward> findByConditionAndCurrentDay(@Param("condition") RewardQuery paramRewardQuery);
+    List<Reward> findByConditionAndCurrentDay(@Param("condition") RewardQuery rewardQuery);
 
-    int queryListByCount(@Param("dto") RewardQueryDto paramRewardQueryDto);
+    int queryListByCount(@Param("dto") RewardQueryDto rewardQueryDto);
 
-    List<RewardVO> queryListBy(@Param("paging") PageBean<RewardVO> paramPageBean, @Param("dto") RewardQueryDto paramRewardQueryDto);
+    List<RewardVO> queryListBy(@Param("paging") PageBean<RewardVO> paging, @Param("dto") RewardQueryDto rewardQueryDto);
 
-    List<IntegralRoleClass> integralRoleList(@Param("id") Integer paramInteger);
+    List<IntegralRoleClass> integralRoleList(@Param("id") Integer id);
 
-    Integer updateByIdToIntegralRole(IntegralRoleClass paramIntegralRoleClass);
+    Integer updateByIdToIntegralRole(IntegralRoleClass integralRoleClass);
 
     Integer getUserIntegralFlagCount();
 
-    int queryListByUserCount(@Param("id") Long paramLong, @Param("type") Integer paramInteger);
+    int queryListByUserCount(@Param("id") Long id, @Param("type") Integer type);
 
-    List<RewardVO> queryListByUser(@Param("paging") PageBean<RewardVO> paramPageBean, @Param("id") Long paramLong, @Param("type") Integer paramInteger);
+    List<RewardVO> queryListByUser(@Param("paging") PageBean<RewardVO> paging, @Param("id") Long id, @Param("type") Integer type);
 
     Integer getUserDefaultIntegral();
 
@@ -97,5 +97,5 @@ public interface RewardDao {
 
     Integer updateRewardFlag(Integer paramInteger);
 
-    List<RewardVO> queryYouhuiquan(@Param("paging") PageBean<RewardVO> paramPageBean, @Param("id") Long paramLong, @Param("type") Integer paramInteger);
+    List<RewardVO> queryYouhuiquan(@Param("paging") PageBean<RewardVO> paging, @Param("id") Long id, @Param("type") Integer type);
 }

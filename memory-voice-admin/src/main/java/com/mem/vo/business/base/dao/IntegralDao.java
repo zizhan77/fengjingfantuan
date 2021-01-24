@@ -56,7 +56,7 @@ public interface IntegralDao {
     */
     void findByCondition(@Param("page") Page page, @Param("condition") IntegralQuery query);
 
-    List<Integral> integralRecordByUser(@Param("id") Long paramLong, @Param("paging") PageBean<Integral> paramPageBean);
+    List<Integral> integralRecordByUser(@Param("id") Long id, @Param("paging") PageBean<Integral> paging);
 
-    int integralRecordByUserCount(@Param("id") Long paramLong);
+    int integralRecordByUserCount(@Param("id") Long id);
 }
