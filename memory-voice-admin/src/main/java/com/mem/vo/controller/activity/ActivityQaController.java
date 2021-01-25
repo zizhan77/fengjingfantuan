@@ -9,6 +9,7 @@ import com.mem.vo.business.biz.model.dto.CommonLoginContext;
 import com.mem.vo.business.biz.service.token.TokenService;
 import com.mem.vo.common.constant.BizCode;
 import com.mem.vo.common.constant.SourceType;
+import com.mem.vo.common.dto.Page;
 import com.mem.vo.common.dto.ResponseDto;
 import com.mem.vo.common.exception.BizAssert;
 import com.mem.vo.common.exception.BizException;
@@ -38,9 +39,9 @@ public class ActivityQaController {
     private ActivityQaService activityQaService;
 
     @PostMapping("/queryAll")
-    public ResponseDto<List<ActivityQa>> queryAllQa(@RequestHeader("token") String token) {
+    public ResponseDto<Page<ActivityQa>> queryAllQa(@RequestHeader("token") String token, Page page) {
         //权限验证
-        ResponseDto<List<ActivityQa>> responseDto = ResponseDto.successDto();
+        ResponseDto<Page<ActivityQa>> responseDto = ResponseDto.successDto();
         try {
             ActivityQaQuery activityQaQuery = new ActivityQaQuery();
             CommonLoginContext contextByken = tokenService.getContextByken(token);
@@ -48,7 +49,7 @@ public class ActivityQaController {
                 Long userId = contextByken.getUserId();
                 activityQaQuery.setSponsorId(Integer.valueOf(userId.intValue()));
             }
-            return responseDto.successData(activityQaService.findByCondition(new ActivityQaQuery()));
+            return responseDto.successData(activityQaService.findByCondition(activityQaQuery, page));
         } catch (BizException e) {
 
             log.error("查询问答题异常，原因：{}", e.getMessage());

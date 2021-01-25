@@ -65,7 +65,7 @@ public interface ActivityUserDao {
     int updateLotteryQtyReduceById(long id);
     //@Update( "update activity_user set  pass_qty=? where user_id=? and is_delete = 0 and activity_id=?")
 //    int updateByUserIdAndActivityId(Integer qty,String id,Integer acId);
-    int updateByUserIdAndActivityId(Integer passQty, String userId, Integer activityId, String date, Integer lotteryQty);
+    int updateByUserIdAndActivityId(Integer qty, String id, Integer acId, String updateTime, Integer l);
 
     @Select({"SELECT COUNT(1) FROM `activity_user` WHERE `pass_qty` = 12"})
     int findCountPass();
