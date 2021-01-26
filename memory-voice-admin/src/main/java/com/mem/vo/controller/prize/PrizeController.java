@@ -135,7 +135,7 @@ public class PrizeController {
             CodeType codeType = codeTypeService.selectById(prizeD.getCodeType());
             prizeD.setCodeTypeBean(codeType);
         }
-        return responseDto.successData(prizeService.slotMachine(token, activityId));
+        return responseDto.successData(prizeD);
     }
 
     @PostMapping({"/deleteById"})

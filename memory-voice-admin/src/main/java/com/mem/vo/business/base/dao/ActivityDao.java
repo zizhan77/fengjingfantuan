@@ -84,7 +84,7 @@ public interface ActivityDao {
 
     Integer querySort(Long paramLong);
 
-    String findSplistToid(Long paramLong);
+    String findSplistToid(Long activityid);
 
     int queryActivityByUserCount(@Param("type") Integer type, @Param("id") Long id);
 
