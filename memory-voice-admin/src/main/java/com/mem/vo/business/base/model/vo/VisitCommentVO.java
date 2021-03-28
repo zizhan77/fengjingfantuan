@@ -20,9 +20,14 @@ public class VisitCommentVO {
     private long visitId;
 
     /**
-     * 用户昵称
+     * 用户名称
      */
-    private String userName;
+    private String name;
+
+    /**
+     * 用户头像
+     */
+    private String avatarurl;
 
     /**
      * 创建用户

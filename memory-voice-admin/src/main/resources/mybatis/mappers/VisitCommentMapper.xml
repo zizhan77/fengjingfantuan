@@ -8,6 +8,7 @@
         <result column="id" property="id" jdbcType="BIGINT"/>
         <result column="visit_id" property="visitId" jdbcType="BIGINT"/>
         <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="avatarurl" property="avatarurl" jdbcType="VARCHAR"/>
         <result column="create_user" property="createUser" jdbcType="BIGINT"/>
         <result column="comments" property="comments" jdbcType="LONGVARCHAR"/>
         <result column="thumbnail_urls" property="thumbnailUrls" jdbcType="LONGVARCHAR"/>
@@ -22,6 +23,7 @@
 		id,
 		visit_id
 		user_name,
+		avatarurl
 		create_user,
 		comments,
 		thumbnail_urls,
@@ -39,9 +41,6 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="visitId != null">
                 visit_id,
-            </if>
-            <if test="userName != null  and userName != '' ">
-                user_name,
             </if>
             <if test="createUser != null ">
                 create_user,
@@ -62,9 +61,6 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="visitId != null ">
                 #{visitId,jdbcType=BIGINT},
-            </if>
-            <if test="userName != null  and userName != '' ">
-                #{userName,jdbcType=VARCHAR},
             </if>
             <if test="createUser != null">
                 #{createUser,jdbcType=BIGINT},
@@ -91,9 +87,6 @@
         <trim  suffixOverrides="," >
             <if test="visitId != null">
                 visit_id=#{visitId,jdbcType=BIGINT},
-            </if>
-            <if test="userName != null  and userName != '' ">
-                user_name=#{userName,jdbcType=VARCHAR},
             </if>
             <if test="createUser != null ">
                 create_user=#{createUser,jdbcType=BIGINT},
@@ -135,7 +128,8 @@
              SELECT
                     vc.id,
                     vc.visit_id,
-                    vc.user_name,
+                    u.name,
+                    u.avatarurl,
                     vc.create_user,
                     vc.comments,
                     vc.thumbnail_urls,
@@ -143,10 +137,9 @@
                     vc.status,
                     vc.create_time,
                     vc.update_time
-            FROM visit_comment vc
-         	WHERE vc.is_delete=0
+            FROM visit_comment vc left join user u on vc.create_user=u.id
+         	WHERE vc.is_delete=0 and vc.visit_id=#{visitId}
             ORDER BY vc.update_time DESC
-
             limit #{paging.start},#{paging.pageSize}
 
     </select>
