@@ -1,0 +1,166 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.VisitCommentDao" >
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.VisitComment" >
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="visitId" property="visitId" jdbcType="BIGINT"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="create_user" property="createUser" jdbcType="BIGINT"/>
+        <result column="comments" property="comments" jdbcType="LONGVARCHAR"/>
+        <result column="thumbnail_urls" property="thumbnailUrls" jdbcType="LONGBIGINT"/>
+        <result column="is_delete" property="isDelete" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- user table all fields -->
+    <sql id="Base_Column_List" >
+		id,
+		visitId
+		user_name,
+		create_user,
+		comments,
+		thumbnail_urls,
+		comments,
+		is_delete,
+		status,
+		create_time,
+		update_time
+	</sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.VisitComment"  useGeneratedKeys="true"
+            keyProperty="id">
+        insert into visit_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="visitId != null">
+                visit_id,
+            </if>
+            <if test="userName != null  and userName != '' ">
+                user_name,
+            </if>
+            <if test="createUser != null ">
+                create_user,
+            </if>
+            <if test="comments != null  and comments != '' ">
+                comments,
+            </if>
+            <if test="thumbnailUrls != null and thumbnailUrls != '' ">
+                thumbnail_urls,
+            </if>
+            <if test="isDelete != null ">
+                is_delete,
+            </if>
+            <if test="status != null  ">
+                status,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="visitId != null ">
+                #{visitId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null  and userName != '' ">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=BIGINT},
+            </if>
+            <if test="comments != null  and comments != '' ">
+                #{comments,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="thumbnailUrls != null and thumbnailUrls != '' ">
+                #{thumbnailUrls,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.VisitComment" >
+        update visit_comment set
+        <trim  suffixOverrides="," >
+            <if test="visitId != null">
+                visit_id,
+            </if>
+            <if test="userName != null  and userName != '' ">
+                user_name,
+            </if>
+            <if test="createUser != null ">
+                create_user,
+            </if>
+            <if test="comments != null  and comments != '' ">
+                comments,
+            </if>
+            <if test="thumbnailUrls != null and thumbnailUrls != '' ">
+                thumbnail_urls,
+            </if>
+            <if test="isDelete != null ">
+                is_delete,
+            </if>
+            <if test="status != null  ">
+                status,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update visit_comment set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 接单中台表 -->
+    <select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select <include refid="Base_Column_List" />
+        from visit_comment where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findByPage" resultType="com.mem.vo.business.base.model.vo.VisitCommentVO">
+             SELECT
+                    vc.id,
+                    vc.visit_id,
+                    vc.user_name,
+                    vc.create_user,
+                    vc.comments,
+                    vc.thumbnail_urls,
+                    vc.is_delete,
+                    vc.status,
+                    vc.create_time,
+                    vc.update_time,
+            FROM visit_comment vc
+         	WHERE AND vc.is_delete=0
+            ORDER BY vc.update_time DESC
+
+            limit #{paging.start},#{paging.pageSize}
+
+    </select>
+</mapper>

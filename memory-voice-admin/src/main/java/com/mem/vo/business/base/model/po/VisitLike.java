@@ -16,7 +16,7 @@ public class VisitLike {
     /**
      * 访谈id
      */
-    private Integer visitId;
+    private long visitId;
 
     /**
      * 用户昵称

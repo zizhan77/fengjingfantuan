@@ -1,6 +1,5 @@
 package com.mem.vo.business.base.dao;
 
-import com.mem.vo.business.base.model.po.Visit;
 import com.mem.vo.business.base.model.po.VisitComment;
 import com.mem.vo.business.base.model.po.VisitCommentQuery;
 import com.mem.vo.business.base.model.vo.VisitCommentVO;
@@ -10,6 +9,9 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * @author zhangsq
+ */
 public interface VisitCommentDao {
     /**
      * 添加接单中台表实体
@@ -41,7 +43,7 @@ public interface VisitCommentDao {
      * @param id 接单中台表ID
      * @return 返回一条接单中台表
      */
-    Visit findById(Long id);
+    VisitComment findById(Long id);
 
     /**
      * 根据条件查询接单中台表
@@ -60,4 +62,6 @@ public interface VisitCommentDao {
     List<VisitComment> findByCondition(@Param("page") Page page, @Param("condition") VisitCommentQuery query);
 
     PageBean<VisitCommentVO> findAll(Integer pageNo, Integer pageSize);
+
+    List<VisitCommentVO> findByPage(@Param("paging") PageBean<VisitCommentVO> paging, @Param("visitId") Long visitId);
 }

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mem.vo.business.base.dao.VisitDao" >
+
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.Visit" >
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="introduction" property="introduction" jdbcType="LONGVARCHAR"/>
+        <result column="video_url" property="videoUrl" jdbcType="VARCHAR"/>
+        <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR"/>
+        <result column="likes" property="likes" jdbcType="BIGINT"/>
+        <result column="comments" property="comments" jdbcType="BIGINT"/>
+        <result column="forwards" property="forwards" jdbcType="BIGINT"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- user table all fields -->
+    <sql id="Base_Column_List" >
+		id,
+		title,
+		introduction,
+		video_url,
+		thumbnail_url,
+		likes,
+		comments,
+		forwards,
+		create_user,
+		create_time,
+		update_time
+	</sql>
+
+    <!-- 单个插入，只插入不为空的字段  -->
+    <insert id="insert" parameterType="com.mem.vo.business.base.model.po.Visit"  useGeneratedKeys="true"
+            keyProperty="id">
+        insert into visit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != '' ">
+                title,
+            </if>
+            <if test="introduction != null  and introduction != '' ">
+                introduction,
+            </if>
+            <if test="videoUrl != null  and videoUrl != '' ">
+                video_url,
+            </if>
+            <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
+                thumbnail_url,
+            </if>
+            <if test="likes != null">
+                likes,
+            </if>
+            <if test="comments != null ">
+                comments,
+            </if>
+            <if test="forwards != null  ">
+                forwards,
+            </if>
+            <if test="createTime != null  ">
+                create_time,
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                create_user,
+            </if>
+            <if test="updateTime != null  ">
+                update_time,
+            </if>
+            <if test="isDelete != null  ">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != '' ">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="introduction != null  and introduction != '' ">
+                #{introduction,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="videoUrl != null  and videoUrl != '' ">
+                #{videoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
+                #{thumbnailUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="likes != null">
+                #{likes,jdbcType=BIGINT},
+            </if>
+            <if test="comments != null  and comments != '' ">
+                #{comments,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 修改记录，只修改只不为空的字段 -->
+    <update id="updateById" parameterType="com.mem.vo.business.base.model.po.Visit" >
+        update visit set
+        <trim  suffixOverrides="," >
+            <if test="title != null  and title != '' ">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="introduction != null  and introduction != '' ">
+                #{introduction,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="videoUrl != null  and videoUrl != '' ">
+                #{videoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
+                #{thumbnailUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="likes != null">
+                #{likes,jdbcType=BIGINT},
+            </if>
+            <if test="comments != null  and comments != '' ">
+                #{comments,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null  ">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null  and createUser != '' ">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null  ">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null  and updateUser != '' ">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  ">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+    </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update visit set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+    <!-- 根据id查询 接单中台表 -->
+    <select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select <include refid="Base_Column_List" />
+        from visit where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findByPage" resultType="com.mem.vo.business.base.model.vo.VisitVO">
+             SELECT
+                    v.id,
+                    v.title,
+                    v.introduction,
+                    v.video_url,
+                    v.thumbnail_url,
+                    v.likes,
+                    v.comments,
+                    v.forwards,
+                    v.is_delete,
+                    v.create_user,
+                    v.create_time,
+                    v.update_time,
+            FROM visit v
+         	WHERE AND v.is_delete=0
+            ORDER BY v.update_time DESC
+
+            limit #{paging.start},#{paging.pageSize}
+
+    </select>
+</mapper>

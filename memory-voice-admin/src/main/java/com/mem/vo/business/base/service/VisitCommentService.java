@@ -43,7 +43,7 @@ public interface VisitCommentService {
      * @param id 接单中台表ID
      * @return 返回一条接单中台表
      */
-    Visit findById(Long id);
+    VisitComment findById(Long id);
 
     /**
      * 根据条件查询接单中台表
@@ -61,5 +61,5 @@ public interface VisitCommentService {
      */
     List<VisitComment> findByCondition(@Param("page") Page page, @Param("condition") VisitCommentQuery query);
 
-    PageBean<VisitCommentVO> findAll(Integer pageNo, Integer pageSize);
+    PageBean<VisitCommentVO> findAll(Integer pageNo, Integer pageSize, Long visitId);
 }

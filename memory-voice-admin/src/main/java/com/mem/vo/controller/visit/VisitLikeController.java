@@ -51,6 +51,7 @@ public class VisitLikeController {
 
             BizAssert.notNull(visit, BizCode.PARAM_NULL.getMessage());
             visit.setLikes(visit.getLikes() + 1);
+            visitService.updateById(visit);
             return responseDto.successData(visitService.insert(visit));
         } catch (BizException e) {
 
@@ -84,7 +85,7 @@ public class VisitLikeController {
     }
 
     @PostMapping("/deleteById")
-    public ResponseDto<Integer> deleteById(@RequestHeader("token") String token, String id) {
+    public ResponseDto<Integer> deleteById(@RequestHeader("token") String token, Long id) {
         //权限验证
         ResponseDto<Integer> responseDto = ResponseDto.successDto();
 
@@ -124,7 +125,7 @@ public class VisitLikeController {
         //权限验证
         ResponseDto<Visit> responseDto = ResponseDto.successDto();
         try {
-            Visit visit = visitLikeService.findById(id);
+            Visit visit = visitService.findById(id);
             return responseDto.successData(visit);
         } catch (Exception e) {
             responseDto.setCode(Integer.valueOf(1));

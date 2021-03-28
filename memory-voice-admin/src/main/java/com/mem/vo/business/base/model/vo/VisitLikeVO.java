@@ -1,10 +1,16 @@
 package com.mem.vo.business.base.model.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class VisitLikeVO {
 
     private Integer id;
@@ -12,7 +18,7 @@ public class VisitLikeVO {
     /**
      * 访谈id
      */
-    private Integer visitId;
+    private long visitId;
 
     /**
      * 用户昵称

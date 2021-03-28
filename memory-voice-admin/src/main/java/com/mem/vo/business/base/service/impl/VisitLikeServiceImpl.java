@@ -45,7 +45,7 @@ public class VisitLikeServiceImpl implements VisitLikeService {
     }
 
     @Override
-    public Visit findById(Long id) {
+    public VisitLike findById(Long id) {
         return visitLikeService.findById(id);
     }
 

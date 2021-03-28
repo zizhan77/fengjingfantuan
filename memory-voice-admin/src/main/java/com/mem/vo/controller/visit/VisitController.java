@@ -34,7 +34,7 @@ public class VisitController {
 
     @CommonExHandler(key = "新增专访")
     @PostMapping("/insert")
-    public ResponseDto<Integer> insert(@RequestHeader String token, Visit visit) {
+    public ResponseDto<Integer> insert(@RequestHeader("token") String token, Visit visit) {
         //权限验证
         ResponseDto<Integer> responseDto = ResponseDto.successDto();
 
@@ -60,7 +60,7 @@ public class VisitController {
 
     @CommonExHandler(key = "更新访谈信息")
     @PostMapping("/update")
-    public ResponseDto<Integer> update(@RequestHeader String token, Visit visit) {
+    public ResponseDto<Integer> update(@RequestHeader("token") String token, Visit visit) {
 
         ResponseDto<Integer> responseDto = ResponseDto.successDto();
 

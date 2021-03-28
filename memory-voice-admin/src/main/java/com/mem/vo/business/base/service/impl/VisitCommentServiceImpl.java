@@ -1,8 +1,6 @@
 package com.mem.vo.business.base.service.impl;
 
 import com.mem.vo.business.base.dao.VisitCommentDao;
-import com.mem.vo.business.base.dao.VisitDao;
-import com.mem.vo.business.base.model.po.Visit;
 import com.mem.vo.business.base.model.po.VisitComment;
 import com.mem.vo.business.base.model.po.VisitCommentQuery;
 import com.mem.vo.business.base.model.vo.VisitCommentVO;
@@ -15,8 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +52,7 @@ public class VisitCommentServiceImpl implements VisitCommentService {
     }
 
     @Override
-    public Visit findById(Long id) {
+    public VisitComment findById(Long id) {
         return visitCommentDao.findById(id);
     }
 
@@ -71,7 +67,14 @@ public class VisitCommentServiceImpl implements VisitCommentService {
     }
 
     @Override
-    public PageBean<VisitCommentVO> findAll(Integer pageNo, Integer pageSize) {
-        return visitCommentDao.findAll(pageNo, pageSize);
+    public PageBean<VisitCommentVO> findAll(Integer pageNo, Integer pageSize,Long visitId) {
+        PageBean<VisitCommentVO> pager = new PageBean<>();
+        pager.setPageSize(pageSize);
+        pager.setPageNo(pageNo);
+        int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
+        pager.setStart(Integer.valueOf(first));
+        List<VisitCommentVO> list = visitCommentDao.findByPage(pager, visitId);
+        pager.setLists(list);
+        return pager;
     }
 }

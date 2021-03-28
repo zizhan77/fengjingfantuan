@@ -5,7 +5,6 @@ import com.mem.vo.business.base.model.po.Visit;
 import com.mem.vo.business.base.model.po.VisitQuery;
 import com.mem.vo.business.base.model.vo.VisitVO;
 import com.mem.vo.business.base.service.VisitService;
-import com.mem.vo.business.biz.service.token.TokenService;
 import com.mem.vo.common.dto.Page;
 import com.mem.vo.common.dto.PageBean;
 import org.apache.logging.log4j.LogManager;
@@ -62,6 +61,13 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public PageBean<VisitVO> findAll(Integer pageNo, Integer pageSize) {
-        return visitDao.findAll(pageNo, pageSize);
+        PageBean<VisitVO> pager = new PageBean<>();
+        pager.setPageSize(pageSize);
+        pager.setPageNo(pageNo);
+        int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
+        pager.setStart(Integer.valueOf(first));
+        List<VisitVO> list = visitDao.findByPage(pager);
+        pager.setLists(list);
+        return pager;
     }
 }

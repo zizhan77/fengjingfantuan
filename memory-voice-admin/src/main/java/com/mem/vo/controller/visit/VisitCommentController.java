@@ -12,7 +12,6 @@ import com.mem.vo.common.dto.PageBean;
 import com.mem.vo.common.dto.ResponseDto;
 import com.mem.vo.common.exception.BizAssert;
 import com.mem.vo.common.exception.BizException;
-import com.mem.vo.config.annotations.CommonExHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +49,9 @@ public class VisitCommentController {
 
             BizAssert.notNull(visitComment, BizCode.PARAM_NULL.getMessage());
             visitComment.setCreateUser(context.getUser().getId());
+            Visit visit = visitService.findById(visitComment.getVisitId());
+            visit.setComments(visit.getComments() + 1);
+            visitService.updateById(visit);
             return responseDto.successData(visitCommentService.insert(visitComment));
         } catch (BizException e) {
 
@@ -83,7 +85,7 @@ public class VisitCommentController {
     }
 
     @PostMapping("/deleteById")
-    public ResponseDto<Integer> deleteById(@RequestHeader("token") String token, String id) {
+    public ResponseDto<Integer> deleteById(@RequestHeader("token") String token, Long id) {
         //权限验证
         ResponseDto<Integer> responseDto = ResponseDto.successDto();
 
@@ -94,6 +96,10 @@ public class VisitCommentController {
                 return responseDto;
             }
             BizAssert.notNull(id, BizCode.PARAM_NULL.getMessage());
+            VisitComment visitComment = visitCommentService.findById(id);
+            Visit visit = visitService.findById(visitComment.getVisitId());
+            visit.setComments(visit.getComments() - 1);
+            visitService.updateById(visit);
             return responseDto.successData(visitCommentService.deleteById(Long.valueOf(id)));
         } catch (BizException e) {
 
@@ -106,11 +112,11 @@ public class VisitCommentController {
     }
 
     @PostMapping("/queryAll")
-    public ResponseDto<PageBean<VisitCommentVO>> queryAll(@RequestParam(required = true) Integer pageNo, @RequestParam(required = true) Integer pageSize) {
+    public ResponseDto<PageBean<VisitCommentVO>> queryAll(@RequestParam(required = true) Integer pageNo, @RequestParam(required = true) Integer pageSize, @RequestParam(required = true) Long visitId ) {
         //权限验证
         ResponseDto<PageBean<VisitCommentVO>> responseDto = ResponseDto.successDto();
         try {
-            PageBean<VisitCommentVO> Page = visitCommentService.findAll(pageNo, pageSize);
+            PageBean<VisitCommentVO> Page = visitCommentService.findAll(pageNo, pageSize, visitId);
             return responseDto.successData(Page);
         } catch (Exception e) {
             responseDto.setCode(Integer.valueOf(1));
@@ -119,12 +125,12 @@ public class VisitCommentController {
     }
 
     @PostMapping("/query")
-    public ResponseDto<Visit> query(Long id) {
+    public ResponseDto<VisitComment> query(Long id) {
         //权限验证
-        ResponseDto<Visit> responseDto = ResponseDto.successDto();
+        ResponseDto<VisitComment> responseDto = ResponseDto.successDto();
         try {
-            Visit visit = visitCommentService.findById(id);
-            return responseDto.successData(visit);
+            VisitComment visitComment = visitCommentService.findById(id);
+            return responseDto.successData(visitComment);
         } catch (Exception e) {
             responseDto.setCode(Integer.valueOf(1));
             return responseDto;

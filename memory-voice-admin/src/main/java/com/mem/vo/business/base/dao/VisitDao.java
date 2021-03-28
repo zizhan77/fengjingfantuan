@@ -1,6 +1,4 @@
 package com.mem.vo.business.base.dao;
-import com.mem.vo.business.base.model.po.User;
-import com.mem.vo.business.base.model.po.UserQuery;
 import com.mem.vo.business.base.model.po.Visit;
 import com.mem.vo.business.base.model.po.VisitQuery;
 import com.mem.vo.business.base.model.vo.VisitVO;
@@ -61,4 +59,6 @@ public interface VisitDao {
     List<Visit> findByCondition(@Param("page") Page page, @Param("condition") VisitQuery query);
 
     PageBean<VisitVO> findAll(Integer pageNo, Integer pageSize);
+
+    List<VisitVO> findByPage(@Param("paging") PageBean<VisitVO> paging);
 }

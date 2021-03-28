@@ -41,7 +41,7 @@ public interface VisitLikeService {
      * @param id 接单中台表ID
      * @return 返回一条接单中台表
      */
-    Visit findById(Long id);
+    VisitLike findById(Long id);
 
     /**
      * 根据条件查询接单中台表
@@ -60,4 +60,6 @@ public interface VisitLikeService {
     List<VisitLike> findByCondition(@Param("page") Page page, @Param("condition") VisitLikeQuery query);
 
     PageBean<VisitLikeVO> findAll(Integer pageNo, Integer pageSize);
+
+
 }
