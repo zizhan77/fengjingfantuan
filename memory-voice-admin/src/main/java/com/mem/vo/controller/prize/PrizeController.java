@@ -86,7 +86,8 @@ public class PrizeController {
 //                    .build();
             PrizeQuery query = PrizeQuery.builder()
                     .activityId(activityId)
-                    .level(prize.getLevel()).build();
+                    .prizeType(prizeType)
+                    .build();
             List<Prize> prizeList = prizeService.findByCondition(query);
             if (CollectionUtils.isNotEmpty(prizeList)) {
                 throw new BizException("已经存在相同类型的奖品！");
