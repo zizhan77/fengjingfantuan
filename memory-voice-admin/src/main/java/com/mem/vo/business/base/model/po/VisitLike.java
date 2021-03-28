@@ -26,7 +26,7 @@ public class VisitLike {
     /**
      * 创建用户
      */
-    private String createUser;
+    private long createUser;
 
 
     /**

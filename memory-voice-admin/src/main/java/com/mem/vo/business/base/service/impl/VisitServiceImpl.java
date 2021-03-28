@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class VisitServiceImpl implements VisitService {
 
-    private final static Logger log = LogManager.getLogger(UserServiceImpl.class);
+    private final static Logger log = LogManager.getLogger(VisitServiceImpl.class);
 
 
     @Resource
@@ -60,10 +60,12 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public PageBean<VisitVO> findAll(Integer pageNo, Integer pageSize) {
+    public PageBean<VisitVO> findByPage(Integer pageNo, Integer pageSize) {
+        int Commod = visitDao.findByPageCount();
         PageBean<VisitVO> pager = new PageBean<>();
-        pager.setPageSize(pageSize);
         pager.setPageNo(pageNo);
+        pager.setRows(Integer.valueOf(Commod));
+        pager.setPageSize(pageSize);
         int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
         pager.setStart(Integer.valueOf(first));
         List<VisitVO> list = visitDao.findByPage(pager);

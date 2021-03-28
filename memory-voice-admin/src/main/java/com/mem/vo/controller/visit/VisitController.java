@@ -46,7 +46,7 @@ public class VisitController {
             }
 
             BizAssert.notNull(visit, BizCode.PARAM_NULL.getMessage());
-            visit.setCreateUser(context.getUser().getCreateUser());
+            visit.setCreateUser(context.getUser().getId());
             return responseDto.successData(visitService.insert(visit));
         } catch (BizException e) {
 
@@ -72,7 +72,7 @@ public class VisitController {
             }
 
             BizAssert.notNull(visit.getId(), BizCode.PARAM_NULL.getMessage());
-            visit.setCreateUser(context.getUser().getCreateUser());
+            visit.setCreateUser(context.getUser().getId());
             return responseDto.successData(visitService.updateById(visit));
 
         } catch (Exception e) {
@@ -110,7 +110,7 @@ public class VisitController {
         //权限验证
         ResponseDto<PageBean<VisitVO>> responseDto = ResponseDto.successDto();
         try {
-            PageBean<VisitVO> Page = visitService.findAll(pageNo, pageSize);
+            PageBean<VisitVO> Page = visitService.findByPage(pageNo, pageSize);
             return responseDto.successData(Page);
         } catch (Exception e) {
             responseDto.setCode(Integer.valueOf(1));

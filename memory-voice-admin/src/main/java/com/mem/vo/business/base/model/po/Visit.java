@@ -57,7 +57,7 @@ public class Visit {
     /**
      * 视频上传用户
      */
-    private String createUser;
+    private long createUser;
 
     /**
      * 创建时间

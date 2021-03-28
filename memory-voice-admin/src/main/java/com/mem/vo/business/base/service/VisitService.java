@@ -58,5 +58,5 @@ public interface VisitService {
      */
     List<Visit> findByCondition(@Param("page") Page page, @Param("condition") VisitQuery query);
 
-    PageBean<VisitVO> findAll(Integer pageNo, Integer pageSize);
+    PageBean<VisitVO> findByPage(Integer pageNo, Integer pageSize);
 }

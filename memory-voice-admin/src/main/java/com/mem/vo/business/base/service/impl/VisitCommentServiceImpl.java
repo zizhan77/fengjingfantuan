@@ -23,7 +23,7 @@ import java.util.List;
 @Service
 public class VisitCommentServiceImpl implements VisitCommentService {
 
-    private final static Logger log = LogManager.getLogger(UserServiceImpl.class);
+    private final static Logger log = LogManager.getLogger(VisitCommentServiceImpl.class);
 
     @Resource
     private VisitCommentDao visitCommentDao;

@@ -61,4 +61,6 @@ public interface VisitDao {
     PageBean<VisitVO> findAll(Integer pageNo, Integer pageSize);
 
     List<VisitVO> findByPage(@Param("paging") PageBean<VisitVO> paging);
+
+    int findByPageCount();
 }

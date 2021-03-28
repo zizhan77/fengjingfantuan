@@ -7,6 +7,8 @@ import com.mem.vo.business.base.model.vo.VisitLikeVO;
 import com.mem.vo.business.base.service.VisitLikeService;
 import com.mem.vo.common.dto.Page;
 import com.mem.vo.common.dto.PageBean;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +22,9 @@ import java.util.List;
  */
 @Service
 public class VisitLikeServiceImpl implements VisitLikeService {
+
+    private final static Logger log = LogManager.getLogger(VisitLikeServiceImpl.class);
+
 
     @Resource
     VisitLikeService visitLikeService;

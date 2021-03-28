@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mem.vo.business.base.dao.VisitDao" >
 
-    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.Visit" >
+    <resultMap id="BaseResultMap" type="com.mem.vo.business.base.model.po.Visit">
         <result column="id" property="id" jdbcType="BIGINT"/>
         <result column="title" property="title" jdbcType="VARCHAR"/>
         <result column="introduction" property="introduction" jdbcType="LONGVARCHAR"/>
@@ -14,7 +14,7 @@
         <result column="comments" property="comments" jdbcType="BIGINT"/>
         <result column="forwards" property="forwards" jdbcType="BIGINT"/>
         <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
-        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="create_user" property="createUser" jdbcType="BIGINT"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -51,26 +51,14 @@
             <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
                 thumbnail_url,
             </if>
-            <if test="likes != null">
-                likes,
-            </if>
-            <if test="comments != null ">
-                comments,
-            </if>
-            <if test="forwards != null  ">
-                forwards,
-            </if>
             <if test="createTime != null  ">
                 create_time,
             </if>
-            <if test="createUser != null  and createUser != '' ">
+            <if test="createUser != null">
                 create_user,
             </if>
             <if test="updateTime != null  ">
                 update_time,
-            </if>
-            <if test="isDelete != null  ">
-                is_delete,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -86,26 +74,14 @@
             <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
                 #{thumbnailUrl,jdbcType=VARCHAR},
             </if>
-            <if test="likes != null">
-                #{likes,jdbcType=BIGINT},
-            </if>
-            <if test="comments != null  and comments != '' ">
-                #{comments,jdbcType=BIGINT},
-            </if>
             <if test="createTime != null  ">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="createUser != null  and createUser != '' ">
-                #{createUser,jdbcType=VARCHAR},
+            <if test="createUser != null ">
+                #{createUser,jdbcType=BIGINT},
             </if>
             <if test="updateTime != null  ">
                 #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateUser != null  and updateUser != '' ">
-                #{updateUser,jdbcType=VARCHAR},
-            </if>
-            <if test="isDelete != null  ">
-                #{isDelete,jdbcType=TINYINT},
             </if>
         </trim>
     </insert>
@@ -116,37 +92,37 @@
         update visit set
         <trim  suffixOverrides="," >
             <if test="title != null  and title != '' ">
-                #{title,jdbcType=VARCHAR},
+                title=#{title,jdbcType=VARCHAR},
             </if>
             <if test="introduction != null  and introduction != '' ">
-                #{introduction,jdbcType=LONGVARCHAR},
+                introduction=#{introduction,jdbcType=LONGVARCHAR},
             </if>
             <if test="videoUrl != null  and videoUrl != '' ">
-                #{videoUrl,jdbcType=VARCHAR},
+                video_url=#{videoUrl,jdbcType=VARCHAR},
             </if>
             <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
-                #{thumbnailUrl,jdbcType=VARCHAR},
+                thumbnail_url=#{thumbnailUrl,jdbcType=VARCHAR},
             </if>
             <if test="likes != null">
-                #{likes,jdbcType=BIGINT},
+                likes=#{likes,jdbcType=BIGINT},
             </if>
-            <if test="comments != null  and comments != '' ">
-                #{comments,jdbcType=BIGINT},
+            <if test="comments != null">
+                comments=#{comments,jdbcType=BIGINT},
             </if>
-            <if test="createTime != null  ">
-                #{createTime,jdbcType=TIMESTAMP},
+            <if test="forwards != null">
+                forwards=#{forwards,jdbcType=BIGINT},
             </if>
-            <if test="createUser != null  and createUser != '' ">
-                #{createUser,jdbcType=VARCHAR},
+            <if test="createTime != null ">
+                create_time=#{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null">
+                create_user=#{createUser,jdbcType=BIGINT},
             </if>
             <if test="updateTime != null  ">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateUser != null  and updateUser != '' ">
-                #{updateUser,jdbcType=VARCHAR},
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
             </if>
             <if test="isDelete != null  ">
-                #{isDelete,jdbcType=TINYINT},
+                is_delete=#{isDelete,jdbcType=TINYINT},
             </if>
         </trim>
         where id=#{id,jdbcType=BIGINT} and is_delete = 0
@@ -163,6 +139,13 @@
         from visit where id = #{id,jdbcType=BIGINT}
     </select>
 
+    <select id="findByPageCount" resultType="int">
+        SELECT
+        count(1)
+        FROM visit ,(SELECT @rownum:=0) r
+        where is_delete=0
+    </select>
+
     <select id="findByPage" resultType="com.mem.vo.business.base.model.vo.VisitVO">
              SELECT
                     v.id,
@@ -176,12 +159,10 @@
                     v.is_delete,
                     v.create_user,
                     v.create_time,
-                    v.update_time,
+                    v.update_time
             FROM visit v
-         	WHERE AND v.is_delete=0
+         	WHERE v.is_delete=0
             ORDER BY v.update_time DESC
-
             limit #{paging.start},#{paging.pageSize}
-
     </select>
 </mapper>

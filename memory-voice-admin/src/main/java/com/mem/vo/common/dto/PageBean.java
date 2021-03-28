@@ -80,10 +80,15 @@ public class PageBean<T> {
     }
 
     public void setPageNo(Integer pageNo) {
-        if (null == pageNo || pageNo.intValue() < 0) {
+//        if (null == pageNo || pageNo.intValue() < 0) {
+//            this.pageNo = Integer.valueOf(1);
+//        } else if (pageNo.intValue() > this.totalPage.intValue() && this.totalPage.intValue() > 0) {
+//            this.pageNo = pageNo;
+//        } else {
+//            this.pageNo = pageNo;
+//        }
+        if (pageNo == null || pageNo.intValue() < 0) {
             this.pageNo = Integer.valueOf(1);
-        } else if (pageNo.intValue() > this.totalPage.intValue() && this.totalPage.intValue() > 0) {
-            this.pageNo = pageNo;
         } else {
             this.pageNo = pageNo;
         }
