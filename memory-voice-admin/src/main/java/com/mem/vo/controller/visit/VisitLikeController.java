@@ -38,9 +38,10 @@ public class VisitLikeController {
     private VisitService visitService;
 
     @PostMapping("/insert")
-    public ResponseDto<Integer> insert(@RequestHeader String token, Visit visit) {
+    public ResponseDto<Integer> insert(@RequestHeader String token,@RequestParam(required = true) long id,@RequestParam(required = true) int count) {
         //权限验证
         ResponseDto<Integer> responseDto = ResponseDto.successDto();
+        Visit visit = visitService.findById(id);
 
         try {
             CommonLoginContext context = tokenService.getContextByken(token);
@@ -50,7 +51,7 @@ public class VisitLikeController {
             }
 
             BizAssert.notNull(visit, BizCode.PARAM_NULL.getMessage());
-            visit.setLikes(visit.getLikes() + 1);
+            visit.setLikes(visit.getLikes() + count);
             visitService.updateById(visit);
             return responseDto.successData(visitService.insert(visit));
         } catch (BizException e) {
