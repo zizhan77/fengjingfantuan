@@ -53,7 +53,7 @@ public class VisitLikeController {
             BizAssert.notNull(visit, BizCode.PARAM_NULL.getMessage());
             visit.setLikes(visit.getLikes() + count);
             visitService.updateById(visit);
-            return responseDto.successData(visitService.insert(visit));
+            return responseDto.successData(visitService.updateById(visit));
         } catch (BizException e) {
 
             log.error("创建活动异常，参数:{},原因：{}", visit.getId(), e.getMessage());
