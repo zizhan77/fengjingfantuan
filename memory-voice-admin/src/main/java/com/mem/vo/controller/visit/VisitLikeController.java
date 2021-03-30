@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 
 /**
@@ -38,7 +39,7 @@ public class VisitLikeController {
     private VisitService visitService;
 
     @PostMapping("/insert")
-    public ResponseDto<Integer> insert(@RequestHeader String token,@RequestParam(required = true) long id,@RequestParam(required = true) int count) {
+    public ResponseDto<Integer> insert(@RequestHeader String token,@RequestParam(required = true) long id,@RequestParam(required = true) int likes,@RequestParam(required = true) int forwards ) {
         //权限验证
         ResponseDto<Integer> responseDto = ResponseDto.successDto();
         Visit visit = visitService.findById(id);
@@ -51,7 +52,8 @@ public class VisitLikeController {
             }
 
             BizAssert.notNull(visit, BizCode.PARAM_NULL.getMessage());
-            visit.setLikes(visit.getLikes() + count);
+            visit.setLikes(visit.getLikes() + likes);
+            visit.setForwards(visit.getForwards() + forwards);
             visitService.updateById(visit);
             return responseDto.successData(visitService.updateById(visit));
         } catch (BizException e) {

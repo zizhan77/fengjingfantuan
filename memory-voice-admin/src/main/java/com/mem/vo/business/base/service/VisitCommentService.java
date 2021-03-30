@@ -5,6 +5,7 @@ import com.mem.vo.business.base.model.po.VisitComment;
 import com.mem.vo.business.base.model.po.VisitCommentQuery;
 import com.mem.vo.business.base.model.po.VisitQuery;
 import com.mem.vo.business.base.model.vo.VisitCommentVO;
+import com.mem.vo.business.base.model.vo.VisitReplyCommentVO;
 import com.mem.vo.business.base.model.vo.VisitVO;
 import com.mem.vo.common.dto.Page;
 import com.mem.vo.common.dto.PageBean;
@@ -62,4 +63,6 @@ public interface VisitCommentService {
     List<VisitComment> findByCondition(@Param("page") Page page, @Param("condition") VisitCommentQuery query);
 
     PageBean<VisitCommentVO> findAll(Integer pageNo, Integer pageSize, Long visitId);
+
+    PageBean<VisitReplyCommentVO> findReplyAll(Integer pageNo, Integer pageSize, Long visitCommentId);
 }

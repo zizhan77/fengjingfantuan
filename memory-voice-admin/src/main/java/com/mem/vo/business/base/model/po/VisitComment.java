@@ -19,6 +19,16 @@ public class VisitComment {
     private long visitId;
 
     /**
+     * 主评论id
+     */
+    private long visitCommentId;
+
+    /**
+     * 被评论用户id
+     */
+    private long replyCreateUser;
+
+    /**
      * 用户昵称
      */
     private String userName;

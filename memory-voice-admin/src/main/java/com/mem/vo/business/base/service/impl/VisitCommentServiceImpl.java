@@ -4,6 +4,7 @@ import com.mem.vo.business.base.dao.VisitCommentDao;
 import com.mem.vo.business.base.model.po.VisitComment;
 import com.mem.vo.business.base.model.po.VisitCommentQuery;
 import com.mem.vo.business.base.model.vo.VisitCommentVO;
+import com.mem.vo.business.base.model.vo.VisitReplyCommentVO;
 import com.mem.vo.business.base.service.VisitCommentService;
 import com.mem.vo.common.constant.VisitCommentStatus;
 import com.mem.vo.common.dto.Page;
@@ -74,6 +75,22 @@ public class VisitCommentServiceImpl implements VisitCommentService {
         int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
         pager.setStart(Integer.valueOf(first));
         List<VisitCommentVO> list = visitCommentDao.findByPage(pager, visitId);
+        for (VisitCommentVO visitCommentVO: list) {
+            PageBean<VisitReplyCommentVO> pape = findReplyAll(1, 2, visitCommentVO.getVisitId());
+            visitCommentVO.setVisitReplyCommentVOs(pape.getLists());
+        }
+        pager.setLists(list);
+        return pager;
+    }
+
+    @Override
+    public PageBean<VisitReplyCommentVO> findReplyAll(Integer pageNo, Integer pageSize, Long visitCommentId) {
+        PageBean<VisitReplyCommentVO> pager = new PageBean<>();
+        pager.setPageSize(pageSize);
+        pager.setPageNo(pageNo);
+        int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
+        pager.setStart(Integer.valueOf(first));
+        List<VisitReplyCommentVO> list = visitCommentDao.findReplyByPage(pager, visitCommentId);
         pager.setLists(list);
         return pager;
     }

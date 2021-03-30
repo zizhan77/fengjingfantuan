@@ -3,6 +3,7 @@ package com.mem.vo.controller.visit;
 import com.mem.vo.business.base.model.po.Visit;
 import com.mem.vo.business.base.model.po.VisitComment;
 import com.mem.vo.business.base.model.vo.VisitCommentVO;
+import com.mem.vo.business.base.model.vo.VisitReplyCommentVO;
 import com.mem.vo.business.base.service.VisitCommentService;
 import com.mem.vo.business.base.service.VisitService;
 import com.mem.vo.business.biz.model.dto.CommonLoginContext;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * @author zhangsq
@@ -117,6 +119,19 @@ public class VisitCommentController {
         ResponseDto<PageBean<VisitCommentVO>> responseDto = ResponseDto.successDto();
         try {
             PageBean<VisitCommentVO> Page = visitCommentService.findAll(pageNo, pageSize, visitId);
+            return responseDto.successData(Page);
+        } catch (Exception e) {
+            responseDto.setCode(Integer.valueOf(1));
+            return responseDto;
+        }
+    }
+
+    @PostMapping("/queryReplayAll")
+    public ResponseDto<PageBean<VisitReplyCommentVO>> queryReplayAll(@RequestParam(required = true) Integer pageNo, @RequestParam(required = true) Integer pageSize, @RequestParam(required = true) Long visitCommentId) {
+        //权限验证
+        ResponseDto<PageBean<VisitReplyCommentVO>> responseDto = ResponseDto.successDto();
+        try {
+            PageBean<VisitReplyCommentVO> Page = visitCommentService.findReplyAll(pageNo, pageSize, visitCommentId);
             return responseDto.successData(Page);
         } catch (Exception e) {
             responseDto.setCode(Integer.valueOf(1));

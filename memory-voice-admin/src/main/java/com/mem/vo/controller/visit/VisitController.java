@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * @author zhangsq
@@ -73,6 +74,8 @@ public class VisitController {
 
             BizAssert.notNull(visit.getId(), BizCode.PARAM_NULL.getMessage());
             visit.setCreateUser(context.getUser().getId());
+            Date date = new Date();
+            visit.setUpdateTime(date);
             return responseDto.successData(visitService.updateById(visit));
 
         } catch (Exception e) {

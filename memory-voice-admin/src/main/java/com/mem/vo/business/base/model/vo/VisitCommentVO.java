@@ -6,12 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class VisitCommentVO {
+
     private Integer id;
 
     /**
@@ -43,6 +45,8 @@ public class VisitCommentVO {
      * 评论图片,多个图片，逗号分隔，最多9张。
      */
     private String thumbnailUrls;
+
+    private List<VisitReplyCommentVO> visitReplyCommentVOs;
 
     /**
      * 删除标识  0 有效 1 无效

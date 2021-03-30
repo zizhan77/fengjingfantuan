@@ -3,6 +3,7 @@ package com.mem.vo.business.base.dao;
 import com.mem.vo.business.base.model.po.VisitComment;
 import com.mem.vo.business.base.model.po.VisitCommentQuery;
 import com.mem.vo.business.base.model.vo.VisitCommentVO;
+import com.mem.vo.business.base.model.vo.VisitReplyCommentVO;
 import com.mem.vo.common.dto.Page;
 import com.mem.vo.common.dto.PageBean;
 import org.apache.ibatis.annotations.Param;
@@ -64,4 +65,6 @@ public interface VisitCommentDao {
     PageBean<VisitCommentVO> findAll(Integer pageNo, Integer pageSize);
 
     List<VisitCommentVO> findByPage(@Param("paging") PageBean<VisitCommentVO> paging, @Param("visitId") Long visitId);
+
+    List<VisitReplyCommentVO> findReplyByPage(@Param("paging") PageBean<VisitReplyCommentVO> paging, @Param("visitId") Long visitCommentId);
 }

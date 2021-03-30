@@ -34,8 +34,6 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public int updateById(Visit visit) {
-        Date date = new Date();
-        visit.setUpdateTime(date);
         return visitDao.updateById(visit);
     }
 

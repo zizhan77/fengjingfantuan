@@ -1,32 +1,55 @@
-package com.mem.vo.business.base.model.po;
+package com.mem.vo.business.base.model.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
-public class VisitCommentQuery {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class VisitReplyCommentVO {
     private Integer id;
 
     /**
      * 访谈id
      */
-    private Integer visitId;
+    private long visitId;
 
     /**
-     * 主评论id
+     * 主评论Id
      */
-    private long visitCommentId;
+    private long visitCommentIid;
+
 
     /**
-     * 被评论用户id
+     * 被回复用户昵称
      */
-    private long replayCreateUser;
+    private String replyName;
 
     /**
-     * 用户昵称
+     * 被回复用户头像
      */
-    private String userName;
+    private String replyAvatarurl;
+
+
+    /**
+     * 被回复用户id
+     */
+    private long replyCreateuser;
+
+    /**
+     * 用户名称
+     */
+    private String name;
+
+    /**
+     * 用户头像
+     */
+    private String avatarurl;
 
     /**
      * 创建用户
