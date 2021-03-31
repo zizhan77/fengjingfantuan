@@ -39,6 +39,11 @@ public class VisitComment {
     private long createUser;
 
     /**
+     * 用户头像
+     */
+    private String avatarurl;
+
+    /**
      * 评论内容，限定140个字符。
      */
     private String comments;
@@ -47,6 +52,11 @@ public class VisitComment {
      * 评论图片,多个图片，逗号分隔，最多9张。
      */
     private String thumbnailUrls;
+
+    /**
+     * 评论点赞数
+     */
+    private Integer likes;
 
     /**
      * 删除标识  0 有效 1 无效

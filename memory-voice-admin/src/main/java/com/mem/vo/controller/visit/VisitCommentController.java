@@ -151,4 +151,30 @@ public class VisitCommentController {
             return responseDto;
         }
     }
+
+    @PostMapping("/likes")
+    public ResponseDto<Integer> like(@RequestHeader String token,@RequestParam(required = true) long id,@RequestParam(required = true) int likes) {
+        //权限验证
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+       VisitComment visitComment = visitCommentService.findById(id);
+
+        try {
+            CommonLoginContext context = tokenService.getContextByken(token);
+            if (context.getUserId() == null) {
+                responseDto.setCode(Integer.valueOf(3));
+                return responseDto;
+            }
+
+            BizAssert.notNull(visitComment, BizCode.PARAM_NULL.getMessage());
+            visitComment.setLikes(visitComment.getLikes() + likes);
+            return responseDto.successData(visitCommentService.updateById(visitComment));
+        } catch (BizException e) {
+
+            log.error("创建活动异常，参数:{},原因：{}", visitComment.getId(), e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+            log.error("创建活动异常，参数:{}", visitComment.getId(), e);
+            return responseDto.failSys();
+        }
+    }
 }

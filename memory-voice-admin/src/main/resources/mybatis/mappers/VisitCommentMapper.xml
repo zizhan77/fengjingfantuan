@@ -14,6 +14,7 @@
         <result column="create_user" property="createUser" jdbcType="BIGINT"/>
         <result column="comments" property="comments" jdbcType="LONGVARCHAR"/>
         <result column="thumbnail_urls" property="thumbnailUrls" jdbcType="LONGVARCHAR"/>
+        <result column="likes" property="likes"   jdbcType="BIGINT"/>
         <result column="is_delete" property="isDelete" jdbcType="BIGINT"/>
         <result column="status" property="status" jdbcType="BIGINT"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -27,10 +28,11 @@
 		visit_comment_id,
 		reply_create_user,
 		user_name,
-		avatarurl
+		avatarurl,
 		create_user,
 		comments,
 		thumbnail_urls,
+		likes,
 		comments,
 		is_delete,
 		status,
@@ -73,6 +75,12 @@
             <if test="replyCreateUser == null  ">
                 reply_create_user,
             </if>
+            <if test="likes != null">
+                likes
+            </if>
+            <if test="likes == null">
+                likes
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="visitId != null ">
@@ -105,6 +113,12 @@
             <if test="replyCreateUser == null  ">
                 0,
             </if>
+            <if test="likes !=null ">
+                ${likes, jdbcType=BIGINT}
+            </if>
+            <if test="likes == null">
+                0
+            </if>
         </trim>
     </insert>
 
@@ -135,7 +149,10 @@
                 create_time=#{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateTime != null  ">
-                update_time=#{updateTime,jdbcType=TIMESTAMP},,
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="likes !=null ">
+                likes = #{likes, jdbcType=BIGINT},
             </if>
         </trim>
         where id=#{id,jdbcType=BIGINT} and is_delete = 0
@@ -161,13 +178,14 @@
                     vc.create_user,
                     vc.comments,
                     vc.thumbnail_urls,
+                    vc.likes,
                     vc.is_delete,
                     vc.status,
                     vc.create_time,
                     vc.update_time
             FROM visit_comment vc left join user u on vc.create_user=u.id
          	WHERE vc.is_delete=0 and vc.visit_id=#{visitId}
-            ORDER BY vc.update_time DESC
+         	ORDER BY vc.likes desc
             limit #{paging.start},#{paging.pageSize}
 
     </select>
@@ -183,6 +201,7 @@
             vrc.avatarurl,
             vrc.comments,
             vrc.thumbnail_urls,
+            vrc.likes,
             vrc.is_delete,
             vrc.status,
             vrc.create_time,
@@ -197,13 +216,13 @@
                     u.avatarurl as avatarurl,
                     vc.comments as comments,
                     vc.thumbnail_urls as thumbnail_urls,
+                    vc.likes as likes,
                     vc.is_delete as is_delete,
                     vc.status as status,
                     vc.create_time as create_time,
                     vc.update_time as update_time
             FROM visit_comment vc left join user u on vc.create_user=u.id
          	WHERE vc.is_delete=0 and vc.visit_comment_id !=0 and vc.reply_create_user !=0 and vc.visit_id=#{visitId}
-            ORDER BY vc.create_time DESC
             limit #{paging.start},#{paging.pageSize}) as vrc left join user on vrc.reply_create_user=user.id;
     </select>
 </mapper>

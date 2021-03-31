@@ -44,6 +44,11 @@ public class VisitCommentQuery {
     private String thumbnailUrls;
 
     /**
+     * 评论点赞数
+     */
+    private Integer likes;
+
+    /**
      * 删除标识  0 有效 1 无效
      */
     private Integer isDelete;

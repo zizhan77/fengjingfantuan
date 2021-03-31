@@ -76,7 +76,7 @@ public class VisitCommentServiceImpl implements VisitCommentService {
         pager.setStart(Integer.valueOf(first));
         List<VisitCommentVO> list = visitCommentDao.findByPage(pager, visitId);
         for (VisitCommentVO visitCommentVO: list) {
-            PageBean<VisitReplyCommentVO> pape = findReplyAll(1, 2, visitCommentVO.getVisitId());
+            PageBean<VisitReplyCommentVO> pape = findReplyAll(1, 2, visitCommentVO.getId().longValue());
             visitCommentVO.setVisitReplyCommentVOs(pape.getLists());
         }
         pager.setLists(list);

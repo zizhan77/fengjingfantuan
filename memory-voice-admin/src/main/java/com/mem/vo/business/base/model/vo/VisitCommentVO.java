@@ -46,6 +46,14 @@ public class VisitCommentVO {
      */
     private String thumbnailUrls;
 
+    /**
+     * 评论点赞数
+     */
+    private Integer likes;
+
+    /**
+     * 评论回复列表
+     */
     private List<VisitReplyCommentVO> visitReplyCommentVOs;
 
     /**
