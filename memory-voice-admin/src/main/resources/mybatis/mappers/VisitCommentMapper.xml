@@ -240,7 +240,7 @@
                     vc.create_time as create_time,
                     vc.update_time as update_time
             FROM visit_comment vc left join user u on vc.create_user=u.id
-         	WHERE vc.is_delete=0 and vc.visit_comment_id =#{visitCommentId} and vc.reply_create_user !=0
+         	WHERE vc.is_delete=0 and vc.visit_comment_id =#{visitCommentId}
             limit #{paging.start},#{paging.pageSize}) as vrc left join user on vrc.reply_create_user=user.id;
     </select>
 </mapper>
