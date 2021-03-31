@@ -55,7 +55,7 @@ public class VisitCommentController {
             Visit visit = visitService.findById(visitComment.getVisitId());
             visit.setComments(visit.getComments() + 1);
             visitService.updateById(visit);
-            if (Objects.nonNull(visitComment.getVisitCommentId())) {
+            if (visitComment.getVisitCommentId() != 0) {
                 VisitComment vc = visitCommentService.findById(visitComment.getVisitCommentId());
                 vc.setVisitReplyCommentCount(vc.getVisitReplyCommentCount() + 1);
                 visitCommentService.updateById(vc);
