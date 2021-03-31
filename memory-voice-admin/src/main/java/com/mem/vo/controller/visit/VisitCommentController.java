@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author zhangsq
@@ -54,6 +55,12 @@ public class VisitCommentController {
             Visit visit = visitService.findById(visitComment.getVisitId());
             visit.setComments(visit.getComments() + 1);
             visitService.updateById(visit);
+            if (Objects.nonNull(visitComment.getVisitCommentId())) {
+                VisitComment vc = visitCommentService.findById(visitComment.getVisitCommentId());
+                vc.setVisitReplyCommentCount(vc.getVisitReplyCommentCount() + 1);
+                visitCommentService.updateById(vc);
+            }
+
             return responseDto.successData(visitCommentService.insert(visitComment));
         } catch (BizException e) {
 

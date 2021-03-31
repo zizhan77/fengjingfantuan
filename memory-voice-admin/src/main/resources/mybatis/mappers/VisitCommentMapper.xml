@@ -12,6 +12,7 @@
         <result column="user_name" property="userName" jdbcType="VARCHAR"/>
         <result column="avatarurl" property="avatarurl" jdbcType="VARCHAR"/>
         <result column="create_user" property="createUser" jdbcType="BIGINT"/>
+        <result column="visit_reply_comment_count" property="visitReplyCommentCount" jdbcType="BIGINT"/>
         <result column="comments" property="comments" jdbcType="LONGVARCHAR"/>
         <result column="thumbnail_urls" property="thumbnailUrls" jdbcType="LONGVARCHAR"/>
         <result column="likes" property="likes"   jdbcType="BIGINT"/>
@@ -27,6 +28,7 @@
 		visit_id,
 		visit_comment_id,
 		reply_create_user,
+		visit_reply_comment_count,
 		user_name,
 		avatarurl,
 		create_user,
@@ -76,10 +78,16 @@
                 reply_create_user,
             </if>
             <if test="likes != null">
-                likes
+                likes,
             </if>
             <if test="likes == null">
-                likes
+                likes,
+            </if>
+            <if test="visitReplyCommentCount != null">
+                visit_reply_comment_count,
+            </if>
+            <if test="visitReplyCommentCount == null">
+                visit_reply_comment_count
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -114,9 +122,15 @@
                 0,
             </if>
             <if test="likes !=null ">
-                ${likes, jdbcType=BIGINT}
+                #{likes, jdbcType=BIGINT},
             </if>
             <if test="likes == null">
+                0,
+            </if>
+            <if test="visitReplyCommentCount != null">
+                #{visitReplyCommentCount, jdbcType=BIGINT},
+            </if>
+            <if test="visitReplyCommentCount == null">
                 0
             </if>
         </trim>
@@ -154,6 +168,9 @@
             <if test="likes !=null ">
                 likes = #{likes, jdbcType=BIGINT},
             </if>
+            <if test="visitReplyCommentCount != null">
+                visit_reply_comment_count=#{visitReplyCommentCount,jdbcType=BIGINT},
+            </if>
         </trim>
         where id=#{id,jdbcType=BIGINT} and is_delete = 0
     </update>
@@ -181,6 +198,7 @@
                     vc.likes,
                     vc.is_delete,
                     vc.status,
+                    vc.visit_reply_comment_count,
                     vc.create_time,
                     vc.update_time
             FROM visit_comment vc left join user u on vc.create_user=u.id
@@ -222,7 +240,7 @@
                     vc.create_time as create_time,
                     vc.update_time as update_time
             FROM visit_comment vc left join user u on vc.create_user=u.id
-         	WHERE vc.is_delete=0 and vc.visit_comment_id !=0 and vc.reply_create_user !=0 and vc.visit_id=#{visitId}
+         	WHERE vc.is_delete=0 and vc.visit_comment_id =#{visitCommentId} and vc.reply_create_user !=0
             limit #{paging.start},#{paging.pageSize}) as vrc left join user on vrc.reply_create_user=user.id;
     </select>
 </mapper>

@@ -82,6 +82,11 @@ public class VisitReplyCommentVO {
     private Integer status;
 
     /**
+     * 子评论数
+     */
+    private Integer visitReplyCommentCount;
+
+    /**
      * 创建时间
      */
     private Date createTime;

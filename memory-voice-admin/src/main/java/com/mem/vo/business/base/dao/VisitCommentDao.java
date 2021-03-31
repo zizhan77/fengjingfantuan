@@ -66,5 +66,5 @@ public interface VisitCommentDao {
 
     List<VisitCommentVO> findByPage(@Param("paging") PageBean<VisitCommentVO> paging, @Param("visitId") Long visitId);
 
-    List<VisitReplyCommentVO> findReplyByPage(@Param("paging") PageBean<VisitReplyCommentVO> paging, @Param("visitId") Long visitCommentId);
+    List<VisitReplyCommentVO> findReplyByPage(@Param("paging") PageBean<VisitReplyCommentVO> paging, @Param("visitCommentId") Long visitCommentId);
 }
