@@ -1,6 +1,5 @@
 package com.mem.vo.business.base.service;
 
-import com.mem.vo.business.base.model.po.Visit;
 import com.mem.vo.business.base.model.po.VisitLike;
 import com.mem.vo.business.base.model.po.VisitLikeQuery;
 import com.mem.vo.business.base.model.vo.VisitLikeVO;

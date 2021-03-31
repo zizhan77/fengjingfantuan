@@ -173,7 +173,7 @@
     </select>
 
     <select id="findReplyByPage" resultType="com.mem.vo.business.base.model.vo.VisitReplyCommentVO">
-             select
+            select
 			vrc.id ,
 			vrc.visit_id,
 			vrc.visit_comment_id,
@@ -192,7 +192,7 @@
                     vc.id as id ,
                     vc.visit_id as visit_id,
                     vc.visit_comment_id as visit_comment_id,
-                    vc.reply_create_user as reply_create_user
+                    vc.reply_create_user as reply_create_user,
                     u.name as name,
                     u.avatarurl as avatarurl,
                     vc.comments as comments,
@@ -202,7 +202,7 @@
                     vc.create_time as create_time,
                     vc.update_time as update_time
             FROM visit_comment vc left join user u on vc.create_user=u.id
-         	WHERE vc.is_delete=0 and vc.visit_comment_id !=0 and vc.reply_create_user !=0 and vc. vc.visit_id=#{visitId}
+         	WHERE vc.is_delete=0 and vc.visit_comment_id !=0 and vc.reply_create_user !=0 and vc.visit_id=#{visitId}
             ORDER BY vc.create_time DESC
             limit #{paging.start},#{paging.pageSize}) as vrc left join user on vrc.reply_create_user=user.id;
     </select>
