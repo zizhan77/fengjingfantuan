@@ -202,7 +202,7 @@
                     vc.create_time,
                     vc.update_time
             FROM visit_comment vc left join user u on vc.create_user=u.id
-         	WHERE vc.is_delete=0 and vc.visit_id=#{visitId}
+         	WHERE vc.is_delete=0 and vc.visit_id=#{visitId} and vc.visit_comment_id = 0 and vc.reply_create_user=0
          	ORDER BY vc.likes desc
             limit #{paging.start},#{paging.pageSize}
 
