@@ -49,8 +49,8 @@ public class  ActivityQaServiceImpl implements ActivityQaService {
     }
 
     @Override
-    public int deleteById(Long id){
-        return activityQaDao.deleteById(id);
+    public int deleteById(List<Long> ids){
+        return activityQaDao.deleteById(ids);
     }
 
     @Override

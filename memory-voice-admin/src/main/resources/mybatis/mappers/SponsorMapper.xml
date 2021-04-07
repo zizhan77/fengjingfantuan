@@ -22,18 +22,18 @@
 		<result column="isshow" property="isshow" jdbcType="INTEGER"/>
 		<result column="intro" property="intro" jdbcType="VARCHAR"/>
 		</resultMap>
-       
+
 <!-- sponsor table all fields -->
 	<sql id="Base_Column_List" >
-		 id,	
+		 id,
 		name,
-		phone,	
-		password,	
-		contact_name,	
-		status,	
-		create_time,	
-		create_user,	
-		update_time,	
+		phone,
+		password,
+		contact_name,
+		status,
+		create_time,
+		create_user,
+		update_time,
 		update_user
 		,is_delete,
 		url,
@@ -49,41 +49,41 @@
 			<if test="condition.id != null" >
 				and id =  #{condition.id,jdbcType=INTEGER}
 			</if>
-			
+
 			<if test="condition.name != null and condition.name != ''" >
 				and name =  #{condition.name,jdbcType=VARCHAR}
 			</if>
-			
+
 			<if test="condition.phone != null and condition.phone != ''" >
 				and phone =  #{condition.phone,jdbcType=VARCHAR}
 			</if>
-			
+
 			<if test="condition.password != null and condition.password != ''" >
 				and password =  #{condition.password,jdbcType=VARCHAR}
 			</if>
-			
+
 			<if test="condition.contactName != null and condition.contactName != ''" >
 				and contact_name =  #{condition.contactName,jdbcType=VARCHAR}
 			</if>
-			
+
 			<if test="condition.status != null" >
 				and status =  #{condition.status,jdbcType=TINYINT}
 			</if>
-			
+
 			<if test="condition.createTime != null" >
 				and create_time =  #{condition.createTime,jdbcType=TIMESTAMP}
 			</if>
 			<if test="condition.createUser != null and condition.createUser != ''" >
 				and create_user =  #{condition.createUser,jdbcType=VARCHAR}
 			</if>
-			
+
 			<if test="condition.updateTime != null" >
 				and update_time =  #{condition.updateTime,jdbcType=TIMESTAMP}
 			</if>
 			<if test="condition.updateUser != null and condition.updateUser != ''" >
 				and update_user =  #{condition.updateUser,jdbcType=VARCHAR}
 			</if>
-			
+
 
 		</trim>
 	</sql>
@@ -206,7 +206,7 @@
 	</select>
 	 <!-- 修改记录，只修改只不为空的字段 -->
 	<update id="updateById" parameterType="com.mem.vo.business.base.model.po.Sponsor" >
-		 update sponsor set 
+		 update sponsor set
 		<trim  suffixOverrides="," >
 			<if test="thumburl != null  and thumburl != '' ">
 				thumb_url=#{thumburl,jdbcType=VARCHAR},
@@ -250,13 +250,16 @@
 	</update>
 
 	<!-- 删除记录 -->
-	<update id="deleteById" parameterType="java.lang.Long">
-		update sponsor set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	<update id="deleteById" parameterType="java.util.List">
+		update sponsor set is_delete = 1 where is_delete = 0 and id in
+		<foreach collection="list" separator="," open="(" close=")" item="id">
+			#{id,jdbcType=BIGINT}
+		</foreach>
 	</update>
- 
+
 	<!-- 根据id查询 用户分享表 -->
 	<select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
-		select <include refid="Base_Column_List" /> 
+		select <include refid="Base_Column_List" />
 		 from sponsor where id = #{id,jdbcType=INTEGER}
 	</select>
 
@@ -268,4 +271,4 @@
 		<include refid="whereCondition"/>
 	 order by update_time desc
 	</select>
-</mapper>   
+</mapper>

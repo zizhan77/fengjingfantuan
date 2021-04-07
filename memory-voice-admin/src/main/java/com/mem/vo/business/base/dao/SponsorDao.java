@@ -30,9 +30,9 @@ public interface SponsorDao {
 
     /**
     * 删除用户分享表
-    * @param  id 用户分享表ID
+    * @param  ids 用户分享表ID
     */
-    int deleteById(Long id);
+    int deleteById(List<Long> ids);
 
     /**
     * 根据ID查询用户分享表

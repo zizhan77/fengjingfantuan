@@ -29,9 +29,9 @@ public interface ActivityQaDao {
 
     /**
     * 删除网络资源表
-    * @param  id 网络资源表ID
+    * @param  ids 网络资源表ID
     */
-    int deleteById(Long id);
+    int deleteById(List<Long> ids);
 
     /**
     * 根据ID查询网络资源表

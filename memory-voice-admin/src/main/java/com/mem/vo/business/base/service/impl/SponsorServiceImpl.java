@@ -58,8 +58,8 @@ public class  SponsorServiceImpl implements SponsorService {
     }
 
     @Override
-    public int deleteById(Long id){
-        return sponsorDao.deleteById(id);
+    public int deleteById(List<Long> ids){
+        return sponsorDao.deleteById(ids);
     }
 
     @Override

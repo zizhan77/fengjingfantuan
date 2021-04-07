@@ -21,13 +21,13 @@
 
     <!-- activity_qa table all fields -->
     <sql id="Base_Column_List">
-		 id,	
-		tile,	
-		answers,	
-		answer,	
-		create_time,	
-		create_user,	
-		update_time,	
+		 id,
+		tile,
+		answers,
+		answer,
+		create_time,
+		create_user,
+		update_time,
 		update_user,
 		sponsorId,
 		status,
@@ -190,8 +190,11 @@
     </update>
 
     <!-- 删除记录 -->
-    <update id="deleteById" parameterType="java.lang.Long">
-		update activity_qa set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+    <update id="deleteById" parameterType="java.util.List">
+        update activity_qa set is_delete = 1 where is_delete = 0 and id in
+        <foreach collection="list" separator="," item="id" open="(" close=")">
+            #{id,jdbcType=BIGINT}
+        </foreach>
 	</update>
 
     <!-- 根据id查询 网络资源表 -->
@@ -222,4 +225,4 @@
             )
         </foreach>
     </insert>
-</mapper>   
+</mapper>

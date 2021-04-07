@@ -14,10 +14,7 @@ import com.mem.vo.common.dto.ResponseDto;
 import com.mem.vo.common.exception.BizAssert;
 import com.mem.vo.common.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -100,6 +97,20 @@ public class ActivityQaController {
             return responseDto.failData(e.getMessage());
         } catch (Exception e) {
             log.error("更新问答题异常，参数:{}", activity.getId(), e);
+            return responseDto.failSys();
+        }
+    }
+
+    @PostMapping("/del")
+    public ResponseDto<Integer> delActivityQa(@RequestHeader("token") String token, @RequestParam("ids") List<Long> ids) {
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+        try {
+            return responseDto.successData(activityQaService.deleteById(ids));
+        } catch (BizException e) {
+            log.error("sponsor.del，原因：{}", e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+            log.error("sponsor.del", e);
             return responseDto.failSys();
         }
     }

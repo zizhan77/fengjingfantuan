@@ -85,6 +85,21 @@ public class SponsorController {
         }
     }
 
+    @PostMapping("/del")
+    public ResponseDto<Integer> delete(@RequestHeader("token") String token,@RequestParam("ids") List<Long> ids) {
+        //权限验证
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+        try {
+            return responseDto.successData(sponsorService.deleteById(ids));
+        } catch (BizException e) {
+            log.error("sponsor.del，原因：{}", e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+            log.error("sponsor.del", e);
+            return responseDto.failSys();
+        }
+    }
+
     @CommonExHandler(key = "添加赞助商")
     @PostMapping(value = "/add")
     public ResponseDto<Integer> addSave(@RequestHeader("token") String token, Sponsor sponsor) {
