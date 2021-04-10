@@ -70,4 +70,16 @@ public class VisitServiceImpl implements VisitService {
         pager.setLists(list);
         return pager;
     }
+
+    @Override
+    public PageBean<VisitVO> getVisit(Integer pageNo, Integer pageSize, String name) {
+        PageBean<VisitVO> pager = new PageBean<>();
+        pager.setPageNo(pageNo);
+        pager.setPageSize(pageSize);
+        int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
+        pager.setStart(Integer.valueOf(first));
+        List<VisitVO> list = visitDao.getVisit(pager, name);
+        pager.setLists(list);
+        return pager;
+    }
 }

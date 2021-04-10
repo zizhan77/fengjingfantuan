@@ -362,6 +362,45 @@
             limit #{paging.start},#{paging.pageSize}
 
     </select>
+
+    <select id="getActivity" resultType="com.mem.vo.business.base.model.vo.ActivityVO">
+             SELECT
+                    a.id,
+                    a.activity_title as activityTitle,
+                    a.activity_intro as activityIntro,
+                    a.type,
+                    a.start_date as startDate,
+                    a.end_date as endDate,
+                    a.status,
+                    a.sort,
+                    a.activity_url as activityUrl,
+                    a.create_time as createTime,
+                    a.create_user as createUser,
+                    a.update_time as updateTime,
+                    a.update_user as updateUser,
+                    a.sponsor_id as sponsorId,
+                    a.sponsor_name as sponsorName,
+                    a.is_only as isOnly,
+                    a.thumbnail_url as thumbnailUrl,
+                    a.bgUrl,
+                    a.crossimage,
+                    a.of_ranking as ofranking,
+                    sp.id as spid,
+                    sp.`name` as spname,
+                    sp.url as spurl,
+                    sp.thumb_url as spthumburl,
+                    sp.thumb_type as spthumbtype,
+                    a.provence
+            FROM activity a
+            LEFT JOIN sponsor sp ON a.top_sp = sp.id
+            WHERE a.`status`=0 AND a.is_delete=0 AND sp.is_delete=0 AND a.activity_title like "%"#{name}"%"
+            and a.end_date > NOW()
+            ORDER BY a.sort DESC
+
+            limit #{paging.start},#{paging.pageSize}
+
+    </select>
+
     <select id="findByPageToPhoneCount" resultType="int">
         SELECT count(1) FROM activity a
         LEFT JOIN sponsor sp ON a.top_sp = sp.id

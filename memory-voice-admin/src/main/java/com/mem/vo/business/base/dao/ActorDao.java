@@ -6,6 +6,7 @@ import com.mem.vo.business.base.model.po.ActorTirp;
 import com.mem.vo.common.dto.PageBean;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.w3c.dom.ls.LSInput;
 
 public interface ActorDao {
     List<Actor> getActorList(@Param("a") Actor actor, @Param("p") PageBean<Actor> pager);
@@ -33,6 +34,8 @@ public interface ActorDao {
     int getPhoneActorListCount();
 
     List<Actor> getPhoneActorList(@Param("p") PageBean<Actor> paramPageBean);
+
+    List<Actor> getActor(@Param("p") PageBean<Actor> paramPageBean, @Param("name") String name);
 
     List<String> getActorTripNextOne(Integer paramInteger);
 

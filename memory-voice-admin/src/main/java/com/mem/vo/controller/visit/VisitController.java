@@ -12,6 +12,7 @@ import com.mem.vo.common.exception.BizAssert;
 import com.mem.vo.common.exception.BizException;
 import com.mem.vo.config.annotations.CommonExHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -128,6 +129,19 @@ public class VisitController {
         try {
             Visit visit = visitService.findById(id);
             return responseDto.successData(visit);
+        } catch (Exception e) {
+            responseDto.setCode(Integer.valueOf(1));
+            return responseDto;
+        }
+    }
+
+    @PostMapping("/getVisit")
+    public ResponseDto<PageBean<VisitVO>> getVisit(@RequestParam(required = true) Integer pageNo, @RequestParam(required = true) Integer pageSize, String name) {
+        //权限验证
+        ResponseDto<PageBean<VisitVO>> responseDto = ResponseDto.successDto();
+        try {
+            PageBean<VisitVO> Page = visitService.getVisit(pageNo, pageSize, name);
+            return responseDto.successData(Page);
         } catch (Exception e) {
             responseDto.setCode(Integer.valueOf(1));
             return responseDto;

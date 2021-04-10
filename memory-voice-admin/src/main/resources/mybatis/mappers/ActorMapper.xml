@@ -28,7 +28,7 @@
 
 	<select id="getPhoneActorTripList" resultType="com.mem.vo.business.base.model.po.ActorTirp">
 		SELECT  *  FROM actor_trip WHERE actorid=#{id} AND time BETWEEN #{first} AND #{last}
-		ORDER BY time 
+		ORDER BY time
 		limit #{p.start},#{p.pageSize}
 
 	</select>
@@ -55,6 +55,14 @@
 			  ORDER BY a.integral DESC
 			  limit #{p.start},#{p.pageSize}
 	</select>
+
+	<select id="getActor" resultType="com.mem.vo.business.base.model.po.Actor">
+		SELECT a.id, a.name, a.url, a.integral,a.nexttrip,(@rownum:=@rownum+1) AS count FROM actor a
+			 ,(SELECT @rownum:=0) r where a.name like "%"#{name}"%"
+			  ORDER BY a.integral DESC
+			  limit #{p.start},#{p.pageSize}
+	</select>
+
 	<select id="getActorTripList" resultType="com.mem.vo.business.base.model.po.ActorTirp">
 		SELECT * FROM actor_trip where actorid=#{a.actorid}
 		<if test="a.tripname!=null and a.tripname!=''">
@@ -238,4 +246,4 @@
 		</trim>
 
 	</insert>
-</mapper>   
+</mapper>

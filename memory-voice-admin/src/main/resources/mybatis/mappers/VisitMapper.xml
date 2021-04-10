@@ -165,4 +165,24 @@
             ORDER BY v.update_time DESC
             limit #{paging.start},#{paging.pageSize}
     </select>
+
+    <select id="getVisit" resultType="com.mem.vo.business.base.model.vo.VisitVO">
+        SELECT
+                    v.id,
+                    v.title,
+                    v.introduction,
+                    v.video_url,
+                    v.thumbnail_url,
+                    v.likes,
+                    v.comments,
+                    v.forwards,
+                    v.is_delete,
+                    v.create_user,
+                    v.create_time,
+                    v.update_time
+            FROM visit v
+         	WHERE v.title like "%"#{name}"%" and v.is_delete=0
+            ORDER BY v.update_time DESC
+            limit #{paging.start},#{paging.pageSize}
+    </select>
 </mapper>

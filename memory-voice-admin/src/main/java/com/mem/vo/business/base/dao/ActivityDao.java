@@ -80,6 +80,8 @@ public interface ActivityDao {
 
     List<ActivityVO> findByPageToPhone(@Param("paging") PageBean<ActivityVO> paging);
 
+    List<ActivityVO> getActivity(@Param("paging") PageBean<ActivityVO> paging,@Param("name") String name);
+
     ActivityVO queryDetailByPhone(Integer id);
 
     Integer querySort(Long paramLong);

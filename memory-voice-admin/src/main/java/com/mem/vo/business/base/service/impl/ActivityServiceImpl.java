@@ -246,6 +246,27 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public PageBean<ActivityVO> getActivity(Integer pageNo, Integer pageSize, String name) {
+        int Commod = activityDao.findByPageToPhoneCount();
+        PageBean<ActivityVO> pager = new PageBean();
+        pager.setPageSize(pageSize);
+        pager.setRows(Integer.valueOf(Commod));
+        pager.setPageNo(pageNo);
+        int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
+        pager.setStart(Integer.valueOf(first));
+        List<ActivityVO> list = activityDao.getActivity(pager, name);
+        for (ActivityVO act : list) {
+            ActivityVO a = prizeDao.gettotalandgived(act.getId());
+            if (a != null) {
+                act.setTotalNum(a.getTotalNum());
+                act.setGivedNum(a.getGivedNum());
+            }
+        }
+        pager.setLists(list);
+        return pager;
+    }
+
+    @Override
     public PageBean<ActivityVO> queryActivityByUser(Integer pageNo, Integer pageSize, Integer flag, Long userId) {
         int Commod = activityDao.queryActivityByUserCount(flag, userId);
         PageBean<ActivityVO> pager = new PageBean();

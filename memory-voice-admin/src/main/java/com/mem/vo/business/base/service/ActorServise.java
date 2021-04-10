@@ -24,6 +24,8 @@ public interface ActorServise {
 
     PageBean<Actor> getPhoneActorList(Integer page, Integer pageSize);
 
+    PageBean<Actor> getActor(Integer page, Integer pageSize, String name);
+
     PageBean<ActorTirp> getPhoneActorTripList(String name, Integer page, Integer pageSize, Integer actorid);
 
     Integer clickPrize(String token, Long id);

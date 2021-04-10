@@ -64,6 +64,19 @@ public class ActorController {
         }
     }
 
+    @PostMapping({"/getActor"})
+    public ResponseDto<PageBean<Actor>> getActor(@RequestParam Integer page, @RequestParam Integer pageSize,@RequestParam String name) {
+        ResponseDto<PageBean<Actor>> responseDto = ResponseDto.successDto();
+        try {
+            PageBean<Actor> ilst = actorServise.getActor(page, pageSize, name);
+            return responseDto.successData(ilst);
+        } catch (Exception e) {
+            log.debug("getPhone", e.getMessage());
+            responseDto.failData("有问题");
+            return responseDto;
+        }
+    }
+
     @PostMapping({"/pc/getActorList"})
     public ResponseDto<PageBean<Actor>> getActorList(Actor actor, @RequestParam Integer page, @RequestParam Integer pageSize) {
         ResponseDto<PageBean<Actor>> responseDto = ResponseDto.successDto();

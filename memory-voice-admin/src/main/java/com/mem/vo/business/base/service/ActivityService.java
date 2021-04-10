@@ -81,6 +81,8 @@ public interface ActivityService {
 
     PageBean<ActivityVO> findByPageToPhone(Integer pageNo, Integer pageSize);
 
+    PageBean<ActivityVO> getActivity(Integer pageNo, Integer pageSize,String name);
+
     PageBean<ActivityVO> queryActivityByUser(Integer pageNo, Integer pageSize, Integer flag, Long userId);
 
 }

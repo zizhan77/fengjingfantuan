@@ -109,6 +109,27 @@ public class ActorServiceImpl implements ActorServise {
     }
 
     @Override
+    public PageBean<Actor> getActor(Integer page, Integer pageSize, String name) {
+        PageBean<Actor> pager = new PageBean();
+        pager.setPageSize(pageSize);
+        pager.setPageNo(page);
+        int first = (pager.getPageNo().intValue() - 1) * pager.getPageSize().intValue();
+        pager.setStart(Integer.valueOf(first));
+
+        List<Actor> list = actorDao.getActor(pager, name);
+        for (Actor actor : list) {
+            List<String> trip = actorDao.getActorTripNextOne(actor.getId());
+            if (trip != null && trip.size() > 0) {
+                actor.setNexttrip(trip.get(0));
+                continue;
+            }
+            actor.setNexttrip("暂无行程");
+        }
+        pager.setLists(list);
+        return pager;
+    }
+
+    @Override
     public PageBean<ActorTirp> getPhoneActorTripList(String name, Integer page, Integer pageSize, Integer actorid) {
         String monthFirstStr = DateUtil.getMonthFirstStr(name);
         String monthLastStr = DateUtil.getMonthLastStr(name);

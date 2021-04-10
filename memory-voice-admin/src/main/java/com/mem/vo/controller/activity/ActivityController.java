@@ -120,6 +120,21 @@ public class ActivityController {
         }
     }
 
+    @PostMapping({"/getActivity"})
+    public ResponseDto<PageBeanCopy<ActivityVO>> getActivity(@RequestParam(required = true) Integer pageNo, @RequestParam(required = true) Integer pageSize, String name) {
+        ResponseDto<PageBeanCopy<ActivityVO>> responseDto = ResponseDto.successDto();
+        try {
+            PageBean<ActivityVO> byPage = activityService.getActivity(pageNo, pageSize, name);
+            String s1 = JSON.toJSONString(byPage);
+            PageBeanCopy pageBeanCopy = JSONObject.parseObject(s1, PageBeanCopy.class);
+            return responseDto.successData(pageBeanCopy);
+        } catch (Exception e) {
+            log.debug("token未登录", e.getMessage());
+            responseDto.setCode(Integer.valueOf(3));
+            return responseDto;
+        }
+    }
+
     @PostMapping("/queryAll")
     public ResponseDto<Page<ActivityVO>> queryAll(ActivityQuery activityQuery, Page page) {
         //权限验证
