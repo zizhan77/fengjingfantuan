@@ -4,9 +4,11 @@ import com.mem.vo.business.base.model.po.ActivityUrl;
 import com.mem.vo.business.base.service.ActivityUrlService;
 import com.mem.vo.business.biz.model.dto.CommonLoginContext;
 import com.mem.vo.business.biz.service.token.TokenService;
+import com.mem.vo.common.constant.BizCode;
 import com.mem.vo.common.constant.SourceType;
 import com.mem.vo.common.dto.Page;
 import com.mem.vo.common.dto.ResponseDto;
+import com.mem.vo.common.exception.BizAssert;
 import com.mem.vo.common.exception.BizException;
 import com.mem.vo.common.util.FileUtil;
 import java.util.List;
@@ -108,6 +110,24 @@ public class ActivityQaUrlController {
             return responseDto.failData(e.getMessage());
         } catch (Exception e) {
             log.error("活动拼图异常", e);
+            return responseDto.failSys();
+        }
+    }
+
+    @PostMapping("/deleteById")
+    public ResponseDto<Integer> deleteById(@RequestHeader("token") String token, String id) {
+        //权限验证
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+
+        try {
+            BizAssert.notNull(id, BizCode.PARAM_NULL.getMessage());
+            return responseDto.successData(activityUrlService.deleteById(Long.valueOf(id)));
+        } catch (BizException e) {
+
+            log.error("删除图片异常，参数:{},原因：{}", id, e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+            log.error("删除图片异常，参数:{}", id, e);
             return responseDto.failSys();
         }
     }

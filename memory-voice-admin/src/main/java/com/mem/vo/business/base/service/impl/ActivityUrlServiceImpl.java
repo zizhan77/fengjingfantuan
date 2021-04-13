@@ -83,4 +83,9 @@ public class ActivityUrlServiceImpl implements ActivityUrlService {
         ActivityUrl activityUrl1 = objects1.get(index);
         return activityUrl1;
     }
+
+    @Override
+    public int deleteById(Long id) {
+        return activityUrlDao.deleteById(id);
+    }
 }

@@ -12,4 +12,6 @@ public interface ActivityUrlService {
     ActivityUrl edit(ActivityUrl activityUrl);
 
     ActivityUrl queryOne(String id);
+
+    int deleteById(Long id);
 }

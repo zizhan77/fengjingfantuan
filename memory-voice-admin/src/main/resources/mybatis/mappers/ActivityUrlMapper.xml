@@ -83,14 +83,17 @@
         </trim>
         where id = #{id}
     </update>
+
+    <!-- 删除记录 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+		update activity_url set isDelete = 1 where id = #{id,jdbcType=BIGINT}  and isDelete = 0
+	</update>
+
     <select id="queryPage"  resultMap="BaseResultMap">
         select <include refid="Base_Column_List" />
-        from activity_url where 1=1
+        from activity_url where 1=1 and isDelete=0
         <if test="activityUrl.sponsorId != null and activityUrl.sponsorId != ''">
             and sponsorId=#{activityUrl.sponsorId}
-        </if>
-        <if test="activityUrl.isDelete != null and activityUrl.isDelete != ''">
-           and isDelete=#{activityUrl.isDelete}
         </if>
         <if test="activityUrl.status != null and activityUrl.status != ''">
             and status=#{activityUrl.status}

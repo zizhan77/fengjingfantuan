@@ -13,4 +13,6 @@ public interface ActivityUrlDao {
     int insert(ActivityUrl paramActivityUrl);
 
     int update(ActivityUrl paramActivityUrl);
+
+    int deleteById(Long id);
 }
