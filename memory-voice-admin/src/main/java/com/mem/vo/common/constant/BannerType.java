@@ -14,7 +14,8 @@ import lombok.Getter;
 public enum BannerType {
 
     BANNER(1, "banner"),
-    OPENING_PAGE(2, "开屏页");
+    OPENING_PAGE(2, "开屏页"),
+    INDEX_PAGE(3, "首页图");
 
     private Integer code;
     private String name;
