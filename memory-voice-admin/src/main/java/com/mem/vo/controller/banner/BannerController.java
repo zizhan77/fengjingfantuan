@@ -222,6 +222,52 @@ public class BannerController {
         }
     }
 
+    @PostMapping("/queryPage")
+    @CommonExHandler(key = "查询图片")
+    public ResponseDto<List<BannerVo>> queryPageByphone(BannerVo query) {
+
+        ResponseDto<List<BannerVo>> responseDto = new ResponseDto<>();
+        try {
+
+            BannerQuery bannerQuery = new BannerQuery();
+            bannerQuery.setType(query.getType());
+            bannerQuery.setOneAddress(query.getOneAddress());
+            bannerQuery.setTwoAddress(query.getTwoAddress());
+            bannerQuery.setIsDelete(0);
+            bannerQuery.setEnable(1);
+            bannerQuery.setAllPlace(0);
+            List<Banner> banners = bannerService.findByCondition(bannerQuery);
+            if (CollectionUtils.isEmpty(banners)) {
+                bannerQuery.setAllPlace(1);
+                bannerQuery.setOneAddress(null);
+                bannerQuery.setTwoAddress(null);
+                banners = bannerService.findByCondition(bannerQuery);
+
+            }
+
+            if (CollectionUtils.isEmpty(banners)) {
+                return responseDto;
+            }
+            List<BannerVo> bannerVos = new ArrayList<>(banners.size());
+            banners.forEach(item -> {
+                BannerVo bannerVo = BeanCopyUtil.copyProperties(item, BannerVo.class);
+                assembleAddress(bannerVo);
+
+                bannerVos.add(bannerVo);
+            });
+            return responseDto.successData(bannerVos);
+        } catch (BizException e) {
+
+            log.error("查询图片异常,原因：{}", e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+
+            log.error("查询图片系统异常", e);
+            return responseDto.failSys();
+
+        }
+    }
+
 
     @PostMapping("/queryOpeningPage/forwx")
     @CommonExHandler(key = "查询开屏页轮播图（微信小程序端）")
