@@ -15,7 +15,9 @@ public enum BannerType {
 
     BANNER(1, "banner"),
     OPENING_PAGE(2, "开屏页"),
-    INDEX_PAGE(3, "首页图");
+    INDEX_PAGE(3, "首页图"),
+    POPUP_PAGE(4, "弹窗图"),
+        ;
 
     private Integer code;
     private String name;
