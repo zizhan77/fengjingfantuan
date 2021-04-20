@@ -8,12 +8,11 @@ import com.mem.vo.common.dto.PageBean;
 import com.mem.vo.common.dto.ResponseDto;
 import com.mem.vo.common.exception.BizAssert;
 import javax.annotation.Resource;
+
+import com.mem.vo.common.exception.BizException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping({"/actor"})
@@ -169,6 +168,26 @@ public class ActorController {
             log.debug("deleteActor", e.getMessage());
             responseDto.failSys();
             return responseDto;
+        }
+    }
+
+    @PostMapping({"/pc/add"})
+    public ResponseDto<Integer> queryPage(@RequestHeader("token") String token, String id, String count) {
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+        try {
+            if (id == null || "".equals(id)) {
+                throw new BizException(BizCode.PARAM_NULL.getMessage());
+            }
+            if (count == null || "".equals(count)) {
+                throw new BizException(BizCode.PARAM_NULL.getMessage());
+            }
+            return responseDto.successData(actorServise.add(token, id, count));
+        } catch (BizException e) {
+            log.error("查询排行项目异常, 原因:{}", e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+            log.error("查询排行项目异常", e);
+            return responseDto.failSys();
         }
     }
 }

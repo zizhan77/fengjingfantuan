@@ -1,14 +1,16 @@
 package com.mem.vo.business.base.service.impl;
 
 import com.mem.vo.business.base.dao.ActorDao;
-import com.mem.vo.business.base.model.po.Activity;
-import com.mem.vo.business.base.model.po.Actor;
-import com.mem.vo.business.base.model.po.ActorTirp;
+import com.mem.vo.business.base.model.po.*;
 import com.mem.vo.business.base.service.ActivityService;
 import com.mem.vo.business.base.service.ActorServise;
+import com.mem.vo.business.base.service.IntegralService;
+import com.mem.vo.business.base.service.UserService;
 import com.mem.vo.business.biz.model.dto.CommonLoginContext;
 import com.mem.vo.business.biz.service.token.TokenService;
+import com.mem.vo.common.constant.IntegralEnum;
 import com.mem.vo.common.dto.PageBean;
+import com.mem.vo.common.exception.BizException;
 import com.mem.vo.common.util.DateUtil;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,12 @@ public class ActorServiceImpl implements ActorServise {
 
     @Resource
     private ActivityService activityService;
+
+    @Resource
+    private UserService userService;
+
+    @Resource
+    private IntegralService integralService;
 
     @Override
     public PageBean<Actor> getActorList(Actor actor, Integer page, Integer pageSize) {
@@ -208,5 +216,37 @@ public class ActorServiceImpl implements ActorServise {
             int i = actorDao.clickSponsor(id, 0, 1);
         }
         return 1;
+    }
+
+    @Override
+    public Integer add(String token, String id, String count) {
+        CommonLoginContext contextByken = tokenService.getContextByken(token);
+        User user = userService.findById(Long.valueOf(contextByken.getUserId().longValue()));
+        System.out.println("投之前的饭团"+ user.getIntegral());
+        Integer integral = user.getIntegral();
+        if (integral.intValue() < Integer.parseInt(count)) {
+            throw new BizException("你没有那么多饭团");
+        }
+        int i1 = addIntegral(id, count);
+        if (i1 == 0) {
+            throw new BizException("排行榜增加饭团操作失败");
+        }
+        Integral in = Integral.builder()
+                .activityId(Integer.valueOf(Integer.parseInt(id)))
+                .integralQty(Integer.valueOf(0 - Integer.parseInt(count)))
+                .type(IntegralEnum.TYPE_USE.getCode())
+                .userId(Integer.valueOf(contextByken.getUserId().intValue()))
+                .activityName("投饭团").build();
+        int insert = integralService.insert(in);
+        if (insert == 0) {
+            throw new BizException("饭团操作记录写入失败");
+        }
+        return Integer.valueOf(insert);
+    }
+
+    @Override
+    public int addIntegral(String id, String count) {
+        int row = actorDao.addIntegral(id, count);
+        return row;
     }
 }

@@ -33,4 +33,8 @@ public interface ActorServise {
     Integer clickBanner(String token, Long id);
 
     Integer clickSponsor(String token, Long id);
+
+    Integer add(String token, String id, String count);
+
+    int addIntegral(String id, String count);
 }

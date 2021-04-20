@@ -6,6 +6,7 @@ import com.mem.vo.business.base.model.po.ActorTirp;
 import com.mem.vo.common.dto.PageBean;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.w3c.dom.ls.LSInput;
 
 public interface ActorDao {
@@ -56,4 +57,8 @@ public interface ActorDao {
     int clickSponsor(@Param("id") Long paramLong, @Param("people") int paramInt1, @Param("clicknum") int paramInt2);
 
     Activity findByActivityId(Integer paramInteger);
+
+    @Update({"update actor set integral = integral + #{count} where id = #{id}"})
+    int addIntegral(@Param("id") String id, @Param("count") String count);
+
 }
