@@ -61,6 +61,54 @@ public class FileController {
         }
     }
 
+    @PostMapping("/uploadToken")
+    public ResponseDto<String> uploadToken(@RequestHeader("token") String token, @RequestParam("fileName") String fileName) {
+
+        ResponseDto<String> responseDto = ResponseDto.successDto();
+        if (fileName.isEmpty()) {
+            return responseDto.failData("文件不能为空!");
+        }
+        if (fileName.contains(" ")) {
+            return responseDto.failData("文件名不能包含空格!");
+        }
+        try {
+            return responseDto.successData(fileUtil.getUploadToken(fileName, true));
+        } catch (BizException e) {
+
+            log.error("上传token失败，原因：{}", e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+
+            log.error("上传token失败", e);
+            return responseDto.failSys();
+
+        }
+    }
+
+    @PostMapping("/uploadFile")
+    public ResponseDto<String> uploadFile(@RequestHeader("token") String token, @RequestParam("fileName") String fileName) {
+
+        ResponseDto<String> responseDto = ResponseDto.successDto();
+        if (fileName.isEmpty()) {
+            return responseDto.failData("文件不能为空!");
+        }
+        if (fileName.contains(" ")) {
+            return responseDto.failData("文件名不能包含空格!");
+        }
+        try {
+            return responseDto.successData(fileUtil.getUploadFile(fileName));
+        } catch (BizException e) {
+
+            log.error("上传文件失败，原因：{}", e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+
+            log.error("上传文件失败", e);
+            return responseDto.failSys();
+
+        }
+    }
+
     @RequestMapping("/downloadFile")
     public ResponseDto<String> downloadFile(String fileName) {
         ResponseDto<String> responseDto = ResponseDto.successDto();

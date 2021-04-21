@@ -189,6 +189,37 @@ public class FileUtil {
         }
     }
 
+    public String getUploadToken(String key, Boolean override) {
+        Date date = new Date();
+        long time = date.getTime();
+        key = key + time;
+
+        String upToken;
+
+        Auth auth = getAuth();
+
+        if (override) {
+            upToken = auth.uploadToken(bucket, key);
+        } else {
+            upToken = auth.uploadToken(bucket);
+        }
+
+        return upToken;
+    }
+
+    public String getUploadFile(String fileName) {
+        String fileUrl = getFileUrl(fileName);
+
+        InternetResources internetResources = new InternetResources();
+        internetResources.setName(fileName);
+        internetResources.setUrl(fileUrl);
+
+        internetResources.setType(Integer.valueOf(2));
+        internetResourcesDao.insert(internetResources);
+
+        return fileUrl;
+    }
+
     /**
      * 下载文件
      *
