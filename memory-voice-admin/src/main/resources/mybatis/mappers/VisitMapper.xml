@@ -181,7 +181,7 @@
                     v.update_time
             FROM visit v
          	WHERE v.is_delete=0
-            ORDER BY v.update_time DESC
+            ORDER BY v.create_time DESC
             limit #{paging.start},#{paging.pageSize}
     </select>
 
