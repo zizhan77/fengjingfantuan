@@ -11,6 +11,7 @@
         <result column="prob" property="prob" jdbcType="DECIMAL"/>
         <result column="total_num" property="totalNum" jdbcType="INTEGER"/>
         <result column="gived_num" property="givedNum" jdbcType="INTEGER"/>
+        <result column="show_num" property="showNum" jdbcType="INTEGER"/>
         <result column="prize_type" property="prizeType" jdbcType="TINYINT"/>
         <result column="prize_intro" property="prizeIntro" jdbcType="VARCHAR"/>
         <result column="prize_rule" property="prizeRule" jdbcType="VARCHAR"/>
@@ -42,6 +43,7 @@
 		prob,
 		total_num,
 		gived_num,
+		show_num,
 		prize_type,
 		prize_intro,
 		prize_rule,
@@ -86,7 +88,9 @@
             <if test="condition.givedNum != null" >
                 and gived_num =  #{condition.givedNum,jdbcType=INTEGER}
             </if>
-
+            <if test="condition.showNum != null" >
+                and show_num =  #{condition.showNum,jdbcType=INTEGER}
+            </if>
             <if test="condition.prizeType != null" >
                 and prize_type =  #{condition.prizeType,jdbcType=TINYINT}
             </if>
@@ -165,6 +169,9 @@
             <if test="givedNum != null  ">
                 gived_num,
             </if>
+            <if test="showNum != null  ">
+                show_num,
+            </if>
             <if test="prizeType != null  ">
                 prize_type,
             </if>
@@ -226,6 +233,9 @@
             </if>
             <if test="givedNum != null  ">
                 #{givedNum,jdbcType=INTEGER},
+            </if>
+            <if test="showNum != null  ">
+                #{showNum,jdbcType=INTEGER},
             </if>
             <if test="prizeType != null  ">
                 #{prizeType,jdbcType=TINYINT},
@@ -295,6 +305,9 @@
             <if test="givedNum != null  ">
                 gived_num,
             </if>
+            <if test="showNum != null  ">
+                show_num,
+            </if>
             <if test="prizeType != null  ">
                 prize_type,
             </if>
@@ -356,6 +369,9 @@
             </if>
             <if test="givedNum != null  ">
                 #{givedNum,jdbcType=INTEGER},
+            </if>
+            <if test="showNum != null  ">
+                #{showNum,jdbcType=INTEGER},
             </if>
             <if test="prizeType != null  ">
                 #{prizeType,jdbcType=TINYINT},
@@ -426,6 +442,9 @@
             <if test="givedNum != null  ">
                 gived_num=#{givedNum,jdbcType=INTEGER},
             </if>
+            <if test="showNum != null  ">
+                show_num=#{showNum,jdbcType=INTEGER},
+            </if>
             <if test="prizeType != null  ">
                 prize_type=#{prizeType,jdbcType=TINYINT},
             </if>
@@ -489,4 +508,4 @@
         from prize
         <include refid="whereCondition"/>
     </select>
-</mapper>   
+</mapper>
