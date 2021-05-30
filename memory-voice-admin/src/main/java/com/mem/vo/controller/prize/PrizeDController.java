@@ -262,6 +262,7 @@ public class PrizeDController {
                     .id(prizeD.getPrizeId())
                     .prizeType(prizeD.getPrizeType())
                     .prizeName(prizeD.getPrizeName())
+                    .showNum(prizeD.getShowNum())
                     .prizeIntro(prizeD.getPrizeIntro())
                     .totalNum(prizeD.getPrizeNum())
                     .codeType(prizeD.getCodeType())
@@ -284,6 +285,7 @@ public class PrizeDController {
                     .id(prizeD.getPrizeId())
                     .prizeType(prizeD.getPrizeType())
                     .prizeName(prizeD.getPrizeName())
+                    .showNum(prizeD.getShowNum())
                     .prizeIntro(prizeD.getPrizeIntro())
                     .totalNum(prizeD.getPrizeNum())
                     .codeType(prizeD.getCodeType())
@@ -321,6 +323,7 @@ public class PrizeDController {
             res.setPrizeType(prize.getPrizeType());
             res.setActivityId(prize.getActivityId());
             res.setPrizeNum(prize.getTotalNum());
+            res.setShowNum(prize.getShowNum());
             res.setLevel(prize.getLevel());
             res.setCodeType(prize.getCodeType());
             res.setPrizeIntro(prize.getPrizeIntro());

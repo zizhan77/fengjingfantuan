@@ -63,6 +63,8 @@ public class ActivityVO {
 
     private String givedNum;
 
+    private String showNum;
+
     private Integer topsp;
 
     private String crossimage;

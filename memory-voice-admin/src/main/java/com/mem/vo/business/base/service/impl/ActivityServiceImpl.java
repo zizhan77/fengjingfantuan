@@ -220,6 +220,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (a != null) {
             act.setTotalNum(a.getTotalNum());
             act.setGivedNum(a.getGivedNum());
+            act.setShowNum(a.getShowNum());
         }
         return act;
     }

@@ -25,7 +25,7 @@
         <result column="integral_prob" property="integralProb" jdbcType="DECIMAL"/>
         <result column="prized_count" property="prizedCount" jdbcType="INTEGER"/>
         <result column="ticket_unit" property="ticketUnit" jdbcType="INTEGER"/>
-
+        <result column="show_num" property="showNum" jdbcType="INTEGER"/>
         <result column="keyId" property="keyId" jdbcType="INTEGER"/>
     </resultMap>
 
@@ -49,8 +49,7 @@
 		integral_prob,
 		prized_count,
 		ticket_unit,
-
-
+		show_num,
 		keyId
 	</sql>
     <!-- 查询条件 -->
@@ -134,6 +133,9 @@
 
             <if test="condition.keyId != null">
                 and keyId = #{condition.keyId,jdbcType=INTEGER}
+            </if>
+            <if test="condition.showNum != null">
+                and show_num = #{condition.showNum,jdbcType=INTEGER}
             </if>
         </trim>
     </sql>
@@ -232,6 +234,9 @@
             <if test="ticketUnit != null  ">
                 prized_count,
             </if>
+            <if test="showNum != null  ">
+                show_num,
+            </if>
             <if test="prizedCount != null  ">
                 ticket_unit,
             </if>
@@ -294,6 +299,9 @@
             </if>
             <if test="prizedCount != null  ">
                 #{prizedCount,jdbcType=INTEGER},
+            </if>
+            <if test="showNum != null  ">
+                #{showNum,jdbcType=INTEGER},
             </if>
             <if test="ticketUnit != null  ">
                 #{ticketUnit,jdbcType=INTEGER},
@@ -361,6 +369,9 @@
             <if test="prizedCount != null  ">
                 prized_count=#{prizedCount,jdbcType=INTEGER},
             </if>
+            <if test="showNum != null  ">
+                show_num=#{showNum,jdbcType=INTEGER},
+            </if>
          <!--   <if test="codeType != null  ">
                 codeType=#{codeType},
             </if>-->
@@ -399,4 +410,4 @@
 		select id from prize_d where
 	activity_id=#{condition.activityId,jdbcType=BIGINT} and prize_type=#{condition.prizeType,jdbcType=TINYINT} and eticket_code = #{condition.eticketCode,jdbcType=VARCHAR}
 	</select>
-</mapper>   
+</mapper>

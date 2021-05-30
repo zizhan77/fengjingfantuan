@@ -674,7 +674,7 @@
         a.thumbnail_url,
         a.performanceId,
         a.bgUrl,
-        p.total_num as totalNum  ,p.gived_num as givedNum,
+        p.total_num as totalNum  ,p.gived_num as givedNum,p.show_num as showNum,
         a.top_sp as topsp,
         a.of_ranking as ofranking,
         a.crossimage,

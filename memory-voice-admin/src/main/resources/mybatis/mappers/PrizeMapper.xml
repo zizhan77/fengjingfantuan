@@ -149,7 +149,7 @@
     </sql>
 
     <select id="gettotalandgived" resultType="com.mem.vo.business.base.model.vo.ActivityVO" parameterType="long">
-        SELECT p.total_num as totalnum,p.gived_num AS givednum FROM prize p WHERE p.activity_id = #{id} AND p.prize_type=1 AND p.is_delete=0
+        SELECT p.total_num as totalnum,p.gived_num AS givednum, p.show_num AS shownum FROM prize p WHERE p.activity_id = #{id} AND p.prize_type=1 AND p.is_delete=0
     </select>
     <insert id="insertforprize"   useGeneratedKeys="true" keyProperty="id" parameterType="com.mem.vo.business.base.model.po.Prize">
         insert into prize
