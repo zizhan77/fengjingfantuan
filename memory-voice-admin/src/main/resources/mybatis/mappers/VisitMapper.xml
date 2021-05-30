@@ -125,7 +125,7 @@
                 is_delete=#{isDelete,jdbcType=TINYINT},
             </if>
         </trim>
-        where id=#{id,jdbcType=BIGINT} and is_delete = 0
+        where id=#{id,jdbcType=BIGINT}
     </update>
 
     <!-- 删除记录 -->
@@ -156,7 +156,6 @@
         SELECT
         count(1)
         FROM visit ,(SELECT @rownum:=0) r
-        where is_delete=0
     </select>
 
     <select id="findByPage" resultType="com.mem.vo.business.base.model.vo.VisitVO">
@@ -174,7 +173,6 @@
                     v.create_time,
                     v.update_time
             FROM visit v
-         	WHERE v.is_delete=0
             ORDER BY v.create_time DESC
             limit #{paging.start},#{paging.pageSize}
     </select>
