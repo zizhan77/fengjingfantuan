@@ -82,6 +82,7 @@
 		<if test="a.id !=null">
 		and 	id =#{a.id}
 		</if>
+		order by integral desc
 		limit #{p.start},#{p.pageSize}
 
 	</select>
