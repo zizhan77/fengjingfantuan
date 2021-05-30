@@ -139,7 +139,7 @@
 
     <!-- 启用记录 -->
     <update id="showById" parameterType="java.lang.Long">
-        update visit set is_delete = 1 where
+        update visit set is_delete = 0 where
         is_delete = 1
         <if test="_parameter != null  ">
             and id = #{id,jdbcType=BIGINT}
