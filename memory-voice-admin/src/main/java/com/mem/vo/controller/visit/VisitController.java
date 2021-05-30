@@ -99,7 +99,11 @@ public class VisitController {
                 return responseDto;
             }
             BizAssert.notNull(id, BizCode.PARAM_NULL.getMessage());
-            return responseDto.successData(visitService.deleteById(Long.valueOf(id)));
+            Long i = 0L;
+            if (!"".equals(id)) {
+                i = Long.valueOf(id);
+            }
+            return responseDto.successData(visitService.deleteById(i));
         } catch (BizException e) {
 
             log.error("删除活动异常，参数:{},原因：{}", id, e.getMessage());
@@ -123,7 +127,11 @@ public class VisitController {
                 return responseDto;
             }
             BizAssert.notNull(id, BizCode.PARAM_NULL.getMessage());
-            return responseDto.successData(visitService.showById(Long.valueOf(id)));
+            Long i = 0L;
+            if (!"".equals(id)) {
+                i = Long.valueOf(id);
+            };
+            return responseDto.successData(visitService.showById(i));
         } catch (BizException e) {
 
             log.error("删除活动异常，参数:{},原因：{}", id, e.getMessage());
