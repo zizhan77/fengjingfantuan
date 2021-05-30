@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author zhangsq
@@ -85,7 +86,7 @@ public class VisitController {
         }
     }
 
-    @CommonExHandler(key = "删除指定访谈")
+    @CommonExHandler(key = "隐藏指定访谈")
     @PostMapping("/deleteById")
     public ResponseDto<Integer> deleteById(@RequestHeader("token") String token, String id) {
         //权限验证
@@ -99,6 +100,30 @@ public class VisitController {
             }
             BizAssert.notNull(id, BizCode.PARAM_NULL.getMessage());
             return responseDto.successData(visitService.deleteById(Long.valueOf(id)));
+        } catch (BizException e) {
+
+            log.error("删除活动异常，参数:{},原因：{}", id, e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+            log.error("删除活动异常，参数:{}", id, e);
+            return responseDto.failSys();
+        }
+    }
+
+    @CommonExHandler(key = "启动指定访谈")
+    @PostMapping("/showById")
+    public ResponseDto<Integer> showById(@RequestHeader("token") String token, String id) {
+        //权限验证
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+
+        try {
+            CommonLoginContext context = tokenService.getContextByken(token);
+            if (context.getUserId() == null) {
+                responseDto.setCode(Integer.valueOf(3));
+                return responseDto;
+            }
+            BizAssert.notNull(id, BizCode.PARAM_NULL.getMessage());
+            return responseDto.successData(visitService.showById(Long.valueOf(id)));
         } catch (BizException e) {
 
             log.error("删除活动异常，参数:{},原因：{}", id, e.getMessage());

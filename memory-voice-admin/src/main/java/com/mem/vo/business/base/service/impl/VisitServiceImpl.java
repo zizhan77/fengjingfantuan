@@ -43,6 +43,11 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    public int showById(Long id) {
+        return visitDao.showById(id);
+    }
+
+    @Override
     public Visit findById(Long id) {
         return visitDao.findById(id);
     }

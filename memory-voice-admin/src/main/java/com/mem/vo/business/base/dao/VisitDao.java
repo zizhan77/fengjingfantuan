@@ -34,6 +34,14 @@ public interface VisitDao {
      */
     int deleteById(Long id);
 
+
+    /**
+     * 启用接单中台表
+     *
+     * @param id 接单中台表ID
+     */
+    int showById(Long id);
+
     /**
      * 根据ID查询接单中台表
      *

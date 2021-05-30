@@ -130,8 +130,27 @@
 
     <!-- 删除记录 -->
     <update id="deleteById" parameterType="java.lang.Long">
-		update visit set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+		update visit set is_delete = 1 where
+		id = #{id,jdbcType=BIGINT}
+        <trim  suffixOverrides="," >
+            <if test="id != null  ">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+        </trim>
+		and is_delete = 0
 	</update>
+
+    <!-- 启用记录 -->
+    <update id="showById" parameterType="java.lang.Long">
+        update visit set is_delete = 1 where
+        id = #{id,jdbcType=BIGINT}
+        <trim  suffixOverrides="," >
+            <if test="id != null  ">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+        </trim>
+        and is_delete = 1
+    </update>
 
     <!-- 根据id查询 接单中台表 -->
     <select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">

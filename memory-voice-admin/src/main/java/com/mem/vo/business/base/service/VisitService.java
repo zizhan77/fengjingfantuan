@@ -35,6 +35,13 @@ public interface VisitService {
     int deleteById(Long id);
 
     /**
+     * 启动接单中台表
+     *
+     * @param id 接单中台表ID
+     */
+    int showById(Long id);
+
+    /**
      * 根据ID查询接单中台表
      *
      * @param id 接单中台表ID
