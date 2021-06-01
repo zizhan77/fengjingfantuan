@@ -56,6 +56,12 @@ public class VisitVO {
     private Integer isDelete;
 
     /**
+     *
+     * 启停标注  0 隐藏 1 显示
+     * */
+    private Integer isShow;
+
+    /**
      * 视频上传用户
      */
     private long createUser;

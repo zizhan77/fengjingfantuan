@@ -43,6 +43,11 @@ public interface VisitDao {
     int showById(Long id);
 
     /**
+     * 隐藏访谈
+     * */
+    int shadowById(Long id);
+
+    /**
      * 根据ID查询接单中台表
      *
      * @param id 接单中台表ID

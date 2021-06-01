@@ -86,7 +86,7 @@ public class VisitController {
         }
     }
 
-    @CommonExHandler(key = "隐藏指定访谈")
+    @CommonExHandler(key = "删除指定访谈")
     @PostMapping("/deleteById")
     public ResponseDto<Integer> deleteById(@RequestHeader("token") String token, String id) {
         //权限验证
@@ -99,11 +99,7 @@ public class VisitController {
                 return responseDto;
             }
             BizAssert.notNull(id, BizCode.PARAM_NULL.getMessage());
-            Long i = 0L;
-            if (!"".equals(id)) {
-                i = Long.valueOf(id);
-            }
-            return responseDto.successData(visitService.deleteById(i));
+            return responseDto.successData(visitService.deleteById(Long.valueOf(id)));
         } catch (BizException e) {
 
             log.error("删除活动异常，参数:{},原因：{}", id, e.getMessage());
@@ -132,6 +128,34 @@ public class VisitController {
                 i = Long.valueOf(id);
             };
             return responseDto.successData(visitService.showById(i));
+        } catch (BizException e) {
+
+            log.error("删除活动异常，参数:{},原因：{}", id, e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+            log.error("删除活动异常，参数:{}", id, e);
+            return responseDto.failSys();
+        }
+    }
+
+    @CommonExHandler(key = "停用指定访谈")
+    @PostMapping("/shadowById")
+    public ResponseDto<Integer> shadowByIdById(@RequestHeader("token") String token, String id) {
+        //权限验证
+        ResponseDto<Integer> responseDto = ResponseDto.successDto();
+
+        try {
+            CommonLoginContext context = tokenService.getContextByken(token);
+            if (context.getUserId() == null) {
+                responseDto.setCode(Integer.valueOf(3));
+                return responseDto;
+            }
+            BizAssert.notNull(id, BizCode.PARAM_NULL.getMessage());
+            Long i = 0L;
+            if (!"".equals(id)) {
+                i = Long.valueOf(id);
+            };
+            return responseDto.successData(visitService.shadowById(i));
         } catch (BizException e) {
 
             log.error("删除活动异常，参数:{},原因：{}", id, e.getMessage());

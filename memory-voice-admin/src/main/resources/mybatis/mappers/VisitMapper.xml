@@ -14,6 +14,7 @@
         <result column="comments" property="comments" jdbcType="BIGINT"/>
         <result column="forwards" property="forwards" jdbcType="BIGINT"/>
         <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="is_show" property="isShow" jdbcType="TINYINT"/>
         <result column="create_user" property="createUser" jdbcType="BIGINT"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
@@ -29,6 +30,8 @@
 		likes,
 		comments,
 		forwards,
+		is_delete,
+		is_show,
 		create_user,
 		create_time,
 		update_time
@@ -50,6 +53,12 @@
             </if>
             <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
                 thumbnail_url,
+            </if>
+            <if test="isDelete != null  and isDelete != '' ">
+                is_delete,
+            </if>
+            <if test="isShow != null  and isShow != '' ">
+                is_show,
             </if>
             <if test="createTime != null  ">
                 create_time,
@@ -73,6 +82,12 @@
             </if>
             <if test="thumbnailUrl != null  and thumbnailUrl != '' ">
                 #{thumbnailUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null  and isDelete != '' ">
+                isDelete,
+            </if>
+            <if test="isShow != null  and isShow != '' ">
+                isShow,
             </if>
             <if test="createTime != null  ">
                 #{createTime,jdbcType=TIMESTAMP},
@@ -124,23 +139,32 @@
             <if test="isDelete != null  ">
                 is_delete=#{isDelete,jdbcType=TINYINT},
             </if>
+            <if test="isShow != null  ">
+                is_show=#{isShow,jdbcType=TINYINT},
+            </if>
         </trim>
         where id=#{id,jdbcType=BIGINT}
     </update>
 
     <!-- 删除记录 -->
     <update id="deleteById" parameterType="java.lang.Long">
-		update visit set is_delete = 1 where
-        is_delete = 0
+		update visit set is_delete = 1 where id = #{id,jdbcType=BIGINT}  and is_delete = 0
+	</update>
+
+
+    <!--    显示访谈-->
+    <update id="showById" parameterType="java.lang.Long">
+        update visit set is_show = 0 where
+        is_show = 1
         <if test="_parameter != 0  ">
             and id = #{id,jdbcType=BIGINT}
         </if>
-	</update>
+    </update>
 
-    <!-- 启用记录 -->
-    <update id="showById" parameterType="java.lang.Long">
-        update visit set is_delete = 0 where
-        is_delete = 1
+    <!--    隐藏访谈-->
+    <update id="shadowById" parameterType="java.lang.Long">
+        update visit set is_show = 1 where
+        is_show = 0
         <if test="_parameter != 0  ">
             and id = #{id,jdbcType=BIGINT}
         </if>
@@ -149,7 +173,7 @@
     <!-- 根据id查询 接单中台表 -->
     <select id="findById"  resultMap="BaseResultMap" parameterType="java.lang.Long">
         select <include refid="Base_Column_List" />
-        from visit where id = #{id,jdbcType=BIGINT}
+        from visit where is_delete = 0 and id = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="findByPageCount" resultType="int">
@@ -173,6 +197,7 @@
                     v.create_time,
                     v.update_time
             FROM visit v
+            WHERE v.is_delete = 0
             ORDER BY v.create_time DESC
             limit #{paging.start},#{paging.pageSize}
     </select>

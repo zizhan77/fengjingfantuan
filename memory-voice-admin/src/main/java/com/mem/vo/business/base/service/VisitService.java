@@ -41,6 +41,8 @@ public interface VisitService {
      */
     int showById(Long id);
 
+    int shadowById(Long id);
+
     /**
      * 根据ID查询接单中台表
      *

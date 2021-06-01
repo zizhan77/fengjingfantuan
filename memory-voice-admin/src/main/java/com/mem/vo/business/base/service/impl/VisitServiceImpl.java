@@ -48,6 +48,11 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    public int shadowById(Long id) {
+        return visitDao.shadowById(id);
+    }
+
+    @Override
     public Visit findById(Long id) {
         return visitDao.findById(id);
     }
