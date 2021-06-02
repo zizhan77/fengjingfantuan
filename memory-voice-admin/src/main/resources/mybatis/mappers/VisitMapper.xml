@@ -154,8 +154,8 @@
 
     <!--    显示访谈-->
     <update id="showById" parameterType="java.lang.Long">
-        update visit set is_show = 0 where
-        is_show = 1
+        update visit set is_show = 1 where
+        is_show = 0
         <if test="_parameter != 0  ">
             and id = #{id,jdbcType=BIGINT}
         </if>
@@ -163,8 +163,8 @@
 
     <!--    隐藏访谈-->
     <update id="shadowById" parameterType="java.lang.Long">
-        update visit set is_show = 1 where
-        is_show = 0
+        update visit set is_show = 0 where
+        is_show = 1
         <if test="_parameter != 0  ">
             and id = #{id,jdbcType=BIGINT}
         </if>
@@ -193,6 +193,7 @@
                     v.comments,
                     v.forwards,
                     v.is_delete,
+                    v.is_show,
                     v.create_user,
                     v.create_time,
                     v.update_time
@@ -213,6 +214,7 @@
                     v.comments,
                     v.forwards,
                     v.is_delete,
+                    v.is_show,
                     v.create_user,
                     v.create_time,
                     v.update_time
