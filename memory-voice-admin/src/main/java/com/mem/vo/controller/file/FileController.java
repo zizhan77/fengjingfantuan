@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lvxiao
@@ -62,9 +63,9 @@ public class FileController {
     }
 
     @PostMapping("/uploadToken")
-    public ResponseDto<String> uploadToken(@RequestHeader("token") String token, @RequestParam("fileName") String fileName) {
+    public ResponseDto<Map<String, String>> uploadToken(@RequestHeader("token") String token, @RequestParam("fileName") String fileName) {
 
-        ResponseDto<String> responseDto = ResponseDto.successDto();
+        ResponseDto<Map<String, String>> responseDto = ResponseDto.successDto();
         if (fileName.isEmpty()) {
             return responseDto.failData("文件不能为空!");
         }
@@ -97,6 +98,30 @@ public class FileController {
         }
         try {
             return responseDto.successData(fileUtil.getUploadFile(fileName));
+        } catch (BizException e) {
+
+            log.error("上传文件失败，原因：{}", e.getMessage());
+            return responseDto.failData(e.getMessage());
+        } catch (Exception e) {
+
+            log.error("上传文件失败", e);
+            return responseDto.failSys();
+
+        }
+    }
+
+    @PostMapping("/uploadBigFile")
+    public ResponseDto<String> uploadBigFile(@RequestHeader("token") String token, @RequestParam("fileName") String fileName, @RequestParam("key") String key) {
+
+        ResponseDto<String> responseDto = ResponseDto.successDto();
+        if (fileName.isEmpty()) {
+            return responseDto.failData("文件不能为空!");
+        }
+        if (fileName.contains(" ")) {
+            return responseDto.failData("文件名不能包含空格!");
+        }
+        try {
+            return responseDto.successData(fileUtil.getUploadBigFile(fileName, key));
         } catch (BizException e) {
 
             log.error("上传文件失败，原因：{}", e.getMessage());

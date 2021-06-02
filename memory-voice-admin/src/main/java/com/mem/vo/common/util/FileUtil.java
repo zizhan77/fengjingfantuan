@@ -20,12 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Resource;
@@ -189,7 +184,9 @@ public class FileUtil {
         }
     }
 
-    public String getUploadToken(String key, Boolean override) {
+    public Map<String, String> getUploadToken(String key, Boolean override) {
+
+        Map<String, String> token = new HashMap<>();
         Date date = new Date();
         long time = date.getTime();
         key = key + time;
@@ -204,7 +201,12 @@ public class FileUtil {
             upToken = auth.uploadToken(bucket);
         }
 
-        return upToken;
+        token.put(key, upToken);
+        return token;
+    }
+
+    public String getUploadBigFile(String fileName, String key) {
+        return String.format("%s/%s", domainOfBucket, key);
     }
 
     public String getUploadFile(String fileName) {
