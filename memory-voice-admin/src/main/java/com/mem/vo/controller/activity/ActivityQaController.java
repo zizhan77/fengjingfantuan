@@ -64,7 +64,7 @@ public class ActivityQaController {
         CommonLoginContext contextByken = tokenService.getContextByken(token);
         activityQa.setSponsorId(Integer.valueOf(contextByken.getUserId().intValue()));
         try {
-            BizAssert.notNull(activityQa.getId(), BizCode.PARAM_NULL.getMessage());
+            BizAssert.notNull(activityQa.getSponsorId(), BizCode.PARAM_NULL.getMessage());
             return responseDto.successData(activityQaService.insert(activityQa));
         } catch (BizException e) {
 
